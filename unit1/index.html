@@ -1,0 +1,1347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Unit 1 – Introduction to Data Science | K.P. Singh</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Nunito:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0b0f1c;
+  --bg2: #111827;
+  --panel: #161e30;
+  --border: #1f2d44;
+  --accent: #6366f1;
+  --accent2: #22d3ee;
+  --green: #10b981;
+  --orange: #f59e0b;
+  --red: #f43f5e;
+  --purple: #a78bfa;
+  --pink: #ec4899;
+  --text: #e2e8f0;
+  --muted: #64748b;
+  --soft: #94a3b8;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:'Nunito',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  font-size:16px;
+  line-height:1.7;
+  overflow-x:hidden;
+}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px;}
+
+/* ── TOP HEADER ── */
+.top-nav{
+  position:sticky;top:0;z-index:100;
+  background:rgba(11,15,28,.95);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--border);
+  padding:0 16px;
+  display:flex;align-items:center;justify-content:space-between;
+  height:52px;
+}
+.top-nav .brand{font-family:'Space Mono',monospace;font-size:.72rem;color:var(--muted);}
+.top-nav .unit-badge{background:var(--accent);color:#fff;font-family:'Space Mono',monospace;font-size:.65rem;padding:4px 10px;border-radius:20px;font-weight:700;}
+
+/* Progress reading bar */
+.read-bar{position:fixed;top:52px;left:0;height:3px;background:linear-gradient(to right,var(--accent),var(--accent2));width:0%;z-index:99;transition:width .1s;}
+
+/* ── HERO ── */
+.hero{
+  min-height:85vh;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  text-align:center;padding:60px 20px 40px;
+  background:radial-gradient(ellipse at 50% 30%, #1a1f40 0%, var(--bg) 65%);
+  position:relative;overflow:hidden;
+}
+.hero::before{
+  content:'';position:absolute;inset:0;
+  background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%231f2d44' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") repeat;
+  opacity:.4;pointer-events:none;
+}
+.hero-kicker{font-family:'Space Mono',monospace;font-size:.72rem;color:var(--accent2);letter-spacing:.18em;text-transform:uppercase;margin-bottom:14px;}
+.hero-title{font-size:clamp(2rem,8vw,3.6rem);font-weight:900;line-height:1.1;margin-bottom:16px;}
+.hero-title .grad{background:linear-gradient(135deg,#818cf8,var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.hero-sub{font-size:1rem;color:var(--soft);max-width:500px;margin:0 auto 28px;}
+.hero-tags{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-bottom:36px;}
+.hero-tag{background:rgba(99,102,241,.12);border:1px solid rgba(99,102,241,.25);border-radius:20px;padding:6px 16px;font-size:.85rem;color:var(--accent);}
+.hero-author{display:flex;align-items:center;gap:12px;background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:12px 20px;}
+.author-avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-weight:900;font-size:1rem;color:#fff;}
+.author-info .name{font-weight:800;font-size:.95rem;}
+.author-info .role{font-size:.78rem;color:var(--muted);}
+
+/* ── TOC ── */
+.toc-section{padding:0 16px 0;max-width:680px;margin:0 auto;}
+.toc-card{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:20px;margin:0 0 40px;}
+.toc-title{font-weight:800;font-size:1rem;color:#fff;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.toc-list{display:flex;flex-direction:column;gap:8px;}
+.toc-item{display:flex;align-items:center;gap:12px;padding:10px 14px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;cursor:pointer;text-decoration:none;color:var(--text);transition:.15s;}
+.toc-item:hover{background:rgba(99,102,241,.1);border-color:var(--accent);}
+.toc-num{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-family:'Space Mono',monospace;font-size:.72rem;font-weight:700;color:#fff;flex-shrink:0;}
+.toc-text{font-size:.92rem;font-weight:600;}
+
+/* ── SECTION WRAPPER ── */
+.section-wrap{max-width:680px;margin:0 auto;padding:0 16px 60px;}
+
+/* ── SECTION HEADER ── */
+.sec-header{
+  display:flex;align-items:center;gap:12px;
+  background:linear-gradient(135deg,rgba(99,102,241,.12),rgba(34,211,238,.06));
+  border:1px solid rgba(99,102,241,.25);
+  border-radius:14px;padding:18px 20px;
+  margin-bottom:24px;
+}
+.sec-icon{font-size:2rem;}
+.sec-info{}
+.sec-label{font-family:'Space Mono',monospace;font-size:.65rem;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;}
+.sec-title{font-size:1.35rem;font-weight:900;color:#fff;}
+
+/* ── PROSE ── */
+.prose{font-size:.97rem;color:var(--soft);line-height:1.75;margin-bottom:18px;}
+.prose strong{color:var(--text);font-weight:700;}
+.prose .hi{color:var(--accent2);}
+.prose .hio{color:var(--orange);}
+
+/* ── DEFINITION BOX ── */
+.def-box{
+  background:rgba(99,102,241,.08);border-left:3px solid var(--accent);
+  border-radius:0 12px 12px 0;padding:16px 18px;margin:16px 0;
+}
+.def-label{font-family:'Space Mono',monospace;font-size:.65rem;color:var(--accent);letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;font-weight:700;}
+.def-text{font-size:.95rem;color:var(--text);line-height:1.65;}
+
+/* ── EXAMPLE BOX ── */
+.ex-box{
+  background:rgba(34,211,238,.07);border-left:3px solid var(--accent2);
+  border-radius:0 12px 12px 0;padding:14px 18px;margin:14px 0;
+}
+.ex-label{font-family:'Space Mono',monospace;font-size:.65rem;color:var(--accent2);letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;font-weight:700;}
+.ex-text{font-size:.92rem;color:var(--text);line-height:1.65;}
+
+/* ── CARD ── */
+.card{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:18px;margin:14px 0;position:relative;overflow:hidden;}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(to right,var(--accent),var(--accent2));}
+.card.green::before{background:linear-gradient(to right,var(--green),var(--accent2));}
+.card.orange::before{background:linear-gradient(to right,var(--orange),var(--pink));}
+.card.purple::before{background:linear-gradient(to right,var(--purple),var(--pink));}
+.card.red::before{background:linear-gradient(to right,var(--red),var(--orange));}
+.card-icon{font-size:1.6rem;margin-bottom:8px;}
+.card-title{font-weight:800;font-size:1rem;color:#fff;margin-bottom:6px;}
+.card-body{font-size:.9rem;color:var(--soft);line-height:1.65;}
+
+/* ── GRID ── */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
+@media(max-width:480px){.grid-2{grid-template-columns:1fr;} .grid-3{grid-template-columns:1fr 1fr;}}
+
+/* ── FORMULA ── */
+.formula{
+  background:linear-gradient(135deg,#0d1633,#0b1120);
+  border:1px solid var(--accent);border-radius:12px;
+  padding:16px 20px;font-family:'Space Mono',monospace;
+  font-size:1rem;color:var(--accent2);text-align:center;
+  margin:16px 0;letter-spacing:.03em;
+}
+.formula-note{font-size:.78rem;color:var(--muted);text-align:center;margin-top:6px;font-family:'Nunito',sans-serif;}
+
+/* ── TABLE ── */
+.table-wrap{overflow-x:auto;margin:16px 0;border-radius:12px;border:1px solid var(--border);}
+table{width:100%;border-collapse:collapse;min-width:280px;}
+th{background:var(--border);color:var(--accent2);font-family:'Space Mono',monospace;font-size:.72rem;padding:10px 14px;text-align:left;letter-spacing:.05em;}
+td{padding:10px 14px;border-bottom:1px solid var(--border);font-size:.88rem;line-height:1.5;}
+tr:last-child td{border-bottom:none;}
+tr:nth-child(even) td{background:rgba(255,255,255,.02);}
+
+/* ── STEP LIST ── */
+.steps{display:flex;flex-direction:column;gap:0;margin:16px 0;}
+.step-item{display:flex;gap:14px;position:relative;padding-bottom:20px;}
+.step-item:last-child{padding-bottom:0;}
+.step-item:not(:last-child) .step-line::after{content:'';position:absolute;left:13px;top:28px;bottom:0;width:2px;background:linear-gradient(to bottom,var(--accent),transparent);}
+.step-dot{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-family:'Space Mono',monospace;font-size:.72rem;font-weight:700;color:#fff;flex-shrink:0;position:relative;z-index:1;}
+.step-body{flex:1;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;padding:12px 14px;}
+.step-title{font-weight:800;font-size:.95rem;color:#fff;margin-bottom:4px;}
+.step-desc{font-size:.85rem;color:var(--soft);line-height:1.6;}
+.step-example{font-size:.82rem;color:var(--accent2);margin-top:6px;}
+
+/* ── ROLE CARD ── */
+.role-card{border-radius:14px;padding:18px;margin:14px 0;border:1px solid;}
+.role-card.ds{background:rgba(99,102,241,.08);border-color:rgba(99,102,241,.3);}
+.role-card.da{background:rgba(34,211,238,.08);border-color:rgba(34,211,238,.3);}
+.role-card.de{background:rgba(16,185,129,.08);border-color:rgba(16,185,129,.3);}
+.role-emoji{font-size:2rem;margin-bottom:8px;}
+.role-title{font-size:1.05rem;font-weight:900;margin-bottom:4px;}
+.role-tagline{font-size:.82rem;border-radius:20px;display:inline-block;padding:3px 12px;margin-bottom:10px;font-weight:700;}
+.role-card.ds .role-tagline{background:rgba(99,102,241,.2);color:var(--accent);}
+.role-card.da .role-tagline{background:rgba(34,211,238,.2);color:var(--accent2);}
+.role-card.de .role-tagline{background:rgba(16,185,129,.2);color:var(--green);}
+.role-list{list-style:none;display:flex;flex-direction:column;gap:6px;}
+.role-list li{font-size:.88rem;color:var(--soft);display:flex;gap:8px;align-items:flex-start;}
+.role-list li::before{content:'→';color:var(--muted);flex-shrink:0;margin-top:1px;}
+
+/* ── COMPARISON CARD ── */
+.compare-item{display:flex;flex-direction:column;gap:4px;padding:14px;background:var(--panel);border:1px solid var(--border);border-radius:12px;}
+.compare-icon{font-size:1.6rem;}
+.compare-title{font-weight:800;font-size:.95rem;color:#fff;}
+.compare-desc{font-size:.82rem;color:var(--soft);line-height:1.55;}
+.compare-eg{font-size:.8rem;color:var(--accent2);margin-top:4px;}
+
+/* ── DATA TYPE TAG ── */
+.dtype-tag{display:inline-block;padding:4px 12px;border-radius:20px;font-size:.8rem;font-weight:700;margin:3px;}
+.dtype-s{background:rgba(16,185,129,.15);color:var(--green);}
+.dtype-u{background:rgba(244,63,94,.15);color:var(--red);}
+.dtype-ss{background:rgba(245,158,11,.15);color:var(--orange);}
+
+/* ── INTERACTIVE QUIZ ── */
+.quiz-wrap{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:20px;margin:20px 0;}
+.quiz-label{font-family:'Space Mono',monospace;font-size:.65rem;color:var(--orange);letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px;font-weight:700;}
+.quiz-q{font-weight:800;font-size:.97rem;color:#fff;margin-bottom:14px;line-height:1.55;}
+.quiz-options{display:flex;flex-direction:column;gap:8px;}
+.quiz-opt{
+  width:100%;text-align:left;padding:12px 16px;
+  background:rgba(255,255,255,.03);border:1px solid var(--border);
+  border-radius:10px;color:var(--text);font-size:.9rem;font-family:'Nunito',sans-serif;
+  cursor:pointer;transition:.15s;
+}
+.quiz-opt:hover:not(:disabled){background:rgba(99,102,241,.1);border-color:var(--accent);}
+.quiz-opt.correct{background:rgba(16,185,129,.15)!important;border-color:var(--green)!important;color:var(--green)!important;}
+.quiz-opt.wrong{background:rgba(244,63,94,.15)!important;border-color:var(--red)!important;color:var(--red)!important;}
+.quiz-feedback{margin-top:12px;padding:12px 16px;border-radius:10px;font-size:.88rem;display:none;}
+.quiz-feedback.show{display:block;}
+.quiz-feedback.ok{background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.3);color:var(--green);}
+.quiz-feedback.bad{background:rgba(244,63,94,.1);border:1px solid rgba(244,63,94,.3);color:#fca5a5;}
+.quiz-retry{margin-top:10px;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:8px;padding:8px 18px;color:var(--muted);font-family:'Nunito',sans-serif;font-size:.85rem;cursor:pointer;}
+
+/* ── ACTIVITY BOX ── */
+.activity{background:linear-gradient(135deg,rgba(167,139,250,.08),rgba(236,72,153,.05));border:1px solid rgba(167,139,250,.25);border-radius:14px;padding:18px;margin:18px 0;}
+.activity-label{font-family:'Space Mono',monospace;font-size:.65rem;color:var(--purple);letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px;font-weight:700;}
+.activity-title{font-weight:800;font-size:1rem;color:#fff;margin-bottom:8px;}
+
+/* ── NUMERIC BOX ── */
+.num-box{background:linear-gradient(135deg,#0d1228,#0a101e);border:1px solid var(--accent);border-radius:14px;padding:18px;margin:18px 0;}
+.num-label{font-family:'Space Mono',monospace;font-size:.65rem;color:var(--accent);letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px;font-weight:700;}
+.num-title{font-weight:800;font-size:1rem;color:#fff;margin-bottom:12px;}
+.num-input-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px;}
+.num-field{display:flex;flex-direction:column;gap:4px;flex:1;min-width:120px;}
+.num-field label{font-size:.75rem;color:var(--muted);font-family:'Space Mono',monospace;}
+.num-field input, .num-field select{background:var(--bg2);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:9px 12px;font-size:.9rem;font-family:'Nunito',sans-serif;outline:none;transition:border-color .15s;width:100%;}
+.num-field input:focus, .num-field select:focus{border-color:var(--accent);}
+.calc-btn{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border:none;border-radius:8px;padding:11px 22px;font-family:'Nunito',sans-serif;font-size:.9rem;font-weight:700;cursor:pointer;width:100%;margin-top:4px;}
+.calc-result{min-height:44px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:10px;padding:12px 16px;font-size:.9rem;margin-top:10px;}
+
+/* ── INLINE BADGE ── */
+.badge{display:inline-block;padding:2px 10px;border-radius:20px;font-size:.78rem;font-weight:700;vertical-align:middle;margin:0 2px;}
+.badge-a{background:rgba(99,102,241,.2);color:var(--accent);}
+.badge-b{background:rgba(34,211,238,.2);color:var(--accent2);}
+.badge-c{background:rgba(16,185,129,.2);color:var(--green);}
+.badge-d{background:rgba(245,158,11,.2);color:var(--orange);}
+.badge-e{background:rgba(244,63,94,.2);color:var(--red);}
+
+/* ── CALLOUT ── */
+.callout{display:flex;gap:12px;background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.25);border-radius:12px;padding:14px 16px;margin:16px 0;}
+.callout-icon{font-size:1.3rem;flex-shrink:0;}
+.callout-text{font-size:.9rem;color:var(--text);line-height:1.6;}
+.callout.info{background:rgba(34,211,238,.07);border-color:rgba(34,211,238,.2);}
+.callout.info .callout-icon{color:var(--accent2);}
+.callout.success{background:rgba(16,185,129,.07);border-color:rgba(16,185,129,.2);}
+
+/* ── SCENARIO BOX ── */
+.scenario{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:16px;margin:12px 0;}
+.scenario-top{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.scenario-emoji{font-size:1.4rem;}
+.scenario-name{font-weight:800;font-size:.95rem;color:#fff;}
+.scenario-body{font-size:.88rem;color:var(--soft);line-height:1.65;}
+
+/* ── DATA SORTER GAME ── */
+.sorter-wrap{margin:16px 0;}
+.sorter-items{display:flex;flex-wrap:wrap;gap:8px;padding:14px;background:var(--bg2);border:1px solid var(--border);border-radius:12px;min-height:54px;margin-bottom:10px;}
+.sortable-item{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:8px 14px;font-size:.85rem;cursor:pointer;transition:.15s;user-select:none;}
+.sortable-item:hover{border-color:var(--accent2);color:var(--accent2);}
+.sortable-item.dragging{opacity:.5;}
+.sort-zones{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+@media(max-width:480px){.sort-zones{grid-template-columns:1fr;}}
+.sort-zone{background:var(--bg2);border:1px dashed var(--border);border-radius:12px;min-height:80px;padding:10px;}
+.zone-label{font-size:.75rem;font-family:'Space Mono',monospace;text-align:center;margin-bottom:8px;font-weight:700;}
+.zone-s .zone-label{color:var(--green);}
+.zone-u .zone-label{color:var(--red);}
+.zone-ss .zone-label{color:var(--orange);}
+.sort-zone .sortable-item{margin:4px 0;width:100%;text-align:center;}
+.sort-check-btn{width:100%;margin-top:10px;padding:10px;border-radius:10px;background:var(--accent);border:none;color:#fff;font-family:'Nunito',sans-serif;font-weight:700;font-size:.9rem;cursor:pointer;}
+.sort-result{margin-top:10px;padding:12px;border-radius:10px;font-size:.88rem;display:none;}
+.sort-result.show{display:block;}
+
+/* ── DS PROCESS VISUAL ── */
+.process-flow{display:flex;flex-direction:column;gap:0;margin:16px 0;}
+.pf-item{display:flex;align-items:stretch;gap:0;}
+.pf-left{display:flex;flex-direction:column;align-items:center;width:44px;}
+.pf-circle{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;}
+.pf-line{width:2px;flex:1;min-height:12px;}
+.pf-body{flex:1;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:10px;margin-left:8px;}
+.pf-step-title{font-weight:800;font-size:.93rem;color:#fff;}
+.pf-step-desc{font-size:.83rem;color:var(--soft);line-height:1.55;}
+.pf-step-eg{font-size:.8rem;color:var(--accent2);margin-top:4px;}
+
+/* ── BOTTOM SUMMARY ── */
+.summary-section{max-width:680px;margin:0 auto;padding:0 16px 80px;}
+.summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+@media(max-width:420px){.summary-grid{grid-template-columns:1fr;}}
+.sum-card{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center;}
+.sum-icon{font-size:1.8rem;margin-bottom:6px;}
+.sum-term{font-weight:800;font-size:.9rem;color:#fff;margin-bottom:3px;}
+.sum-def{font-size:.78rem;color:var(--muted);line-height:1.5;}
+
+/* ── FOOTER ── */
+.foot{text-align:center;padding:28px 20px;border-top:1px solid var(--border);color:var(--muted);font-size:.8rem;}
+.foot .name{color:var(--accent2);font-weight:700;}
+
+/* ── BACK TO TOP ── */
+.btt{position:fixed;bottom:20px;right:16px;width:42px;height:42px;border-radius:50%;background:var(--accent);border:none;color:#fff;font-size:1.1rem;cursor:pointer;z-index:90;opacity:0;transition:opacity .3s;display:flex;align-items:center;justify-content:center;}
+.btt.show{opacity:1;}
+
+/* ── SECTION DIVIDER ── */
+.sec-divider{height:1px;background:linear-gradient(to right,transparent,var(--border),transparent);margin:10px 0 32px;}
+
+/* ── HIGHLIGHT TEXT ── */
+.hl{color:var(--accent);font-weight:700;}
+.hl2{color:var(--accent2);font-weight:700;}
+.hlg{color:var(--green);font-weight:700;}
+.hlo{color:var(--orange);font-weight:700;}
+.hlr{color:var(--red);font-weight:700;}
+
+/* ── STAT CARD ── */
+.stat-row{display:flex;gap:12px;flex-wrap:wrap;margin:16px 0;}
+.stat-box{flex:1;min-width:100px;background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:14px 16px;text-align:center;}
+.stat-val{font-family:'Space Mono',monospace;font-size:1.5rem;font-weight:700;color:var(--accent2);margin-bottom:4px;}
+.stat-label{font-size:.78rem;color:var(--muted);}
+
+/* ── EXPAND/COLLAPSE ── */
+.expand-btn{width:100%;text-align:left;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;padding:12px 16px;color:var(--text);font-family:'Nunito',sans-serif;font-size:.92rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:space-between;margin:8px 0;}
+.expand-btn:hover{border-color:var(--accent);}
+.expand-content{display:none;padding:14px 16px;background:var(--bg2);border:1px solid var(--border);border-top:none;border-radius:0 0 10px 10px;font-size:.88rem;color:var(--soft);line-height:1.65;}
+.expand-content.open{display:block;}
+.expand-chevron{transition:transform .2s;font-size:1rem;}
+.expand-btn.open .expand-chevron{transform:rotate(180deg);}
+
+/* ── SCROLL REVEAL ── */
+.reveal{opacity:0;transform:translateY(20px);transition:opacity .5s,transform .5s;}
+.reveal.visible{opacity:1;transform:none;}
+</style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<nav class="top-nav">
+  <span class="brand">K.P. Singh · IDS</span>
+  <span class="unit-badge">UNIT 1</span>
+</nav>
+<div class="read-bar" id="readBar"></div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-kicker">Introduction to Data Science · BCA Sem I</div>
+  <h1 class="hero-title">What is <span class="grad">Data Science?</span></h1>
+  <p class="hero-sub">Your complete interactive study notes for Unit 1 — explained simply, with real examples and mini activities.</p>
+  <div class="hero-tags">
+    <span class="hero-tag">📊 Data Science Overview</span>
+    <span class="hero-tag">🔄 DS Process</span>
+    <span class="hero-tag">👥 Roles</span>
+    <span class="hero-tag">🗂️ Data Types</span>
+  </div>
+  <div class="hero-author">
+    <div class="author-avatar">KP</div>
+    <div class="author-info">
+      <div class="name">Prof. K.P. Singh</div>
+      <div class="role">Introduction to Data Science · Lecture-08 · Unit I</div>
+    </div>
+  </div>
+</section>
+
+<!-- TABLE OF CONTENTS -->
+<div class="toc-section">
+  <div class="toc-card reveal">
+    <div class="toc-title">📋 What you'll learn in Unit 1</div>
+    <div class="toc-list">
+      <a class="toc-item" href="#sec1"><div class="toc-num">1</div><span class="toc-text">What is Data Science? Definitions, Importance & Applications</span></a>
+      <a class="toc-item" href="#sec2"><div class="toc-num">2</div><span class="toc-text">The Data Science Process — Steps & Workflow</span></a>
+      <a class="toc-item" href="#sec3"><div class="toc-num">3</div><span class="toc-text">Roles in Data Science — Who does what?</span></a>
+      <a class="toc-item" href="#sec4"><div class="toc-num">4</div><span class="toc-text">Introduction to Data — Types, Sources & Collection</span></a>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ SECTION 1 ══════════════ -->
+<section id="sec1" class="section-wrap">
+  <div class="sec-header reveal">
+    <div class="sec-icon">🔭</div>
+    <div class="sec-info">
+      <div class="sec-label">Section 1</div>
+      <div class="sec-title">What is Data Science?</div>
+    </div>
+  </div>
+
+  <div class="def-box reveal">
+    <div class="def-label">📖 Definition</div>
+    <div class="def-text"><strong>Data Science</strong> is the field that uses <strong>data, statistics, and computer science</strong> to find useful patterns and help make better decisions.</div>
+  </div>
+
+  <p class="prose reveal">Think of it like this: Every day, billions of people use phones, buy things online, watch videos, and go to hospitals. All of this creates <strong class="hi">data</strong>. Data Science is about turning that raw data into <strong>useful answers</strong>.</p>
+
+  <div class="ex-box reveal">
+    <div class="ex-label">📱 Simple Real-Life Example</div>
+    <div class="ex-text">
+      You watch a movie on Netflix → Netflix <strong>records that</strong> → It compares with millions of other users → It <strong>recommends</strong> similar movies.<br><br>
+      That entire process? That is <strong>Data Science!</strong> 🎬
+    </div>
+  </div>
+
+  <div class="callout reveal">
+    <span class="callout-icon">💡</span>
+    <span class="callout-text"><strong>Simple way to remember:</strong> Data Science = <span class="hl">Data</span> + <span class="hl2">Math/Statistics</span> + <span class="hlg">Computer Skills</span> → Useful Insights</span>
+  </div>
+
+  <div class="sec-divider"></div>
+
+  <!-- Importance -->
+  <h3 style="font-weight:900;font-size:1.1rem;color:#fff;margin-bottom:14px;" class="reveal">⭐ Why is Data Science Important?</h3>
+  <div class="stat-row reveal">
+    <div class="stat-box"><div class="stat-val">2.5</div><div class="stat-label">Quintillion bytes of data created per day</div></div>
+    <div class="stat-box"><div class="stat-val">90%</div><div class="stat-label">Of world's data created in last 2 years</div></div>
+    <div class="stat-box"><div class="stat-val">#1</div><div class="stat-label">Most in-demand job skill globally</div></div>
+  </div>
+
+  <p class="prose reveal">We are living in a <strong>data explosion</strong> era. Companies, hospitals, governments — everyone has massive amounts of data but needs help <em>understanding</em> it. That's where Data Science professionals come in!</p>
+
+  <!-- Applications Grid -->
+  <div class="sec-divider"></div>
+  <h3 style="font-weight:900;font-size:1.1rem;color:#fff;margin-bottom:14px;" class="reveal">🌍 Applications of Data Science</h3>
+
+  <div class="grid-2 reveal">
+    <div class="card green">
+      <div class="card-icon">🏥</div>
+      <div class="card-title">Healthcare</div>
+      <div class="card-body">Predicting diseases early, analysing patient data, drug discovery, AI-based diagnosis from X-rays and MRIs.</div>
+    </div>
+    <div class="card orange">
+      <div class="card-icon">🛒</div>
+      <div class="card-title">E-Commerce</div>
+      <div class="card-body">Amazon / Flipkart use DS to recommend products, predict demand, set dynamic pricing, detect fraud.</div>
+    </div>
+    <div class="card purple">
+      <div class="card-icon">📱</div>
+      <div class="card-title">Social Media</div>
+      <div class="card-body">Instagram's algorithm, YouTube autoplay, Twitter trending topics — all powered by Data Science models.</div>
+    </div>
+    <div class="card">
+      <div class="card-icon">🏦</div>
+      <div class="card-title">Banking & Finance</div>
+      <div class="card-body">Detecting credit card fraud, loan approval, stock market prediction, customer risk assessment.</div>
+    </div>
+    <div class="card red">
+      <div class="card-icon">🚗</div>
+      <div class="card-title">Transportation</div>
+      <div class="card-body">Ola/Uber surge pricing, Zomato delivery route optimization, Google Maps traffic prediction.</div>
+    </div>
+    <div class="card accent2">
+      <div class="card-icon">🌾</div>
+      <div class="card-title">Agriculture (India)</div>
+      <div class="card-body">Predicting crop yields, detecting plant diseases from photos, soil analysis using satellite data.</div>
+    </div>
+  </div>
+
+  <!-- Quiz 1 -->
+  <div class="quiz-wrap reveal" id="q1">
+    <div class="quiz-label">🎯 Quick Check — Q1</div>
+    <div class="quiz-q">Netflix recommending movies based on your watch history is an example of which field?</div>
+    <div class="quiz-options">
+      <button class="quiz-opt" onclick="checkQuiz('q1',this,false)">A. Web Design</button>
+      <button class="quiz-opt" onclick="checkQuiz('q1',this,true)">B. Data Science</button>
+      <button class="quiz-opt" onclick="checkQuiz('q1',this,false)">C. Cyber Security</button>
+      <button class="quiz-opt" onclick="checkQuiz('q1',this,false)">D. Networking</button>
+    </div>
+    <div class="quiz-feedback" id="q1-fb"></div>
+    <button class="quiz-retry" onclick="resetQuiz('q1')" style="display:none;" id="q1-retry">↺ Try Again</button>
+  </div>
+
+</section>
+
+<!-- ══════════════ SECTION 2 ══════════════ -->
+<section id="sec2" class="section-wrap">
+  <div class="sec-header reveal">
+    <div class="sec-icon">🔄</div>
+    <div class="sec-info">
+      <div class="sec-label">Section 2</div>
+      <div class="sec-title">The Data Science Process</div>
+    </div>
+  </div>
+
+  <p class="prose reveal">Data Science isn't random — it follows a <strong>systematic process</strong> from raw data to final decision. Think of it like cooking a dish: you need to get ingredients, clean them, prepare, cook, and serve!</p>
+
+  <div class="callout info reveal">
+    <span class="callout-icon">🍕</span>
+    <span class="callout-text"><strong>Analogy:</strong> Imagine you're making pizza. Step 1: Buy ingredients (data collection) → Step 2: Wash/cut (cleaning) → Step 3: Cook (analysis) → Step 4: Serve (presentation). Data Science is similar!</span>
+  </div>
+
+  <!-- Process Flow Visual -->
+  <div class="process-flow reveal" style="margin-top:20px;">
+
+    <div class="pf-item">
+      <div class="pf-left">
+        <div class="pf-circle" style="background:linear-gradient(135deg,#6366f1,#818cf8);">❓</div>
+        <div class="pf-line" style="background:linear-gradient(to bottom,#6366f1,#22d3ee);"></div>
+      </div>
+      <div class="pf-body">
+        <div class="pf-step-title">Step 1 — Define the Problem</div>
+        <div class="pf-step-desc">Before touching any data, <strong>understand the business question</strong>. What exactly do we want to find out?</div>
+        <div class="pf-step-eg">🏥 Example: "Can we predict which patients are at high risk of diabetes?"</div>
+      </div>
+    </div>
+
+    <div class="pf-item">
+      <div class="pf-left">
+        <div class="pf-circle" style="background:linear-gradient(135deg,#22d3ee,#38bdf8);">📥</div>
+        <div class="pf-line" style="background:linear-gradient(to bottom,#22d3ee,#10b981);"></div>
+      </div>
+      <div class="pf-body">
+        <div class="pf-step-title">Step 2 — Collect Data</div>
+        <div class="pf-step-desc">Gather relevant data from various sources — databases, surveys, web scraping, sensors, APIs.</div>
+        <div class="pf-step-eg">🏥 Example: Collect patient age, weight, sugar levels, family history from hospital records.</div>
+      </div>
+    </div>
+
+    <div class="pf-item">
+      <div class="pf-left">
+        <div class="pf-circle" style="background:linear-gradient(135deg,#10b981,#34d399);">🧹</div>
+        <div class="pf-line" style="background:linear-gradient(to bottom,#10b981,#f59e0b);"></div>
+      </div>
+      <div class="pf-body">
+        <div class="pf-step-title">Step 3 — Clean / Prepare Data</div>
+        <div class="pf-step-desc">Real data is <strong>messy!</strong> Fix missing values, remove duplicates, handle errors. This is the most time-consuming step (takes ~60–80% of time!).</div>
+        <div class="pf-step-eg">🏥 Example: Fill in missing ages, remove duplicate patient records, fix typos in names.</div>
+      </div>
+    </div>
+
+    <div class="pf-item">
+      <div class="pf-left">
+        <div class="pf-circle" style="background:linear-gradient(135deg,#f59e0b,#fbbf24);">🔍</div>
+        <div class="pf-line" style="background:linear-gradient(to bottom,#f59e0b,#a78bfa);"></div>
+      </div>
+      <div class="pf-body">
+        <div class="pf-step-title">Step 4 — Explore & Analyse (EDA)</div>
+        <div class="pf-step-desc">Explore patterns, trends, and relationships. Create charts, calculate statistics, understand the data deeply.</div>
+        <div class="pf-step-eg">🏥 Example: Plot age vs blood sugar, find correlation, identify outliers.</div>
+      </div>
+    </div>
+
+    <div class="pf-item">
+      <div class="pf-left">
+        <div class="pf-circle" style="background:linear-gradient(135deg,#a78bfa,#c084fc);">🤖</div>
+        <div class="pf-line" style="background:linear-gradient(to bottom,#a78bfa,#f43f5e);"></div>
+      </div>
+      <div class="pf-body">
+        <div class="pf-step-title">Step 5 — Build Model</div>
+        <div class="pf-step-desc">Apply machine learning algorithms or statistical models to make <strong>predictions or classifications</strong>.</div>
+        <div class="pf-step-eg">🏥 Example: Train a model to predict diabetes using patient data.</div>
+      </div>
+    </div>
+
+    <div class="pf-item">
+      <div class="pf-left">
+        <div class="pf-circle" style="background:linear-gradient(135deg,#f43f5e,#fb7185);">✅</div>
+        <div class="pf-line" style="background:linear-gradient(to bottom,#f43f5e,#6366f1);"></div>
+      </div>
+      <div class="pf-body">
+        <div class="pf-step-title">Step 6 — Evaluate & Validate</div>
+        <div class="pf-step-desc">Test your model on new data. Check: Is it accurate? Does it generalize well? Is it solving the problem?</div>
+        <div class="pf-step-eg">🏥 Example: Test model on 1000 new patients. Check prediction accuracy.</div>
+      </div>
+    </div>
+
+    <div class="pf-item">
+      <div class="pf-left">
+        <div class="pf-circle" style="background:linear-gradient(135deg,#6366f1,#22d3ee);">📊</div>
+        <div class="pf-line" style="height:0;"></div>
+      </div>
+      <div class="pf-body">
+        <div class="pf-step-title">Step 7 — Deploy & Communicate</div>
+        <div class="pf-step-desc">Share insights with decision-makers in a clear, non-technical way. Deploy model into production if needed.</div>
+        <div class="pf-step-eg">🏥 Example: Show doctors a dashboard of high-risk patients. Launch the prediction app in hospitals.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Numeric: % time spent -->
+  <div class="num-box reveal" id="timeCalc">
+    <div class="num-label">🧮 Practical Understanding</div>
+    <div class="num-title">If a Data Science project takes N hours — how much time is spent on each step?</div>
+    <div class="num-input-row">
+      <div class="num-field"><label>Total Project Hours</label><input type="number" id="totalHours" value="100" min="10" max="10000"></div>
+    </div>
+    <button class="calc-btn" onclick="calcTimeBreakdown()">Calculate Breakdown →</button>
+    <div class="calc-result" id="timeResult"><span style="color:var(--muted)">Enter hours and click Calculate!</span></div>
+  </div>
+
+  <!-- Quiz 2 -->
+  <div class="quiz-wrap reveal" id="q2">
+    <div class="quiz-label">🎯 Quick Check — Q2</div>
+    <div class="quiz-q">Which step of the Data Science process takes the MOST time in real projects?</div>
+    <div class="quiz-options">
+      <button class="quiz-opt" onclick="checkQuiz('q2',this,false)">A. Building the ML Model</button>
+      <button class="quiz-opt" onclick="checkQuiz('q2',this,false)">B. Defining the Problem</button>
+      <button class="quiz-opt" onclick="checkQuiz('q2',this,true)">C. Data Cleaning & Preparation</button>
+      <button class="quiz-opt" onclick="checkQuiz('q2',this,false)">D. Visualizing Results</button>
+    </div>
+    <div class="quiz-feedback" id="q2-fb"></div>
+    <button class="quiz-retry" onclick="resetQuiz('q2')" style="display:none;" id="q2-retry">↺ Try Again</button>
+  </div>
+
+</section>
+
+<!-- ══════════════ SECTION 3 ══════════════ -->
+<section id="sec3" class="section-wrap">
+  <div class="sec-header reveal">
+    <div class="sec-icon">👥</div>
+    <div class="sec-info">
+      <div class="sec-label">Section 3</div>
+      <div class="sec-title">Roles in Data Science</div>
+    </div>
+  </div>
+
+  <p class="prose reveal">Data Science is a <strong>team sport!</strong> Different people do different jobs. Let's understand the three main roles you'll often hear about — and what makes each one unique.</p>
+
+  <div class="callout info reveal">
+    <span class="callout-icon">🏏</span>
+    <span class="callout-text"><strong>Cricket Analogy:</strong> Think of a Data Science team like a cricket team. The Data Scientist is the all-rounder (captain), the Data Analyst is the batsman (focuses on scoring/insights), and the Data Engineer is the groundsman (prepares the pitch/infrastructure).</span>
+  </div>
+
+  <!-- Role Cards -->
+  <div class="role-card ds reveal">
+    <div class="role-emoji">🧑‍🔬</div>
+    <div class="role-title">Data Scientist</div>
+    <div class="role-tagline">The Brain / All-Rounder</div>
+    <div class="card-body" style="margin-bottom:12px;">Builds predictive models and uses advanced <strong>machine learning and statistics</strong> to solve complex problems. Needs strong coding skills (Python/R) + math knowledge.</div>
+    <ul class="role-list">
+      <li>Builds ML models (like spam detectors, recommendation engines)</li>
+      <li>Runs experiments and A/B tests</li>
+      <li>Translates business problems into data problems</li>
+      <li>Works with both data and business teams</li>
+    </ul>
+    <div class="ex-box" style="margin-top:12px;">
+      <div class="ex-label">Real Example</div>
+      <div class="ex-text">At Swiggy: A Data Scientist builds a model that predicts which restaurants you'll order from based on time of day, past orders, and weather!</div>
+    </div>
+  </div>
+
+  <div class="role-card da reveal">
+    <div class="role-emoji">📊</div>
+    <div class="role-title">Data Analyst</div>
+    <div class="role-tagline">The Storyteller / Interpreter</div>
+    <div class="card-body" style="margin-bottom:12px;">Focuses on <strong>analysing existing data</strong> and communicating findings to business teams. Uses SQL, Excel, Power BI, Tableau. Less coding, more business sense.</div>
+    <ul class="role-list">
+      <li>Creates dashboards and reports for managers</li>
+      <li>Answers "why did sales drop last month?" type questions</li>
+      <li>Cleans and organises data in Excel/SQL</li>
+      <li>Finds trends and patterns in historical data</li>
+    </ul>
+    <div class="ex-box" style="margin-top:12px;">
+      <div class="ex-label">Real Example</div>
+      <div class="ex-text">At a bank: A Data Analyst creates a monthly report showing which ATM locations have highest usage and which need restocking more frequently.</div>
+    </div>
+  </div>
+
+  <div class="role-card de reveal">
+    <div class="role-emoji">🛠️</div>
+    <div class="role-title">Data Engineer</div>
+    <div class="role-tagline">The Builder / Plumber</div>
+    <div class="card-body" style="margin-bottom:12px;">Builds and maintains the <strong>infrastructure and pipelines</strong> that move and store data. Makes sure data is available, reliable, and in the right format. Needs strong coding and systems knowledge.</div>
+    <ul class="role-list">
+      <li>Builds data pipelines (moving data from source to database)</li>
+      <li>Manages cloud storage (AWS, Azure, GCP)</li>
+      <li>Optimises databases for fast queries</li>
+      <li>Ensures data quality and availability 24/7</li>
+    </ul>
+    <div class="ex-box" style="margin-top:12px;">
+      <div class="ex-label">Real Example</div>
+      <div class="ex-text">At IRCTC: A Data Engineer builds the system that collects and stores millions of ticket bookings every minute, making sure it's fast and never crashes!</div>
+    </div>
+  </div>
+
+  <!-- Comparison Table -->
+  <div class="table-wrap reveal" style="margin-top:20px;">
+    <table>
+      <tr>
+        <th>Feature</th>
+        <th>Data Scientist 🧑‍🔬</th>
+        <th>Data Analyst 📊</th>
+        <th>Data Engineer 🛠️</th>
+      </tr>
+      <tr>
+        <td><strong>Main Focus</strong></td>
+        <td>Predict & model</td>
+        <td>Analyse & report</td>
+        <td>Build & maintain</td>
+      </tr>
+      <tr>
+        <td><strong>Key Tools</strong></td>
+        <td>Python, R, TensorFlow</td>
+        <td>Excel, SQL, Tableau</td>
+        <td>Spark, Kafka, SQL</td>
+      </tr>
+      <tr>
+        <td><strong>Coding Level</strong></td>
+        <td><span class="badge badge-e">High</span></td>
+        <td><span class="badge badge-d">Medium</span></td>
+        <td><span class="badge badge-e">Very High</span></td>
+      </tr>
+      <tr>
+        <td><strong>Works with</strong></td>
+        <td>Future predictions</td>
+        <td>Past data</td>
+        <td>Data systems</td>
+      </tr>
+      <tr>
+        <td><strong>Output</strong></td>
+        <td>ML models</td>
+        <td>Reports/Charts</td>
+        <td>Data pipelines</td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- Scenario matcher -->
+  <div class="activity reveal" style="margin-top:20px;">
+    <div class="activity-label">🎮 Role Matcher — Who would you call?</div>
+    <div class="activity-title">Read each scenario and pick the right role!</div>
+    <div id="scenario-game">
+      <div class="scenario" id="sc1">
+        <div class="scenario-top">
+          <div class="scenario-emoji">📉</div>
+          <div class="scenario-name">Scenario 1</div>
+        </div>
+        <div class="scenario-body">The company's app is slow because the database can't handle 10 lakh users at once. Who do you call?</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;">
+          <button class="quiz-opt" style="flex:1;min-width:100px;" onclick="checkRole('sc1',this,'de')">🧑‍🔬 Data Scientist</button>
+          <button class="quiz-opt" style="flex:1;min-width:100px;" onclick="checkRole('sc1',this,'de')">📊 Data Analyst</button>
+          <button class="quiz-opt" style="flex:1;min-width:100px;" onclick="checkRole('sc1',this,'de','correct')">🛠️ Data Engineer</button>
+        </div>
+        <div class="quiz-feedback" id="sc1-fb"></div>
+      </div>
+      <div class="scenario" id="sc2" style="margin-top:12px;">
+        <div class="scenario-top">
+          <div class="scenario-emoji">🛒</div>
+          <div class="scenario-name">Scenario 2</div>
+        </div>
+        <div class="scenario-body">Management wants a report: "Which product category sold the most in Q3?" Who should handle this?</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;">
+          <button class="quiz-opt" style="flex:1;min-width:100px;" onclick="checkRole('sc2',this,'da')">🧑‍🔬 Data Scientist</button>
+          <button class="quiz-opt" style="flex:1;min-width:100px;" onclick="checkRole('sc2',this,'da','correct')">📊 Data Analyst</button>
+          <button class="quiz-opt" style="flex:1;min-width:100px;" onclick="checkRole('sc2',this,'da')">🛠️ Data Engineer</button>
+        </div>
+        <div class="quiz-feedback" id="sc2-fb"></div>
+      </div>
+      <div class="scenario" id="sc3" style="margin-top:12px;">
+        <div class="scenario-top">
+          <div class="scenario-emoji">🤒</div>
+          <div class="scenario-name">Scenario 3</div>
+        </div>
+        <div class="scenario-body">A hospital wants to predict which patients are likely to get admitted in the next 30 days so they can prepare beds. Who is best for this?</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;">
+          <button class="quiz-opt" style="flex:1;min-width:100px;" onclick="checkRole('sc3',this,'ds','correct')">🧑‍🔬 Data Scientist</button>
+          <button class="quiz-opt" style="flex:1;min-width:100px;" onclick="checkRole('sc3',this,'ds')">📊 Data Analyst</button>
+          <button class="quiz-opt" style="flex:1;min-width:100px;" onclick="checkRole('sc3',this,'ds')">🛠️ Data Engineer</button>
+        </div>
+        <div class="quiz-feedback" id="sc3-fb"></div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ══════════════ SECTION 4 ══════════════ -->
+<section id="sec4" class="section-wrap">
+  <div class="sec-header reveal">
+    <div class="sec-icon">🗂️</div>
+    <div class="sec-info">
+      <div class="sec-label">Section 4</div>
+      <div class="sec-title">Introduction to Data</div>
+    </div>
+  </div>
+
+  <div class="def-box reveal">
+    <div class="def-label">📖 What is Data?</div>
+    <div class="def-text"><strong>Data</strong> is a collection of raw facts, numbers, words, or observations. By itself, data has no meaning. When data is processed and given context, it becomes <strong>information</strong>.</div>
+  </div>
+
+  <div class="ex-box reveal">
+    <div class="ex-label">🔑 Key Distinction</div>
+    <div class="ex-text">
+      <strong>Data:</strong> 98, 99, 45, 78, 100<br>
+      <strong>Information:</strong> These are marks of 5 students in a maths exam. Average = 84.<br><br>
+      → <strong>Data + Context + Processing = Information</strong>
+    </div>
+  </div>
+
+  <div class="sec-divider"></div>
+  <h3 style="font-weight:900;font-size:1.1rem;color:#fff;margin-bottom:14px;" class="reveal">📦 Types of Data</h3>
+
+  <!-- Structured -->
+  <div class="card reveal" style="border-color:rgba(16,185,129,.4);margin-bottom:14px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+      <div>
+        <div style="font-weight:900;font-size:1rem;color:#fff;">📋 Structured Data</div>
+        <span class="dtype-tag dtype-s">Organised · Tabular · Easy to search</span>
+      </div>
+    </div>
+    <div class="card-body">Data that is <strong>organised in rows and columns</strong> (like an Excel sheet or database table). It has a fixed schema (format).</div>
+    <div class="table-wrap" style="margin-top:12px;">
+      <table>
+        <tr><th>Student ID</th><th>Name</th><th>Marks</th><th>Grade</th></tr>
+        <tr><td>101</td><td>Rahul</td><td>85</td><td>A</td></tr>
+        <tr><td>102</td><td>Priya</td><td>72</td><td>B</td></tr>
+        <tr><td>103</td><td>Arjun</td><td>90</td><td>A+</td></tr>
+      </table>
+    </div>
+    <div class="callout success" style="margin-top:12px;">
+      <span class="callout-icon">✅</span>
+      <span class="callout-text"><strong>More examples:</strong> Bank transaction records, Hospital patient details, Train reservation data, Employee salary database, Stock market prices</span>
+    </div>
+  </div>
+
+  <!-- Unstructured -->
+  <div class="card reveal" style="border-color:rgba(244,63,94,.4);margin-bottom:14px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+      <div>
+        <div style="font-weight:900;font-size:1rem;color:#fff;">🗃️ Unstructured Data</div>
+        <span class="dtype-tag dtype-u">No fixed format · Hard to search · 80% of world's data</span>
+      </div>
+    </div>
+    <div class="card-body">Data with <strong>no predefined format</strong>. It cannot easily be stored in rows/columns. Requires special tools to process.</div>
+    <div class="grid-2" style="margin-top:12px;">
+      <div style="background:rgba(244,63,94,.08);border:1px solid rgba(244,63,94,.2);border-radius:10px;padding:12px;">
+        <div style="font-weight:700;margin-bottom:6px;font-size:.9rem;">Examples</div>
+        <div style="font-size:.85rem;color:var(--soft);">
+          📷 Photos, Videos, Audio<br>
+          📧 Emails, WhatsApp chats<br>
+          📰 News articles, social media posts<br>
+          🎵 Songs, Podcasts<br>
+          📄 PDF documents, Word files<br>
+          📹 YouTube videos
+        </div>
+      </div>
+      <div style="background:rgba(244,63,94,.08);border:1px solid rgba(244,63,94,.2);border-radius:10px;padding:12px;">
+        <div style="font-weight:700;margin-bottom:6px;font-size:.9rem;">Used in DS for</div>
+        <div style="font-size:.85rem;color:var(--soft);">
+          🤖 Image recognition (Google Photos)<br>
+          🎙️ Voice assistants (Alexa, Siri)<br>
+          😊 Sentiment analysis (product reviews)<br>
+          🎬 Video recommendation (YouTube)<br>
+          📝 Chatbots (ChatGPT)
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Semi-structured -->
+  <div class="card reveal" style="border-color:rgba(245,158,11,.4);margin-bottom:14px;">
+    <div style="font-weight:900;font-size:1rem;color:#fff;margin-bottom:4px;">📄 Semi-Structured Data</div>
+    <span class="dtype-tag dtype-ss">Middle ground · Has tags/markers · Partially organised</span>
+    <div class="card-body" style="margin-top:8px;">Has <strong>some structure</strong> but not as rigid as a table. Uses tags or markers to separate elements. Common on the internet!</div>
+    <div class="ex-box" style="margin-top:10px;">
+      <div class="ex-label">Examples</div>
+      <div class="ex-text">
+        <strong>JSON</strong> (used by apps): <code style="background:var(--border);padding:2px 6px;border-radius:4px;font-size:.82rem;">{"name":"Rahul", "age":20, "marks":85}</code><br><br>
+        <strong>XML</strong> (used in web services): <code style="background:var(--border);padding:2px 6px;border-radius:4px;font-size:.82rem;">&lt;student&gt;&lt;name&gt;Priya&lt;/name&gt;&lt;/student&gt;</code><br><br>
+        <strong>HTML pages</strong>, <strong>Email with headers</strong>, <strong>Log files</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- Data Type Sorter Game -->
+  <div class="activity reveal">
+    <div class="activity-label">🎮 Mini Game — Sort the Data!</div>
+    <div class="activity-title">Tap each item below, then tap the correct box to classify it!</div>
+    <div class="sorter-wrap">
+      <div class="sorter-items" id="sortablePool">
+        <div class="sortable-item" data-type="s" onclick="moveToZone(this)">📊 Excel Spreadsheet</div>
+        <div class="sortable-item" data-type="u" onclick="moveToZone(this)">🎵 MP3 Song</div>
+        <div class="sortable-item" data-type="ss" onclick="moveToZone(this)">📋 JSON File</div>
+        <div class="sortable-item" data-type="u" onclick="moveToZone(this)">📷 Selfie Photo</div>
+        <div class="sortable-item" data-type="s" onclick="moveToZone(this)">🏦 Bank Transactions</div>
+        <div class="sortable-item" data-type="u" onclick="moveToZone(this)">📰 News Article</div>
+        <div class="sortable-item" data-type="ss" onclick="moveToZone(this)">📧 Email with headers</div>
+        <div class="sortable-item" data-type="s" onclick="moveToZone(this)">🚂 Train Schedule</div>
+      </div>
+      <div class="sort-zones">
+        <div class="sort-zone zone-s" id="zone-s">
+          <div class="zone-label">📋 STRUCTURED</div>
+        </div>
+        <div class="sort-zone zone-u" id="zone-u">
+          <div class="zone-label">🗃️ UNSTRUCTURED</div>
+        </div>
+        <div class="sort-zone zone-ss" id="zone-ss">
+          <div class="zone-label">📄 SEMI-STRUCTURED</div>
+        </div>
+      </div>
+      <button class="sort-check-btn" onclick="checkSort()">✅ Check Answers</button>
+      <div class="sort-result" id="sortResult"></div>
+      <button class="quiz-retry" onclick="resetSort()" style="display:none;width:100%;margin-top:8px;" id="sortRetry">↺ Reset</button>
+    </div>
+  </div>
+
+  <!-- Data Sources -->
+  <div class="sec-divider"></div>
+  <h3 style="font-weight:900;font-size:1.1rem;color:#fff;margin-bottom:14px;" class="reveal">🌐 Data Sources</h3>
+
+  <p class="prose reveal">Where does data come from? There are two main types of data sources:</p>
+
+  <div class="grid-2 reveal">
+    <div class="card green">
+      <div class="card-title">🏢 Primary Sources</div>
+      <div class="card-body">Data you <strong>collect yourself</strong> for your specific purpose. More accurate but costly.</div>
+      <div class="ex-box" style="margin-top:10px;padding:10px 14px;">
+        <div class="ex-text" style="font-size:.82rem;">
+          📝 Surveys and questionnaires<br>
+          🔬 Experiments and lab tests<br>
+          📹 Direct observations<br>
+          📞 Interviews
+        </div>
+      </div>
+    </div>
+    <div class="card purple">
+      <div class="card-title">🌐 Secondary Sources</div>
+      <div class="card-body">Data <strong>already collected</strong> by someone else. Cheaper and faster to use.</div>
+      <div class="ex-box" style="margin-top:10px;padding:10px 14px;">
+        <div class="ex-text" style="font-size:.82rem;">
+          🏛️ Government data (data.gov.in)<br>
+          📰 Published reports<br>
+          🔓 Open datasets (Kaggle)<br>
+          📚 Research papers
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Indian Open Data -->
+  <div class="callout info reveal">
+    <span class="callout-icon">🇮🇳</span>
+    <span class="callout-text"><strong>India has amazing open data!</strong> Visit <strong>data.gov.in</strong> — it has thousands of free datasets on agriculture, education, health, weather, and more. Perfect for your DS projects!</span>
+  </div>
+
+  <!-- Data Collection Methods -->
+  <div class="sec-divider"></div>
+  <h3 style="font-weight:900;font-size:1.1rem;color:#fff;margin-bottom:14px;" class="reveal">📥 Data Collection Methods</h3>
+
+  <div style="display:flex;flex-direction:column;gap:10px;" class="reveal">
+    <button class="expand-btn" onclick="toggleExpand(this)">
+      <span>📝 Surveys & Questionnaires</span>
+      <span class="expand-chevron">▼</span>
+    </button>
+    <div class="expand-content">
+      Collecting data by asking people questions, either online (Google Forms) or on paper. Used in market research, academic studies, and feedback collection.<br><br>
+      <strong>Example:</strong> Google Forms survey asking students about preferred study timings.
+    </div>
+
+    <button class="expand-btn" onclick="toggleExpand(this)">
+      <span>🌐 Web Scraping</span>
+      <span class="expand-chevron">▼</span>
+    </button>
+    <div class="expand-content">
+      Automatically extracting data from websites using code (Python libraries like BeautifulSoup). Used to collect prices, reviews, news, etc.<br><br>
+      <strong>Example:</strong> Scraping Flipkart product prices every day to track discounts.
+    </div>
+
+    <button class="expand-btn" onclick="toggleExpand(this)">
+      <span>🔌 APIs (Application Programming Interface)</span>
+      <span class="expand-chevron">▼</span>
+    </button>
+    <div class="expand-content">
+      Officially provided data access from platforms. You request data and get it in structured JSON/XML format.<br><br>
+      <strong>Example:</strong> Using the Twitter API to get all tweets about "IPL" for sentiment analysis. Using Weather API to get daily temperature data.
+    </div>
+
+    <button class="expand-btn" onclick="toggleExpand(this)">
+      <span>📡 Sensors & IoT Devices</span>
+      <span class="expand-chevron">▼</span>
+    </button>
+    <div class="expand-content">
+      Physical devices that automatically collect real-world data: temperature, location, motion, speed, etc.<br><br>
+      <strong>Examples:</strong> Smartwatch tracking your heartbeat, Ola app GPS tracking your location, Smart meters measuring electricity usage, Factory sensors monitoring machine temperature.
+    </div>
+
+    <button class="expand-btn" onclick="toggleExpand(this)">
+      <span>🏛️ Open Datasets</span>
+      <span class="expand-chevron">▼</span>
+    </button>
+    <div class="expand-content">
+      Freely available datasets online that anyone can download and use for analysis or learning.<br><br>
+      <strong>Sources:</strong> Kaggle.com, UCI ML Repository, data.gov.in (India), WHO, World Bank, NASA, ISRO Open Data.
+    </div>
+
+    <button class="expand-btn" onclick="toggleExpand(this)">
+      <span>📂 Existing Databases / Logs</span>
+      <span class="expand-chevron">▼</span>
+    </button>
+    <div class="expand-content">
+      Companies already have massive databases from their business operations. These are goldmines for Data Scientists.<br><br>
+      <strong>Example:</strong> A hospital's 10-year patient records database, IRCTC's booking history, a bank's transaction logs.
+    </div>
+  </div>
+
+  <!-- Numeric: Data Volume Calculator -->
+  <div class="num-box reveal" style="margin-top:24px;">
+    <div class="num-label">🧮 Data Volume Practice</div>
+    <div class="num-title">Convert between data units (Bits → TB)</div>
+    <div class="num-input-row">
+      <div class="num-field">
+        <label>Value</label>
+        <input type="number" id="dataVal" value="1024" min="1">
+      </div>
+      <div class="num-field">
+        <label>From Unit</label>
+        <select id="dataFrom">
+          <option value="B">Bytes (B)</option>
+          <option value="KB">Kilobytes (KB)</option>
+          <option value="MB">Megabytes (MB)</option>
+          <option value="GB" selected>Gigabytes (GB)</option>
+          <option value="TB">Terabytes (TB)</option>
+        </select>
+      </div>
+      <div class="num-field">
+        <label>To Unit</label>
+        <select id="dataTo">
+          <option value="B">Bytes (B)</option>
+          <option value="KB">Kilobytes (KB)</option>
+          <option value="MB">Megabytes (MB)</option>
+          <option value="GB">Gigabytes (GB)</option>
+          <option value="TB" selected>Terabytes (TB)</option>
+        </select>
+      </div>
+    </div>
+    <button class="calc-btn" onclick="convertData()">Convert →</button>
+    <div class="calc-result" id="dataResult"><span style="color:var(--muted)">Select units and click Convert!</span></div>
+  </div>
+
+  <!-- Final Quiz -->
+  <div class="quiz-wrap reveal" id="q3">
+    <div class="quiz-label">🎯 Quick Check — Q3</div>
+    <div class="quiz-q">WhatsApp chat messages and YouTube videos are examples of which type of data?</div>
+    <div class="quiz-options">
+      <button class="quiz-opt" onclick="checkQuiz('q3',this,false)">A. Structured Data</button>
+      <button class="quiz-opt" onclick="checkQuiz('q3',this,false)">B. Semi-Structured Data</button>
+      <button class="quiz-opt" onclick="checkQuiz('q3',this,true)">C. Unstructured Data</button>
+      <button class="quiz-opt" onclick="checkQuiz('q3',this,false)">D. Relational Data</button>
+    </div>
+    <div class="quiz-feedback" id="q3-fb"></div>
+    <button class="quiz-retry" onclick="resetQuiz('q3')" style="display:none;" id="q3-retry">↺ Try Again</button>
+  </div>
+
+</section>
+
+<!-- ══════════════ FINAL SUMMARY ══════════════ -->
+<div class="summary-section">
+  <div class="sec-header reveal" style="margin-bottom:20px;">
+    <div class="sec-icon">✅</div>
+    <div class="sec-info">
+      <div class="sec-label">Unit 1 Wrap-Up</div>
+      <div class="sec-title">Quick Revision Summary</div>
+    </div>
+  </div>
+  <div class="summary-grid reveal">
+    <div class="sum-card">
+      <div class="sum-icon">🔭</div>
+      <div class="sum-term">Data Science</div>
+      <div class="sum-def">Using data + math + code to find insights and solve real problems.</div>
+    </div>
+    <div class="sum-card">
+      <div class="sum-icon">🔄</div>
+      <div class="sum-term">DS Process</div>
+      <div class="sum-def">7 steps: Problem → Collect → Clean → EDA → Model → Evaluate → Deploy</div>
+    </div>
+    <div class="sum-card">
+      <div class="sum-icon">🧑‍🔬</div>
+      <div class="sum-term">Data Scientist</div>
+      <div class="sum-def">Builds ML models, makes predictions. High coding + math skills.</div>
+    </div>
+    <div class="sum-card">
+      <div class="sum-icon">📊</div>
+      <div class="sum-term">Data Analyst</div>
+      <div class="sum-def">Analyses past data, creates reports. SQL + Excel + visualization.</div>
+    </div>
+    <div class="sum-card">
+      <div class="sum-icon">🛠️</div>
+      <div class="sum-term">Data Engineer</div>
+      <div class="sum-def">Builds data pipelines and infrastructure. Backend/systems focus.</div>
+    </div>
+    <div class="sum-card">
+      <div class="sum-icon">📋</div>
+      <div class="sum-term">Structured Data</div>
+      <div class="sum-def">Rows & columns. Excel tables, SQL databases. Easy to search.</div>
+    </div>
+    <div class="sum-card">
+      <div class="sum-icon">🗃️</div>
+      <div class="sum-term">Unstructured Data</div>
+      <div class="sum-def">No fixed format. Photos, videos, text. 80% of world's data.</div>
+    </div>
+    <div class="sum-card">
+      <div class="sum-icon">📄</div>
+      <div class="sum-term">Semi-Structured</div>
+      <div class="sum-def">Middle ground. JSON, XML, HTML. Has tags/markers.</div>
+    </div>
+    <div class="sum-card">
+      <div class="sum-icon">🏢</div>
+      <div class="sum-term">Primary Sources</div>
+      <div class="sum-def">Self-collected: surveys, experiments, direct observations.</div>
+    </div>
+    <div class="sum-card">
+      <div class="sum-icon">🌐</div>
+      <div class="sum-term">Secondary Sources</div>
+      <div class="sum-def">Pre-existing: govt data, Kaggle, published reports.</div>
+    </div>
+  </div>
+
+  <!-- Exam tips -->
+  <div class="callout" style="margin-top:24px;" class="reveal">
+    <span class="callout-icon">📝</span>
+    <span class="callout-text">
+      <strong>Exam Tips for Unit 1:</strong><br>
+      • Always give a real-life example with every definition<br>
+      • Know the 7 steps of DS process with examples<br>
+      • Be able to distinguish all 3 data types with examples<br>
+      • Know difference between Data Scientist vs Analyst vs Engineer<br>
+      • Know at least 3 data collection methods
+    </span>
+  </div>
+
+  <div class="card" style="margin-top:20px;background:linear-gradient(135deg,rgba(99,102,241,.1),rgba(34,211,238,.06));">
+    <div style="display:flex;align-items:center;gap:14px;">
+      <div style="font-size:2rem;">🎓</div>
+      <div>
+        <div style="font-weight:800;color:#fff;">K.P. Singh · Introduction to Data Science</div>
+        <div style="font-size:.82rem;color:var(--muted);">Unit I · BCA Semester I · Lecture-08 · Data Science Fundamentals</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer class="foot">
+  <span class="name">K.P. Singh</span> · Introduction to Data Science · Unit 1 · BCA Sem I<br>
+  <span style="font-size:.75rem;margin-top:4px;display:block;">Interactive Study Notes — Open on phone or desktop</span>
+</footer>
+
+<button class="btt" id="btt" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+/* ── READING PROGRESS ── */
+window.addEventListener('scroll', () => {
+  const h = document.documentElement;
+  const pct = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+  document.getElementById('readBar').style.width = pct + '%';
+  document.getElementById('btt').classList.toggle('show', h.scrollTop > 300);
+});
+
+/* ── SCROLL REVEAL ── */
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+/* ── QUIZ ENGINE ── */
+function checkQuiz(id, btn, correct) {
+  const opts = document.querySelectorAll(`#${id} .quiz-opt`);
+  opts.forEach(o => o.disabled = true);
+  const fb = document.getElementById(`${id}-fb`);
+  const retry = document.getElementById(`${id}-retry`);
+  if (correct) {
+    btn.classList.add('correct');
+    fb.className = 'quiz-feedback show ok';
+    fb.innerHTML = '🎉 Correct! Well done!';
+  } else {
+    btn.classList.add('wrong');
+    fb.className = 'quiz-feedback show bad';
+    fb.innerHTML = '❌ Not quite! The highlighted option shows the correct answer.';
+    // Highlight correct
+    opts.forEach(o => { if (o.getAttribute('onclick').includes('true')) o.classList.add('correct'); });
+  }
+  retry.style.display = 'block';
+}
+
+function resetQuiz(id) {
+  const opts = document.querySelectorAll(`#${id} .quiz-opt`);
+  opts.forEach(o => { o.disabled = false; o.classList.remove('correct','wrong'); });
+  document.getElementById(`${id}-fb`).className = 'quiz-feedback';
+  document.getElementById(`${id}-retry`).style.display = 'none';
+}
+
+/* ── ROLE CHECKER ── */
+function checkRole(scId, btn, role, isCorrect) {
+  const opts = btn.parentElement.querySelectorAll('.quiz-opt');
+  opts.forEach(o => o.disabled = true);
+  const fb = document.getElementById(`${scId}-fb`);
+  const roleNames = { ds:'🧑‍🔬 Data Scientist', da:'📊 Data Analyst', de:'🛠️ Data Engineer' };
+  if (isCorrect === 'correct') {
+    btn.classList.add('correct');
+    fb.className = 'quiz-feedback show ok';
+    fb.innerHTML = `🎉 Correct! ${roleNames[role]} is the right call here.`;
+  } else {
+    btn.classList.add('wrong');
+    fb.className = 'quiz-feedback show bad';
+    fb.innerHTML = `❌ Not quite! The correct answer is <strong>${roleNames[role]}</strong>.`;
+    opts.forEach(o => { if (o.getAttribute('onclick').includes("'correct'")) o.classList.add('correct'); });
+  }
+}
+
+/* ── TIME BREAKDOWN ── */
+function calcTimeBreakdown() {
+  const h = +document.getElementById('totalHours').value || 100;
+  const steps = [
+    { name: 'Problem Definition', pct: 5 },
+    { name: 'Data Collection', pct: 10 },
+    { name: 'Data Cleaning', pct: 60 },
+    { name: 'EDA & Analysis', pct: 10 },
+    { name: 'Modelling', pct: 8 },
+    { name: 'Evaluation', pct: 4 },
+    { name: 'Deployment', pct: 3 },
+  ];
+  let html = '<div style="display:flex;flex-direction:column;gap:8px;">';
+  steps.forEach(s => {
+    const hrs = (h * s.pct / 100).toFixed(1);
+    const w = s.pct;
+    html += `<div>
+      <div style="display:flex;justify-content:space-between;font-size:.82rem;margin-bottom:3px;">
+        <span style="color:var(--text);font-weight:600;">${s.name}</span>
+        <span style="color:var(--accent2);font-family:'Space Mono',monospace;">${hrs}h (${s.pct}%)</span>
+      </div>
+      <div style="background:var(--border);border-radius:4px;height:8px;overflow:hidden;">
+        <div style="width:${w}%;height:100%;background:linear-gradient(to right,var(--accent),var(--accent2));border-radius:4px;"></div>
+      </div>
+    </div>`;
+  });
+  html += `</div><div style="margin-top:12px;font-size:.82rem;color:var(--orange);font-weight:700;">⚠️ Notice: Data Cleaning alone takes ${(h*0.6).toFixed(0)} hours out of ${h} total hours!</div>`;
+  document.getElementById('timeResult').innerHTML = html;
+}
+
+/* ── DATA SORTER ── */
+let selectedItem = null;
+
+function moveToZone(el) {
+  if (selectedItem && selectedItem !== el) {
+    selectedItem.style.border = '1px solid var(--border)';
+    selectedItem.style.color = 'var(--text)';
+  }
+  if (selectedItem === el) {
+    // Deselect
+    el.style.border = '1px solid var(--border)';
+    el.style.color = 'var(--text)';
+    selectedItem = null;
+    // Add click to zones to receive
+    removeZoneListeners();
+    return;
+  }
+  selectedItem = el;
+  el.style.border = '1px solid var(--accent2)';
+  el.style.color = 'var(--accent2)';
+  // Add zone listeners
+  ['zone-s','zone-u','zone-ss'].forEach(zid => {
+    const zone = document.getElementById(zid);
+    zone.style.borderColor = 'var(--accent2)';
+    zone.onclick = () => {
+      zone.appendChild(selectedItem);
+      selectedItem.style.border = '1px solid var(--border)';
+      selectedItem.style.color = 'var(--text)';
+      selectedItem.onclick = () => moveBackToPool(selectedItem);
+      selectedItem = null;
+      removeZoneListeners();
+    };
+  });
+}
+
+function moveBackToPool(el) {
+  document.getElementById('sortablePool').appendChild(el);
+  el.onclick = () => moveToZone(el);
+}
+
+function removeZoneListeners() {
+  ['zone-s','zone-u','zone-ss'].forEach(zid => {
+    document.getElementById(zid).style.borderColor = '';
+    document.getElementById(zid).onclick = null;
+  });
+}
+
+function checkSort() {
+  const zones = { s: document.getElementById('zone-s'), u: document.getElementById('zone-u'), ss: document.getElementById('zone-ss') };
+  let correct = 0, total = 0;
+  ['s','u','ss'].forEach(type => {
+    zones[type].querySelectorAll('.sortable-item').forEach(item => {
+      total++;
+      if (item.dataset.type === type) {
+        correct++;
+        item.style.background = 'rgba(16,185,129,.2)';
+        item.style.borderColor = 'var(--green)';
+        item.style.color = 'var(--green)';
+      } else {
+        item.style.background = 'rgba(244,63,94,.2)';
+        item.style.borderColor = 'var(--red)';
+        item.style.color = 'var(--red)';
+      }
+    });
+  });
+  const pool = document.getElementById('sortablePool');
+  pool.querySelectorAll('.sortable-item').forEach(item => { total++; item.style.borderColor='var(--orange)'; });
+  const res = document.getElementById('sortResult');
+  res.style.display = 'block';
+  if (correct === 8 && total === 8) {
+    res.style.background = 'rgba(16,185,129,.1)'; res.style.border = '1px solid rgba(16,185,129,.3)'; res.style.color = 'var(--green)';
+    res.innerHTML = `🎉 Perfect! ${correct}/${total} correct! You nailed all data types!`;
+  } else {
+    res.style.background = 'rgba(244,63,94,.08)'; res.style.border = '1px solid rgba(244,63,94,.3)'; res.style.color = '#fca5a5';
+    res.innerHTML = `${correct}/${total} correct. Review the highlighted items and try again!`;
+  }
+  document.getElementById('sortRetry').style.display = 'block';
+}
+
+function resetSort() {
+  const pool = document.getElementById('sortablePool');
+  ['zone-s','zone-u','zone-ss'].forEach(zid => {
+    const zone = document.getElementById(zid);
+    zone.querySelectorAll('.sortable-item').forEach(item => {
+      item.style.background=''; item.style.borderColor=''; item.style.color='';
+      item.onclick = () => moveToZone(item);
+      pool.appendChild(item);
+    });
+  });
+  document.getElementById('sortResult').style.display='none';
+  document.getElementById('sortRetry').style.display='none';
+}
+
+/* ── DATA CONVERTER ── */
+function convertData() {
+  const val = +document.getElementById('dataVal').value;
+  const from = document.getElementById('dataFrom').value;
+  const to = document.getElementById('dataTo').value;
+  const units = { B:1, KB:1024, MB:1024**2, GB:1024**3, TB:1024**4 };
+  const bytes = val * units[from];
+  const result = bytes / units[to];
+  let res;
+  if (result >= 1e12) res = (result/1e12).toFixed(4) + ' (very large!)';
+  else if (result < 0.00001) res = result.toExponential(4);
+  else res = result.toLocaleString('en-IN', {maximumFractionDigits:6});
+  document.getElementById('dataResult').innerHTML =
+    `<span style="font-family:'Space Mono',monospace;">${val.toLocaleString()} ${from} = <strong style="color:var(--accent2);font-size:1.1rem;">${res} ${to}</strong></span>
+     <div style="font-size:.78rem;color:var(--muted);margin-top:6px;">= ${bytes.toLocaleString()} bytes total</div>`;
+}
+
+/* ── EXPAND/COLLAPSE ── */
+function toggleExpand(btn) {
+  btn.classList.toggle('open');
+  const content = btn.nextElementSibling;
+  content.classList.toggle('open');
+}
+</script>
+</body>
+</html>
