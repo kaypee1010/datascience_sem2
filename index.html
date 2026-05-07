@@ -3,36 +3,36 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Unit 4 – Probability & Hypothesis Testing | K.P. Singh</title>
+<title>Practical 7 – Data Cleaning, Normalization & Storytelling | K.P. Singh</title>
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;600;700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
-<!-- 🔥 FLOATING HOME BUTTON -->
-<a href="https://kpsingh.in" target="_blank" class="home-btn" title="Go to Homepage">
-  <svg width="18" height="18" fill="white" viewBox="0 0 24 24">
-    <path d="M12 3l9 8h-3v9h-5v-6H11v6H6v-9H3z"/>
-  </svg>
-</a>
-  <style>
-  :root {
-    --navy: #0a0e1a;
-    --navy2: #111827;
-    --panel: #161d2e;
-    --border: #1e2d45;
-    --accent: #f97316;
-    --accent2: #06b6d4;
-    --success: #10b981;
-    --danger: #ef4444;
-    --yellow: #fbbf24;
-    --purple: #a78bfa;
-    --text: #e2e8f0;
-    --muted: #64748b;
-    --glass: rgba(255,255,255,0.04);
-  }
-    .deck {
-  min-height: 100dvh;
+
+<style>
+:root {
+  --navy: #0a0e1a;
+  --navy2: #111827;
+  --panel: #161d2e;
+  --border: #1e2d45;
+  --accent: #f97316;
+  --accent2: #06b6d4;
+  --success: #10b981;
+  --danger: #ef4444;
+  --yellow: #fbbf24;
+  --purple: #a78bfa;
+  --text: #e2e8f0;
+  --muted: #64748b;
+  --glass: rgba(255,255,255,0.04);
 }
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  /* ─── HOME BUTTON ─── */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--navy);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+/* HOME BUTTON */
 .home-btn {
   position: fixed;
   top: 14px;
@@ -45,1444 +45,1009 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.2rem;
   text-decoration: none;
   color: #fff;
   box-shadow: 0 4px 18px rgba(0,0,0,0.4);
   transition: transform 0.15s, box-shadow 0.15s;
 }
-    .home-btn::after {
-  content: "Home";
-  position: absolute;
-  right: 50px;
+.home-btn:hover { transform: scale(1.08); }
+
+/* HEADER */
+.hbar {
+  height: 58px;
   background: var(--panel);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  padding: 0 36px;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.hbar-title {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.72rem;
+  color: var(--muted);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.hbar-chip {
+  background: var(--accent);
+  color: #fff;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.68rem;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-weight: 700;
+}
+
+/* HERO */
+.hero {
+  padding: 60px 60px 40px;
+  background: radial-gradient(ellipse at 55% 40%, #192344 0%, #0a0e1a 65%);
+  border-bottom: 1px solid var(--border);
+}
+.hero-kicker {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.75rem;
+  color: var(--accent2);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+.hero-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  line-height: 1.1;
+  background: linear-gradient(135deg, #fff 30%, var(--accent2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 14px;
+}
+.hero-sub {
+  font-size: 1.05rem;
+  color: var(--muted);
+  max-width: 560px;
+  line-height: 1.7;
+  margin-bottom: 20px;
+}
+.badges { display: flex; gap: 10px; flex-wrap: wrap; }
+.badge {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 7px 16px;
+  font-size: 0.85rem;
   color: var(--text);
-  padding: 4px 10px;
-  border-radius: 6px;
-  font-size: 0.7rem;
-  opacity: 0;
+}
+.badge span { color: var(--accent); font-weight: 700; }
+.badge.teal span { color: var(--accent2); }
+
+/* TABS */
+.tab-bar {
+  background: var(--panel);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  padding: 0 60px;
+  overflow-x: auto;
+  position: sticky;
+  top: 58px;
+  z-index: 99;
+}
+.tab-btn {
+  padding: 16px 20px;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: none;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
   transition: 0.2s;
+  white-space: nowrap;
 }
-.nav-bar {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 150;
+.tab-btn.active {
+  color: var(--accent2);
+  border-bottom-color: var(--accent2);
 }
-.home-btn:hover::after {
-  opacity: 1;
-}
+.tab-btn:hover { color: var(--text); }
 
-.home-btn:hover {
-  transform: scale(1.08);
-  box-shadow: 0 6px 22px rgba(0,0,0,0.5);
-}
-    
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--navy);
-    color: var(--text);
-    min-height: 100dvh;
-    overflow: hidden;
-    cursor: default;
-    user-select: none;
-  }
-    @media (max-width: 600px) {
-  .nav-bar {
-    padding: 0 12px;
-    height: 56px;
-    backdrop-filter: blur(10px);
-    background: rgba(22,29,46,0.85)
-  }
+/* CONTENT PANELS */
+.panels { padding: 48px 60px 80px; max-width: 1000px; margin: 0 auto; }
+.panel { display: none; }
+.panel.active { display: block; animation: fadeUp 0.3s ease both; }
 
-  .nav-btn {
-    padding: 8px 12px;
-    font-size: 0.7rem;
-  }
-
-  .slide-counter {
-    font-size: 0.7rem;
-  }
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: none; }
 }
 
-  /* ─── SLIDE ENGINE ─── */
-  .deck { width: 100vw; height: 100vh; position: relative; }
+/* TYPOGRAPHY */
+.slide-heading {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.9rem;
+  color: #fff;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.slide-heading::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, var(--border), transparent);
+}
+.hl { color: var(--accent); }
+.hl2 { color: var(--accent2); }
+h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 28px 0 12px;
+}
 
-  .slide {
-    position: absolute; inset: 0;
-    display: none;
-    flex-direction: column;
-    padding: 0;
-    overflow: hidden;
-  }
-  .slide.active { display: flex; }
-  .slide.anim-in { animation: slideIn .45s cubic-bezier(.22,.68,0,1.2) both; }
+/* CARDS */
+.card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 22px 24px;
+  margin-bottom: 16px;
+  position: relative;
+  overflow: hidden;
+}
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(to right, var(--accent), var(--accent2));
+}
+.card.accent2::before { background: linear-gradient(to right, var(--accent2), var(--purple)); }
+.card.success-card::before { background: linear-gradient(to right, var(--success), var(--accent2)); }
+.card.danger-card::before { background: linear(to right, var(--danger), var(--purple)); }
+.card.yellow-card::before { background: linear-gradient(to right, var(--yellow), var(--accent)); }
+.card-title { font-weight: 700; font-size: 1rem; color: #fff; margin-bottom: 8px; }
+.card-body { color: var(--muted); font-size: 0.92rem; line-height: 1.65; }
 
-  @keyframes slideIn {
-    from { opacity:0; transform: translateY(28px) scale(.98); }
-    to   { opacity:1; transform: none; }
-  }
+/* INFO STRIP */
+.info-strip {
+  border-left: 3px solid var(--accent2);
+  background: rgba(6,182,212,0.07);
+  border-radius: 0 10px 10px 0;
+  padding: 14px 18px;
+  margin-bottom: 18px;
+}
+.warn-strip {
+  border-left: 3px solid var(--yellow);
+  background: rgba(251,191,36,0.07);
+  border-radius: 0 10px 10px 0;
+  padding: 14px 18px;
+  margin-bottom: 18px;
+}
+.success-strip {
+  border-left: 3px solid var(--success);
+  background: rgba(16,185,129,0.07);
+  border-radius: 0 10px 10px 0;
+  padding: 14px 18px;
+  margin-bottom: 18px;
+}
+.strip-label {
+  font-size: 0.72rem;
+  font-family: 'Space Mono', monospace;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  color: var(--accent2);
+  font-weight: 700;
+}
+.warn-strip .strip-label { color: var(--yellow); }
+.success-strip .strip-label { color: var(--success); }
 
-  /* ─── HEADER BAR ─── */
-  .hbar {
-    height: 58px; min-height: 58px;
-    background: var(--panel);
-    border-bottom: 1px solid var(--border);
-    display: flex; align-items: center;
-    padding: 0 36px;
-    justify-content: space-between;
-    position: relative; z-index: 10;
-  }
-  .hbar-title { font-family: 'Space Mono', monospace; font-size:.72rem; color: var(--muted); letter-spacing:.12em; text-transform: uppercase; }
-  .hbar-chip {
-    background: var(--accent); color: #fff;
-    font-family: 'Space Mono', monospace; font-size:.68rem;
-    padding: 4px 12px; border-radius: 20px; font-weight: 700;
-  }
+/* TABLES */
+.table-wrap { overflow-x: auto; margin: 14px 0; }
+table { width: 100%; border-collapse: collapse; }
+th {
+  background: var(--border);
+  color: var(--accent2);
+  font-family: 'Space Mono', monospace;
+  font-size: 0.72rem;
+  padding: 10px 14px;
+  text-align: left;
+  letter-spacing: 0.06em;
+}
+td {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.92rem;
+  color: var(--text);
+}
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: rgba(255,255,255,0.02); }
+td.dirty {
+  background: rgba(239,68,68,0.12);
+  color: #f87171;
+  font-weight: 600;
+}
+td.clean {
+  background: rgba(16,185,129,0.12);
+  color: #34d399;
+  font-weight: 600;
+}
 
-  /* ─── SLIDE BODY ─── */
-  .sbody {
-    flex: 1; overflow-y: auto;
-    padding: 44px 60px 30px;
-    position: relative;
-    padding-bottom: 80px; /* important */
+/* PILLS */
+.pill {
+  display: inline-block;
+  padding: 3px 12px;
+  border-radius: 20px;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+.pill-success { background: rgba(16,185,129,0.15); color: var(--success); }
+.pill-danger  { background: rgba(239,68,68,0.15);  color: var(--danger); }
+.pill-yellow  { background: rgba(251,191,36,0.15); color: var(--yellow); }
+.pill-blue    { background: rgba(6,182,212,0.15);  color: var(--accent2); }
 
-  }
-  .sbody::-webkit-scrollbar { width:5px; }
-  .sbody::-webkit-scrollbar-thumb { background: var(--border); border-radius:4px; }
+/* FORMULA BOX */
+.formula-box {
+  background: linear-gradient(135deg, #0f2234, #0d1a2b);
+  border: 1px solid var(--accent2);
+  border-radius: 10px;
+  padding: 16px 22px;
+  font-family: 'Space Mono', monospace;
+  font-size: 1.1rem;
+  color: var(--accent2);
+  text-align: center;
+  margin: 12px 0;
+  letter-spacing: 0.04em;
+}
 
-  /* ─── SLIDE TYPES ─── */
-  /* HERO */
-  .hero-slide .sbody {
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-    text-align: center; gap: 20px;
-    background: radial-gradient(ellipse at 60% 40%, #1a2744 0%, var(--navy) 65%);
-  }
-  .hero-kicker { font-family: 'Space Mono', monospace; font-size:.75rem; color: var(--accent2); letter-spacing:.18em; text-transform: uppercase; }
-  .hero-title {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(2.8rem, 6vw, 5rem);
-    line-height: 1.08;
-    background: linear-gradient(135deg, #fff 30%, var(--accent2));
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-  }
-  .hero-sub { font-size:1.15rem; color: var(--muted); max-width:560px; line-height:1.7; }
-  .hero-meta { display:flex; gap:24px; margin-top:8px; }
-  .hero-badge {
-    background: var(--glass); border:1px solid var(--border);
-    border-radius:10px; padding:10px 22px;
-    font-size:.9rem; color: var(--text);
-  }
-  .hero-badge span { color: var(--accent); font-weight:700; }
+/* STEPS */
+.step-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.step-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  background: var(--glass);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 16px;
+  transition: border-color 0.2s;
+}
+.step-list li:hover { border-color: var(--accent2); }
+.step-num {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.75rem; font-weight: 700;
+  color: #fff; flex-shrink: 0;
+}
+.step-text { font-size: 0.92rem; line-height: 1.55; color: var(--text); padding-top: 4px; }
 
-  /* SECTION DIVIDER */
-  .section-slide .sbody {
-    display: flex; align-items: center; justify-content: center;
-    background: linear-gradient(135deg, #0f1c32 0%, var(--navy) 100%);
-  }
-  .section-num {
-    font-family:'Space Mono',monospace; font-size: 8rem;
-    color: var(--border); position:absolute; left:-10px; top:50%; transform:translateY(-50%);
-    line-height:1; font-weight:700; pointer-events:none;
-  }
-  .section-inner { text-align:center; position:relative; z-index:2; }
-  .section-tag { color: var(--accent); font-weight:700; font-size:1rem; text-transform:uppercase; letter-spacing:.1em; margin-bottom:12px; }
-  .section-title { font-family:'Playfair Display',serif; font-size:3.2rem; line-height:1.1; }
-  .section-desc { color:var(--muted); margin-top:14px; font-size:1.05rem; max-width:500px; }
+/* TWO COL */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
 
-  /* ─── CONTENT COMPONENTS ─── */
-  .slide-heading {
-    font-family:'Playfair Display',serif;
-    font-size:2rem; color:#fff; margin-bottom:28px;
-    display:flex; align-items:center; gap:12px;
-  }
-  .slide-heading::after {
-    content:''; flex:1; height:1px; background:linear-gradient(to right,var(--border),transparent);
-  }
-  .hl { color: var(--accent); }
-  .hl2 { color: var(--accent2); }
+/* INTERACTIVE */
+.interactive-box {
+  background: var(--panel);
+  border: 1px solid var(--accent);
+  border-radius: 14px;
+  padding: 24px;
+  position: relative;
+  margin-bottom: 16px;
+}
+.interactive-box.blue { border-color: var(--accent2); }
+.interactive-label {
+  position: absolute;
+  top: -12px; left: 18px;
+  background: var(--accent);
+  color: #fff;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  padding: 3px 12px;
+  border-radius: 20px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+.interactive-box.blue .interactive-label { background: var(--accent2); }
 
-  .two-col { display:grid; grid-template-columns:1fr 1fr; gap:28px; }
-  .three-col { display:grid; grid-template-columns:1fr 1fr 1fr; gap:20px; }
+/* INPUTS */
+label {
+  font-size: 0.78rem;
+  color: var(--muted);
+  margin-bottom: 5px;
+  display: block;
+  font-family: 'Space Mono', monospace;
+}
+input[type=number], select {
+  width: 100%;
+  background: var(--navy);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.95rem;
+  outline: none;
+  transition: border-color 0.15s;
+  margin-bottom: 12px;
+}
+input[type=number]:focus, select:focus { border-color: var(--accent2); }
 
-  .card {
-    background: var(--panel);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 24px;
-    position: relative; overflow:hidden;
-  }
-  .card::before {
-    content:''; position:absolute; top:0; left:0; right:0; height:3px;
-    background: linear-gradient(to right, var(--accent), var(--accent2));
-  }
-  .card.accent2::before { background: linear-gradient(to right, var(--accent2), var(--purple)); }
-  .card.success::before { background: linear-gradient(to right, var(--success), var(--accent2)); }
-  .card.danger::before { background: linear-gradient(to right, var(--danger), var(--purple)); }
-  .card.yellow::before { background: linear-gradient(to right, var(--yellow), var(--accent)); }
+.solve-btn {
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 11px 26px;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity 0.15s, transform 0.1s;
+}
+.solve-btn:hover { opacity: 0.9; transform: scale(1.02); }
 
-  .card-icon { font-size:2rem; margin-bottom:10px; }
-  .card-title { font-weight:700; font-size:1rem; color:#fff; margin-bottom:6px; }
-  .card-body { color:var(--muted); font-size:.92rem; line-height:1.65; }
+.result-box {
+  min-height: 50px;
+  background: rgba(6,182,212,0.05);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin-top: 12px;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.92rem;
+  color: var(--muted);
+}
 
-  .formula-box {
-    background: linear-gradient(135deg, #0f2234, #0d1a2b);
-    border: 1px solid var(--accent2);
-    border-radius: 12px; padding: 20px 28px;
-    font-family: 'Space Mono', monospace;
-    font-size: 1.2rem; color: var(--accent2);
-    text-align: center; margin: 16px 0;
-    letter-spacing: .04em;
-  }
-  .formula-label { font-size:.72rem; color:var(--muted); margin-bottom:6px; font-family:'DM Sans',sans-serif; text-transform:uppercase; letter-spacing:.1em; }
+/* RANGE SLIDER */
+input[type=range] {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  outline: none;
+  cursor: pointer;
+  background: var(--border);
+  margin-bottom: 12px;
+  padding: 0;
+}
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  background: #fff;
+  border: 3px solid var(--accent2);
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+}
 
-  .example-block {
-    background: rgba(6,182,212,.08);
-    border-left: 3px solid var(--accent2);
-    border-radius: 0 10px 10px 0;
-    padding: 16px 20px; margin: 16px 0;
-  }
-  .example-block .ex-label { font-size:.72rem; color:var(--accent2); text-transform:uppercase; letter-spacing:.1em; margin-bottom:8px; font-weight:700; }
+/* TOGGLE BUTTON */
+.toggle-btn {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--accent2);
+  border-radius: 8px;
+  padding: 7px 16px;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.72rem;
+  cursor: pointer;
+  transition: 0.2s;
+  margin-top: 10px;
+}
+.toggle-btn:hover { border-color: var(--accent2); background: rgba(6,182,212,0.05); }
 
-  .table-wrap { overflow-x:auto; margin:16px 0; }
-  table { width:100%; border-collapse:collapse; }
-  th {
-    background: var(--border); color: var(--accent2);
-    font-family:'Space Mono',monospace; font-size:.75rem;
-    padding:10px 16px; text-align:left; letter-spacing:.06em;
-  }
-  td { padding:10px 16px; border-bottom:1px solid var(--border); font-size:.92rem; }
-  tr:last-child td { border-bottom:none; }
-  tr:hover td { background: rgba(255,255,255,.03); }
+.answer-box {
+  display: none;
+  margin-top: 12px;
+  background: rgba(16,185,129,0.07);
+  border: 1px solid rgba(16,185,129,0.3);
+  border-radius: 10px;
+  padding: 14px 18px;
+  font-size: 0.92rem;
+  line-height: 1.65;
+  color: var(--text);
+}
 
-  .pill {
-    display:inline-block; padding:3px 12px; border-radius:20px;
-    font-size:.78rem; font-weight:700;
-  }
-  .pill.success { background:rgba(16,185,129,.15); color:var(--success); }
-  .pill.danger  { background:rgba(239,68,68,.15);  color:var(--danger); }
-  .pill.yellow  { background:rgba(251,191,36,.15); color:var(--yellow); }
-  .pill.accent2 { background:rgba(6,182,212,.15);  color:var(--accent2); }
+/* METRICS */
+.metric-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 16px 0; }
+.metric {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  text-align: center;
+}
+.metric-val { font-family: 'Space Mono', monospace; font-size: 1.6rem; font-weight: 700; }
+.metric-lbl { font-size: 0.78rem; color: var(--muted); margin-top: 5px; }
 
-  .step-list { list-style:none; display:flex; flex-direction:column; gap:12px; }
-  .step-list li {
-    display:flex; align-items:flex-start; gap:14px;
-    background:var(--glass); border:1px solid var(--border);
-    border-radius:10px; padding:12px 16px;
-    transition: border-color .2s;
-  }
-  .step-list li:hover { border-color: var(--accent2); }
-  .step-num {
-    width:28px; height:28px; border-radius:50%;
-    background: linear-gradient(135deg, var(--accent), var(--accent2));
-    display:flex; align-items:center; justify-content:center;
-    font-family:'Space Mono',monospace; font-size:.75rem; font-weight:700;
-    color:#fff; flex-shrink:0;
-  }
-  .step-text { font-size:.93rem; line-height:1.55; color:var(--text); padding-top:3px; }
+/* VIVA CARDS */
+.viva-card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 18px 20px;
+  margin-bottom: 12px;
+  transition: border-color 0.2s;
+}
+.viva-card:hover { border-color: var(--accent2); }
+.viva-q {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: #fff;
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.q-num {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.72rem;
+  color: var(--accent2);
+  background: rgba(6,182,212,0.1);
+  padding: 2px 10px;
+  border-radius: 20px;
+}
 
-  /* ─── INTERACTIVE COMPONENTS ─── */
-  .interactive-box {
-    background: var(--panel); border: 1px solid var(--accent);
-    border-radius: 16px; padding: 28px;
-    position: relative;
-  }
-  .interactive-label {
-    position:absolute; top:-12px; left:20px;
-    background: var(--accent); color:#fff;
-    font-family:'Space Mono',monospace; font-size:.68rem;
-    padding:3px 12px; border-radius:20px; font-weight:700;
-    letter-spacing:.08em;
-  }
-  .interactive-box.accent2 { border-color: var(--accent2); }
-  .interactive-box.accent2 .interactive-label { background: var(--accent2); }
+/* DEFS TABLE */
+.def-row { display: grid; grid-template-columns: 160px 1fr; gap: 14px; align-items: start; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+.def-row:last-child { border-bottom: none; }
+.def-term { font-family: 'Space Mono', monospace; font-size: 0.82rem; color: var(--accent2); font-weight: 700; }
+.def-body { font-size: 0.92rem; color: var(--text); line-height: 1.55; }
 
-  /* Coin flip */
-  .coin-wrap { display:flex; flex-direction:column; align-items:center; gap:18px; }
-  .coin {
-    width:90px; height:90px; border-radius:50%;
-    background: linear-gradient(135deg, #f59e0b, #d97706);
-    border: 4px solid #fbbf24;
-    display:flex; align-items:center; justify-content:center;
-    font-size:2.2rem; cursor:pointer;
-    box-shadow: 0 0 30px rgba(251,191,36,.3);
-    transition: transform .1s;
-  }
-  .coin:hover { transform: scale(1.05); }
-  .coin.flipping { animation: coinFlip .6s ease; }
-  @keyframes coinFlip {
-    0%   { transform: rotateY(0); }
-    50%  { transform: rotateY(90deg) scale(1.1); }
-    100% { transform: rotateY(0); }
-  }
-  .coin-result { font-family:'Space Mono',monospace; font-size:1rem; min-height:28px; text-align:center; }
-  .coin-stats { display:flex; gap:20px; }
-  .coin-stat { text-align:center; }
-  .coin-stat-val { font-family:'Space Mono',monospace; font-size:1.5rem; font-weight:700; color:var(--accent2); }
-  .coin-stat-label { font-size:.78rem; color:var(--muted); }
+/* SCATTER CANVAS */
+canvas { border-radius: 10px; display: block; }
 
-  /* p-value slider */
-  .pval-slider-wrap { display:flex; flex-direction:column; gap:16px; }
-  input[type=range] {
-    -webkit-appearance:none; width:100%; height:6px;
-    border-radius:3px; outline:none; cursor:pointer;
-    background: linear-gradient(to right, var(--success) 0%, var(--success) 5%, var(--danger) 5%, var(--danger) 100%);
-  }
-  input[type=range]::-webkit-slider-thumb {
-    -webkit-appearance:none; width:20px; height:20px; border-radius:50%;
-    background:#fff; border:3px solid var(--accent); cursor:pointer;
-    box-shadow:0 2px 8px rgba(0,0,0,.4);
-  }
-  .pval-display {
-    display:flex; align-items:center; justify-content:space-between;
-    background:var(--glass); border:1px solid var(--border);
-    border-radius:10px; padding:14px 20px;
-  }
-  .pval-number { font-family:'Space Mono',monospace; font-size:1.8rem; font-weight:700; }
-  .pval-verdict { font-size:1.1rem; font-weight:700; padding:6px 16px; border-radius:8px; }
-
-  /* scatter mini */
-  canvas { border-radius:10px; }
-
-  /* ─── LINK CARD ─── */
-  .link-card {
-    display:flex; align-items:center; gap:16px;
-    background:var(--panel); border:1px solid var(--border);
-    border-radius:12px; padding:16px 20px;
-    text-decoration:none; color:var(--text);
-    transition: border-color .2s, transform .15s;
-    cursor:pointer;
-  }
-  .link-card:hover { border-color: var(--accent2); transform:translateY(-2px); }
-  .link-icon { font-size:2rem; flex-shrink:0; }
-  .link-body .link-title { font-weight:700; color:#fff; margin-bottom:3px; }
-  .link-body .link-url { font-family:'Space Mono',monospace; font-size:.72rem; color:var(--muted); }
-  .link-body .link-desc { font-size:.85rem; color:var(--muted); margin-top:4px; }
-  .link-arrow { margin-left:auto; color:var(--accent2); font-size:1.3rem; }
-
-  /* ─── NAVIGATION ─── */
-  .nav-bar {
-    height:52px; min-height:52px;
-    background:var(--panel); border-top:1px solid var(--border);
-    display:flex; align-items:center; justify-content:space-between;
-    padding:0 36px;
-  }
-  .nav-btn {
-    background:var(--glass); border:1px solid var(--border);
-    color:var(--text); padding:8px 22px; border-radius:8px;
-    cursor:pointer; font-family:'Space Mono',monospace; font-size:.78rem;
-    transition: background .15s, border-color .15s;
-    display:flex; align-items:center; gap:8px;
-  }
-  .nav-btn:hover { background:rgba(255,255,255,.07); border-color:var(--accent2); }
-  .nav-btn:disabled { opacity:.3; cursor:default; }
-  .slide-counter { font-family:'Space Mono',monospace; font-size:.8rem; color:var(--muted); }
-  .progress-bar {
-    height:3px; background:var(--border); position:fixed; top:0; left:0; right:0; z-index:100;
-  }
-  .progress-fill { height:100%; background:linear-gradient(to right,var(--accent),var(--accent2)); transition:width .3s; }
-
-  /* ─── DOTS ─── */
-  .dots { display:flex; gap:6px; }
-  .dot { width:6px; height:6px; border-radius:50%; background:var(--border); cursor:pointer; transition:.2s; }
-  .dot.active { background:var(--accent2); width:18px; border-radius:3px; }
-  .dot:hover { background:var(--muted); }
-
-  /* Summary table */
-  .summary-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
-  .summary-card {
-    background:var(--panel); border:1px solid var(--border);
-    border-radius:12px; padding:18px; text-align:center;
-    transition: border-color .2s, transform .15s;
-  }
-  .summary-card:hover { border-color:var(--accent2); transform:translateY(-3px); }
-  .summary-icon { font-size:2rem; margin-bottom:8px; }
-  .summary-term { font-weight:700; color:#fff; font-size:.95rem; margin-bottom:4px; }
-  .summary-def { font-size:.82rem; color:var(--muted); }
-
-  /* Error table styled */
-  .error-row { display:flex; gap:14px; margin-bottom:14px; }
-  .error-box {
-    flex:1; border-radius:12px; padding:18px;
-    border: 1px solid;
-  }
-  .error-box.t1 { background:rgba(239,68,68,.08); border-color:rgba(239,68,68,.3); }
-  .error-box.t2 { background:rgba(251,191,36,.08); border-color:rgba(251,191,36,.3); }
-  .error-type { font-family:'Space Mono',monospace; font-size:.75rem; margin-bottom:6px; font-weight:700; }
-  .error-name { font-size:1rem; font-weight:700; color:#fff; margin-bottom:6px; }
-  .error-desc { font-size:.88rem; color:var(--muted); line-height:1.55; }
-  .error-example { margin-top:8px; font-size:.82rem; color:var(--text); background:var(--glass); border-radius:6px; padding:8px 12px; }
-
-  /* Quick numeric solver */
-  .num-solver { display:flex; flex-direction:column; gap:14px; }
-  .num-inputs { display:flex; gap:12px; }
-  .num-field { flex:1; }
-  .num-field label { font-size:.78rem; color:var(--muted); margin-bottom:4px; display:block; font-family:'Space Mono',monospace; }
-  .num-field input {
-    width:100%; background:var(--navy); border:1px solid var(--border);
-    color:var(--text); border-radius:8px; padding:10px 14px;
-    font-family:'Space Mono',monospace; font-size:1rem;
-    transition:border-color .15s; outline:none;
-  }
-  .num-field input:focus { border-color:var(--accent2); }
-  .solve-btn {
-    background:linear-gradient(135deg,var(--accent),var(--accent2));
-    color:#fff; border:none; border-radius:8px;
-    padding:12px 28px; font-family:'Space Mono',monospace;
-    font-size:.85rem; font-weight:700; cursor:pointer;
-    transition: opacity .15s, transform .1s;
-    align-self:flex-end;
-  }
-  .solve-btn:hover { opacity:.9; transform:scale(1.02); }
-  .num-result { min-height:54px; background:var(--glass); border:1px solid var(--border); border-radius:10px; padding:14px 18px; }
-
-  /* Scatter interactive */
-  .scatter-controls { display:flex; gap:14px; align-items:center; flex-wrap:wrap; margin-bottom:12px; }
-  .scatter-btn {
-    padding:7px 18px; border-radius:8px; border:1px solid var(--border);
-    background:var(--glass); color:var(--text); cursor:pointer;
-    font-size:.85rem; transition:.15s;
-  }
-  .scatter-btn:hover, .scatter-btn.active { background:rgba(6,182,212,.15); border-color:var(--accent2); color:var(--accent2); }
-
-  /* ─── RESPONSIVE ─── */
-  @media (max-width:800px) {
-    .two-col, .three-col { grid-template-columns:1fr; }
-    .summary-grid { grid-template-columns:repeat(2,1fr); }
-    .sbody { padding:28px 24px 20px; }
-  }
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .hero { padding: 40px 24px 30px; }
+  .tab-bar { padding: 0 16px; }
+  .panels { padding: 30px 24px 60px; }
+  .two-col, .three-col { grid-template-columns: 1fr; }
+  .metric-row { grid-template-columns: 1fr 1fr; }
+}
 </style>
 </head>
 <body>
 
-<div class="progress-bar"><div class="progress-fill" id="pbar"></div></div>
+<!-- HOME BUTTON -->
+<a href="https://kpsingh.in" class="home-btn" title="Back to Homepage" target="_blank">
+  <svg width="18" height="18" fill="white" viewBox="0 0 24 24"><path d="M12 3l9 8h-3v9h-5v-6H11v6H6v-9H3z"/></svg>
+</a>
 
-<div class="deck" id="deck">
+<!-- HEADER -->
+<div class="hbar">
+  <span class="hbar-title">Introduction to Data Science · BCA Sem I · Practical 7</span>
+  <span class="hbar-chip">LAB 7</span>
+</div>
 
-<!-- ══════════════ SLIDE 0: HERO ══════════════ -->
-<div class="slide active" data-index="0">
-  <div class="hbar">
-    <span class="hbar-title">Introduction to Data Science · BCA Sem I</span>
-    <span class="hbar-chip">UNIT 4</span>
-  </div>
-  <div class="sbody hero-slide" style="background:radial-gradient(ellipse at 55% 40%,#192344 0%,#0a0e1a 65%);">
-    <div class="hero-kicker">K.P. Singh · Introduction to Data Science</div>
-    <div class="hero-title">Probability &<br>Hypothesis Testing</div>
-    <div class="hero-sub">From coin flips to confident decisions — learn to think like a data scientist.</div>
-    <div class="hero-meta">
-      <div class="hero-badge">📚 <span>Unit 4</span> · Question Bank</div>
-      <div class="hero-badge">🎓 BCA <span>Semester I</span></div>
-      <div class="hero-badge">🔢 <span>7 Topics</span> Covered</div>
-    </div>
-    <div style="margin-top:28px;display:flex;gap:16px;flex-wrap:wrap;justify-content:center;">
-      <div style="background:rgba(6,182,212,.1);border:1px solid rgba(6,182,212,.25);border-radius:10px;padding:10px 18px;font-size:.85rem;color:var(--accent2);">📊 Probability</div>
-      <div style="background:rgba(249,115,22,.1);border:1px solid rgba(249,115,22,.25);border-radius:10px;padding:10px 18px;font-size:.85rem;color:var(--accent);">🧪 Hypothesis Testing</div>
-      <div style="background:rgba(167,139,250,.1);border:1px solid rgba(167,139,250,.25);border-radius:10px;padding:10px 18px;font-size:.85rem;color:var(--purple);">📈 Correlation & Regression</div>
-      <div style="background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.25);border-radius:10px;padding:10px 18px;font-size:.85rem;color:var(--success);">📉 Time Series</div>
-    </div>
-    <div style="margin-top:18px;font-size:.82rem;color:var(--muted);">Use ← → arrow keys or buttons below to navigate • Interactive demos inside ✨</div>
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-kicker">K.P. Singh · Introduction to Data Science</div>
+  <div class="hero-title">Data Cleaning, Normalization<br>& Storytelling</div>
+  <div class="hero-sub">Learn to spot bad data, fix it, scale it fairly, and turn numbers into a real story — using a student marks dataset in Excel.</div>
+  <div class="badges">
+    <div class="badge">🧹 <span>Data Cleaning</span></div>
+    <div class="badge teal">📏 <span>Normalization</span></div>
+    <div class="badge">📊 <span>Storytelling</span></div>
+    <div class="badge teal">🎓 BCA <span>Sem I</span></div>
   </div>
 </div>
 
-<!-- ══════════════ SLIDE 1: What is Probability ══════════════ -->
-<div class="slide" data-index="1">
-  <div class="hbar">
-    <span class="hbar-title">1. Introduction to Probability</span>
-    <span class="hbar-chip">📊 PROB</span>
-  </div>
-  <div class="sbody">
-    <div class="slide-heading">What is <span class="hl">Probability?</span></div>
-    <div class="two-col">
-      <div>
-        <div class="card" style="margin-bottom:20px;">
-          <div class="card-icon">🎲</div>
-          <div class="card-title">Simple Definition</div>
-          <div class="card-body">Probability = <strong style="color:var(--accent2);">chance of an event happening</strong>.<br><br>
-          It answers: <em>"How likely is something to occur?"</em>
-          </div>
-        </div>
-        <div class="formula-label">THE FORMULA</div>
-        <div class="formula-box">P(E) = Favourable Outcomes / Total Outcomes</div>
-        <div class="three-col" style="margin-top:16px;">
-          <div class="card success">
-            <div style="font-family:'Space Mono',monospace;font-size:.75rem;color:var(--muted);margin-bottom:4px;">CERTAIN</div>
-            <div style="font-size:1.6rem;font-weight:700;color:var(--success);">P = 1</div>
-            <div style="font-size:.82rem;color:var(--muted);">Will definitely happen</div>
-          </div>
-          <div class="card accent2">
-            <div style="font-family:'Space Mono',monospace;font-size:.75rem;color:var(--muted);margin-bottom:4px;">RANDOM</div>
-            <div style="font-size:1.6rem;font-weight:700;color:var(--accent2);">0–1</div>
-            <div style="font-size:.82rem;color:var(--muted);">May or may not happen</div>
-          </div>
-          <div class="card danger">
-            <div style="font-family:'Space Mono',monospace;font-size:.75rem;color:var(--muted);margin-bottom:4px;">IMPOSSIBLE</div>
-            <div style="font-size:1.6rem;font-weight:700;color:var(--danger);">P = 0</div>
-            <div style="font-size:.82rem;color:var(--muted);">Cannot happen</div>
-          </div>
-        </div>
-      </div>
-
-      <div>
-        <div class="interactive-box" style="margin-top:0;">
-          <div class="interactive-label">🪙 INTERACTIVE — FLIP THE COIN</div>
-          <div class="coin-wrap" style="margin-top:12px;">
-            <div class="coin" id="coin" onclick="flipCoin()" title="Click to flip!">🪙</div>
-            <div class="coin-result" id="coinResult">👆 Click the coin to flip!</div>
-            <div class="coin-stats">
-              <div class="coin-stat">
-                <div class="coin-stat-val" id="headCount">0</div>
-                <div class="coin-stat-label">Heads</div>
-              </div>
-              <div class="coin-stat" style="padding:0 16px;border-left:1px solid var(--border);border-right:1px solid var(--border);">
-                <div class="coin-stat-val" id="totalCount">0</div>
-                <div class="coin-stat-label">Total Flips</div>
-              </div>
-              <div class="coin-stat">
-                <div class="coin-stat-val" id="tailCount">0</div>
-                <div class="coin-stat-label">Tails</div>
-              </div>
-            </div>
-            <div id="probDisplay" style="font-family:'Space Mono',monospace;font-size:.85rem;color:var(--muted);text-align:center;">P(Head) so far: —</div>
-            <button class="solve-btn" onclick="resetCoin()" style="margin-top:4px;font-size:.78rem;padding:8px 18px;background:var(--glass);border:1px solid var(--border);color:var(--muted);">Reset</button>
-          </div>
-        </div>
-        <div class="example-block" style="margin-top:18px;">
-          <div class="ex-label">🎲 Classic Dice Example</div>
-          P(getting a 6) = 1/6 ≈ <strong style="color:var(--accent2);">0.167</strong><br>
-          P(even number) = 3/6 = <strong style="color:var(--accent2);">0.5</strong>
-        </div>
-      </div>
-    </div>
-  </div>
+<!-- TABS -->
+<div class="tab-bar">
+  <button class="tab-btn active" onclick="switchTab('overview', this)">📋 Overview</button>
+  <button class="tab-btn" onclick="switchTab('clean', this)">🧹 Cleaning</button>
+  <button class="tab-btn" onclick="switchTab('normalize', this)">📏 Normalization</button>
+  <button class="tab-btn" onclick="switchTab('analysis', this)">📊 Analysis</button>
+  <button class="tab-btn" onclick="switchTab('story', this)">💬 Storytelling</button>
+  <button class="tab-btn" onclick="switchTab('viva', this)">🧠 Viva Prep</button>
 </div>
 
-<!-- ══════════════ SLIDE 2: Addition & Conditional ══════════════ -->
-<div class="slide" data-index="2">
-  <div class="hbar">
-    <span class="hbar-title">1. Probability Rules</span>
-    <span class="hbar-chip">📊 PROB</span>
-  </div>
-  <div class="sbody">
-    <div class="slide-heading">Addition & <span class="hl2">Conditional</span> Rules</div>
-    <div class="two-col">
-      <div>
-        <div class="card" style="margin-bottom:18px;">
-          <div class="card-title">➕ Addition Rule</div>
-          <div class="formula-box" style="font-size:1rem;">P(A ∪ B) = P(A) + P(B) − P(A ∩ B)</div>
-          <div class="card-body" style="margin-top:10px;">Used when you want the probability of <strong>event A or event B</strong> happening.</div>
-          <div class="example-block">
-            <div class="ex-label">Numerical</div>
-            P(A) = 0.4, P(B) = 0.5, P(A∩B) = 0.2<br>
-            P(A∪B) = 0.4 + 0.5 − 0.2 = <strong style="color:var(--success);font-size:1.1rem;">0.7</strong>
-          </div>
-        </div>
-        <div class="card accent2">
-          <div class="card-title">🔗 Conditional Probability</div>
-          <div class="formula-box" style="font-size:1rem;border-color:var(--purple);">P(A | B) = P(A ∩ B) / P(B)</div>
-          <div class="card-body" style="margin-top:10px;">Probability of A <em>given</em> that B has already happened.</div>
-          <div class="example-block">
-            <div class="ex-label">Real-life Example</div>
-            P(B) = 0.65,&nbsp; P(A∩B) = 0.30<br>
-            P(A|B) = 0.30 / 0.65 ≈ <strong style="color:var(--success);font-size:1.1rem;">0.46</strong><br>
-            <span style="color:var(--muted);font-size:.82rem;">Probability of passing given attendance &gt; 75%</span>
-          </div>
-        </div>
-      </div>
-      <div>
-        <div class="interactive-box accent2">
-          <div class="interactive-label" style="background:var(--accent2);">🧮 PROBABILITY CALCULATOR</div>
-          <div class="num-solver" style="margin-top:14px;">
-            <div style="font-size:.9rem;color:var(--muted);margin-bottom:4px;">Calculate P(A ∪ B)</div>
-            <div class="num-inputs">
-              <div class="num-field"><label>P(A)</label><input type="number" id="pA" value="0.4" min="0" max="1" step="0.01"></div>
-              <div class="num-field"><label>P(B)</label><input type="number" id="pB" value="0.5" min="0" max="1" step="0.01"></div>
-              <div class="num-field"><label>P(A∩B)</label><input type="number" id="pAB" value="0.2" min="0" max="1" step="0.01"></div>
-            </div>
-            <button class="solve-btn" onclick="calcAddition()">Calculate →</button>
-            <div class="num-result" id="addResult"><span style="color:var(--muted);">Result appears here…</span></div>
-          </div>
-          <hr style="border:none;border-top:1px solid var(--border);margin:18px 0;">
-          <div class="num-solver">
-            <div style="font-size:.9rem;color:var(--muted);margin-bottom:4px;">Calculate P(A | B)</div>
-            <div class="num-inputs">
-              <div class="num-field"><label>P(A∩B)</label><input type="number" id="cAB" value="0.30" min="0" max="1" step="0.01"></div>
-              <div class="num-field"><label>P(B)</label><input type="number" id="cB" value="0.65" min="0" max="1" step="0.01"></div>
-            </div>
-            <button class="solve-btn" onclick="calcConditional()">Calculate →</button>
-            <div class="num-result" id="condResult"><span style="color:var(--muted);">Result appears here…</span></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+<!-- PANELS -->
+<div class="panels">
 
-<!-- ══════════════ SLIDE 3: SECTION – Hypothesis Testing ══════════════ -->
-<div class="slide" data-index="3">
-  <div class="hbar">
-    <span class="hbar-title">Section Divider</span>
-    <span class="hbar-chip">🧪 HYP</span>
-  </div>
-  <div class="sbody section-slide" style="background:linear-gradient(135deg,#0e1628,#0a0e1a);">
-    <div class="section-num" style="opacity:.07;">02</div>
-    <div class="section-inner">
-      <div class="section-tag">Section 2</div>
-      <div class="section-title" style="color:#fff;">Hypothesis<br><span style="color:var(--accent);">Testing</span></div>
-      <div class="section-desc">Turning guesses into data-driven decisions — the scientific way to know if something is really true.</div>
-      <div style="display:flex;gap:14px;margin-top:28px;justify-content:center;flex-wrap:wrap;">
-        <div style="background:rgba(249,115,22,.1);border:1px solid rgba(249,115,22,.3);border-radius:10px;padding:10px 22px;font-size:.88rem;color:var(--accent);">H₀ Null Hypothesis</div>
-        <div style="background:rgba(6,182,212,.1);border:1px solid rgba(6,182,212,.3);border-radius:10px;padding:10px 22px;font-size:.88rem;color:var(--accent2);">H₁ Alternative Hypothesis</div>
-        <div style="background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.3);border-radius:10px;padding:10px 22px;font-size:.88rem;color:var(--success);">p-value Decision</div>
-      </div>
-    </div>
-  </div>
-</div>
+  <!-- ═══════ OVERVIEW ═══════ -->
+  <div class="panel active" id="panel-overview">
+    <div class="slide-heading">The Raw Dataset — <span class="hl">What's Wrong?</span></div>
 
-<!-- ══════════════ SLIDE 4: H0 vs H1 ══════════════ -->
-<div class="slide" data-index="4">
-  <div class="hbar">
-    <span class="hbar-title">2. Hypothesis Testing – Core Concepts</span>
-    <span class="hbar-chip">🧪 HYP</span>
-  </div>
-  <div class="sbody">
-    <div class="slide-heading">H₀ vs <span class="hl">H₁</span> — The Two Hypotheses</div>
-    <div class="two-col">
-      <div>
-        <div class="card" style="margin-bottom:16px;border-color:rgba(100,116,139,.4);">
-          <div style="font-family:'Space Mono',monospace;font-size:.75rem;color:var(--muted);margin-bottom:6px;">CORE IDEA</div>
-          <div class="card-body" style="font-size:1rem;line-height:1.7;">We don't just <em>"feel"</em> something is true — we <strong style="color:var(--accent2);">test it using data.</strong></div>
-        </div>
-        <div style="display:flex;flex-direction:column;gap:14px;">
-          <div class="card" style="border-color:rgba(6,182,212,.4);">
-            <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
-              <span style="font-family:'Space Mono',monospace;font-size:1.2rem;color:var(--accent2);">H₀</span>
-              <span style="font-weight:700;color:#fff;">Null Hypothesis</span>
-              <span class="pill accent2">No Effect</span>
-            </div>
-            <div class="card-body">"No change / No effect" — this is the default assumption we try to disprove.</div>
-            <div class="example-block">
-              <div class="ex-label">Example</div>
-              H₀: Extra classes do <strong>NOT</strong> improve marks
-            </div>
-          </div>
-          <div class="card" style="border-color:rgba(249,115,22,.4);">
-            <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
-              <span style="font-family:'Space Mono',monospace;font-size:1.2rem;color:var(--accent);">H₁</span>
-              <span style="font-weight:700;color:#fff;">Alternative Hypothesis</span>
-              <span class="pill yellow">Has Effect</span>
-            </div>
-            <div class="card-body">"There IS an effect" — what we are trying to prove with data.</div>
-            <div class="example-block" style="border-left-color:var(--accent);">
-              <div class="ex-label" style="color:var(--accent);">Example</div>
-              H₁: Extra classes <strong>improve</strong> marks
-            </div>
-          </div>
-        </div>
-      </div>
-      <div>
-        <div class="card" style="margin-bottom:16px;">
-          <div class="card-title">🪜 Steps of Hypothesis Testing</div>
-          <ul class="step-list" style="margin-top:12px;">
-            <li><div class="step-num">1</div><div class="step-text">Define H₀ and H₁ clearly</div></li>
-            <li><div class="step-num">2</div><div class="step-text">Choose significance level α = 0.05</div></li>
-            <li><div class="step-num">3</div><div class="step-text">Collect data from sample</div></li>
-            <li><div class="step-num">4</div><div class="step-text">Calculate test statistic</div></li>
-            <li><div class="step-num">5</div><div class="step-text">Find p-value</div></li>
-            <li><div class="step-num">6</div><div class="step-text">Compare p with α → Make decision</div></li>
-            <li><div class="step-num">7</div><div class="step-text">Interpret the result in context</div></li>
-          </ul>
-        </div>
-        <div class="example-block">
-          <div class="ex-label">📖 Classroom Story</div>
-          <strong>"Average marks = 50"</strong><br>
-          Is it really true? Or just a coincidence in one exam? That's exactly what hypothesis testing helps us find out! 🎯
-        </div>
-      </div>
+    <div class="info-strip">
+      <div class="strip-label">How to use this page</div>
+      Open Excel alongside this page. Read each section, then perform the steps in Excel. Highlighted cells in red below = problems to fix.
     </div>
-  </div>
-</div>
 
-<!-- ══════════════ SLIDE 5: p-value Interactive ══════════════ -->
-<div class="slide" data-index="5">
-  <div class="hbar">
-    <span class="hbar-title">2. p-value & Significance Level</span>
-    <span class="hbar-chip">🧪 HYP</span>
-  </div>
-  <div class="sbody">
-    <div class="slide-heading">The <span class="hl">p-value</span> — Your Decision Tool</div>
-    <div class="two-col">
-      <div>
-        <div class="card" style="margin-bottom:16px;">
-          <div class="card-icon">🔬</div>
-          <div class="card-title">What is p-value?</div>
-          <div class="card-body">Probability that your observed result happened <strong>purely by chance</strong>, assuming H₀ is true.<br><br>
-          <strong style="color:var(--accent2);">Smaller p-value = stronger evidence against H₀</strong></div>
-        </div>
-        <div class="card accent2" style="margin-bottom:16px;">
-          <div class="card-title">α — Significance Level</div>
-          <div class="card-body">The threshold we set <em>before</em> the experiment.<br>
-          Usually <strong style="color:#fff;">α = 0.05</strong> (5%)</div>
-        </div>
-        <div class="two-col" style="gap:12px;">
-          <div class="card success">
-            <div style="font-family:'Space Mono',monospace;font-size:.72rem;color:var(--muted);">IF</div>
-            <div style="font-size:1.1rem;font-weight:700;color:var(--success);font-family:'Space Mono',monospace;">p ≤ α</div>
-            <div style="font-size:.85rem;color:var(--text);margin-top:6px;">❌ Reject H₀<br><span style="color:var(--muted);font-size:.8rem;">Result is statistically significant!</span></div>
-          </div>
-          <div class="card danger" style="--card-before:var(--muted);">
-            <div style="font-family:'Space Mono',monospace;font-size:.72rem;color:var(--muted);">IF</div>
-            <div style="font-size:1.1rem;font-weight:700;color:var(--danger);font-family:'Space Mono',monospace;">p > α</div>
-            <div style="font-size:.85rem;color:var(--text);margin-top:6px;">✅ Fail to Reject H₀<br><span style="color:var(--muted);font-size:.8rem;">Not enough evidence.</span></div>
-          </div>
-        </div>
-      </div>
-      <div>
-        <div class="interactive-box accent2">
-          <div class="interactive-label" style="background:var(--accent2);">🎚️ INTERACTIVE — DRAG THE p-VALUE</div>
-          <div class="pval-slider-wrap" style="margin-top:16px;">
-            <div style="display:flex;justify-content:space-between;font-family:'Space Mono',monospace;font-size:.7rem;color:var(--muted);">
-              <span>0.00</span><span>Threshold α = 0.05</span><span>0.20</span>
-            </div>
-            <input type="range" id="pvalSlider" min="0" max="0.20" step="0.01" value="0.03" oninput="updatePval()">
-            <div class="pval-display" id="pvalDisplay">
-              <div>
-                <div style="font-size:.75rem;color:var(--muted);font-family:'Space Mono',monospace;">p-value</div>
-                <div class="pval-number" id="pvalNum" style="color:var(--success);">0.03</div>
-              </div>
-              <div>
-                <div style="font-size:.75rem;color:var(--muted);font-family:'Space Mono',monospace;text-align:right;">Verdict</div>
-                <div class="pval-verdict" id="pvalVerdict" style="background:rgba(16,185,129,.15);color:var(--success);">Reject H₀ ✓</div>
-              </div>
-            </div>
-            <div id="pvalExplain" style="background:var(--glass);border:1px solid var(--border);border-radius:10px;padding:12px 16px;font-size:.88rem;color:var(--text);margin-top:8px;">
-              p = 0.03 &lt; α = 0.05 → <strong style="color:var(--success);">Significant result!</strong> Extra classes DO improve marks.
-            </div>
-          </div>
-        </div>
-        <div style="margin-top:16px;">
-          <div class="card yellow">
-            <div class="card-title">📊 Quick Numerical</div>
-            <div class="card-body">
-              <strong>Q1:</strong> p = 0.03, α = 0.05 → <span class="pill danger">Reject H₀</span><br><br>
-              <strong>Q2:</strong> p = 0.08, α = 0.05 → <span class="pill success">Fail to Reject H₀</span><br><br>
-              <strong>Q3:</strong> Student marks went from avg 60 → 68, p = 0.02 → <span class="pill danger">Reject H₀</span> (Classes worked!)
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+    <p style="color:var(--muted);margin-bottom:16px">Before any analysis, you must inspect the data. This dataset has <strong style="color:#fff">3 types of problems</strong>. Can you spot them before reading below?</p>
 
-<!-- ══════════════ SLIDE 6: Type I & II Errors ══════════════ -->
-<div class="slide" data-index="6">
-  <div class="hbar">
-    <span class="hbar-title">2. Type I & Type II Errors</span>
-    <span class="hbar-chip">🧪 HYP</span>
-  </div>
-  <div class="sbody">
-    <div class="slide-heading">Error <span class="hl">Types</span> — When We Get It Wrong</div>
-    <div class="error-row">
-      <div class="error-box t1">
-        <div class="error-type" style="color:var(--danger);">TYPE I ERROR</div>
-        <div class="error-name">❌ False Positive</div>
-        <div class="error-desc">We <strong>reject H₀</strong> when it was actually <strong>true</strong>.<br>We think something happened — but it didn't.</div>
-        <div class="error-example">🏫 "We say classes improved results… but actually they didn't."</div>
-      </div>
-      <div class="error-box t2">
-        <div class="error-type" style="color:var(--yellow);">TYPE II ERROR</div>
-        <div class="error-name">⚠️ False Negative</div>
-        <div class="error-desc">We <strong>fail to reject H₀</strong> when it was actually <strong>false</strong>.<br>We miss a real effect.</div>
-        <div class="error-example">🏫 "Classes actually worked… but we failed to detect it."</div>
-      </div>
-    </div>
-    <div class="table-wrap" style="margin-top:20px;">
+    <div class="table-wrap">
       <table>
+        <tr><th>Reg No</th><th>Name</th><th>Gender</th><th>Attendance %</th><th>Study Hrs</th><th>Marks</th><th>Payment</th></tr>
+        <tr><td>101</td><td>Aman</td><td>Male</td><td>85</td><td>3</td><td>78</td><td>UPI</td></tr>
+        <tr><td>102</td><td>Riya</td><td class="dirty">F ← wrong format</td><td>90</td><td>4</td><td class="dirty">— missing</td><td>Cash</td></tr>
+        <tr><td>103</td><td>Kabir</td><td class="dirty">male ← wrong case</td><td class="dirty">110 ← impossible!</td><td>2</td><td>65</td><td class="dirty">upi ← wrong case</td></tr>
+        <tr><td>104</td><td>Ananya</td><td>Female</td><td>75</td><td class="dirty">— missing</td><td>82</td><td>Card</td></tr>
+        <tr><td>105</td><td>Rahul</td><td class="dirty">M ← wrong format</td><td>60</td><td>1</td><td class="dirty">500 ← impossible!</td><td>UPI</td></tr>
+        <tr><td>106</td><td>Sneha</td><td>Female</td><td>88</td><td>3</td><td>76</td><td class="dirty">cash ← wrong case</td></tr>
+        <tr><td>107</td><td>Arjun</td><td>Male</td><td>40</td><td>0</td><td>30</td><td>UPI</td></tr>
+        <tr><td>108</td><td>Kavya</td><td class="dirty">F ← wrong format</td><td>95</td><td>5</td><td>89</td><td>Cash</td></tr>
+      </table>
+    </div>
+
+    <h3>3 Types of Problems Found</h3>
+    <ul class="step-list">
+      <li>
+        <div class="step-num">1</div>
+        <div class="step-text">
+          <strong style="color:#fff">Missing Values</strong> — Riya's Marks = blank. Ananya's Study Hours = blank.<br>
+          <span style="color:var(--muted)">You cannot leave blanks — they break averages and Excel formulas.</span>
+        </div>
+      </li>
+      <li>
+        <div class="step-num">2</div>
+        <div class="step-text">
+          <strong style="color:#fff">Inconsistent Formats</strong> — Gender has: Male, male, M, F, Female (all meaning the same thing!). Payment has: UPI, upi, Cash, cash.<br>
+          <span style="color:var(--muted)">Excel treats "M" and "Male" as completely different. COUNTIF will give wrong results.</span>
+        </div>
+      </li>
+      <li>
+        <div class="step-num">3</div>
+        <div class="step-text">
+          <strong style="color:#fff">Outliers</strong> — Rahul's Marks = 500 (max is 100, so this is a data entry error). Kabir's Attendance = 110% (impossible).<br>
+          <span style="color:var(--muted)">One wrong extreme value can ruin the entire class average.</span>
+        </div>
+      </li>
+    </ul>
+
+    <div class="warn-strip" style="margin-top:24px">
+      <div class="strip-label">Why This Matters</div>
+      Average marks WITH 500 included = <strong style="color:var(--yellow)">~163</strong> &nbsp;|&nbsp;
+      Average marks AFTER cleaning = <strong style="color:var(--success)">~69</strong> &nbsp;|&nbsp;
+      Difference = <strong style="color:var(--danger)">~94 marks</strong> — just because of one wrong entry!
+    </div>
+  </div>
+
+  <!-- ═══════ CLEANING ═══════ -->
+  <div class="panel" id="panel-clean">
+    <div class="slide-heading">Part B — <span class="hl">Data Cleaning</span></div>
+
+    <!-- STEP 1 -->
+    <h3>Step 1 — Handle Missing Values</h3>
+    <div class="info-strip">
+      <div class="strip-label">Rule</div>
+      Missing <strong>Marks</strong> → replace with <strong style="color:var(--accent2)">AVERAGE</strong> of all other valid marks &nbsp;|&nbsp;
+      Missing <strong>Study Hours</strong> → replace with <strong style="color:var(--accent2)">MEDIAN</strong><br>
+      <span style="color:var(--muted);font-size:0.88rem">Use MEDIAN for hours because it is not affected by extreme values the way AVERAGE is.</span>
+    </div>
+
+    <div class="two-col">
+      <div class="interactive-box blue" style="margin-top:8px">
+        <div class="interactive-label">🧮 CALCULATE — Riya's Marks</div>
+        <div style="margin-top:14px;font-size:0.88rem;color:var(--muted)">Valid marks (ignoring 500 & blank): 78, 65, 82, 76, 30, 89</div>
+        <div class="formula-box" style="font-size:0.9rem;margin-top:10px">=AVERAGE(78, 65, 82, 76, 30, 89)</div>
+        <button class="toggle-btn" onclick="toggleAnswer('avg-ans')">▶ Show Answer</button>
+        <div class="answer-box" id="avg-ans">
+          Sum = 78 + 65 + 82 + 76 + 30 + 89 = <strong>420</strong><br>
+          Count = 6<br>
+          Average = 420 ÷ 6 = <strong style="color:var(--success);font-size:1.1rem">70</strong><br><br>
+          ✅ Replace Riya's blank marks with <strong>70</strong>
+        </div>
+      </div>
+      <div class="interactive-box blue" style="margin-top:8px">
+        <div class="interactive-label">🧮 CALCULATE — Ananya's Study Hours</div>
+        <div style="margin-top:14px;font-size:0.88rem;color:var(--muted)">Known study hours: 3, 4, 2, 1, 3, 0, 5</div>
+        <div class="formula-box" style="font-size:0.9rem;margin-top:10px">=MEDIAN(3, 4, 2, 1, 3, 0, 5)</div>
+        <button class="toggle-btn" onclick="toggleAnswer('med-ans')">▶ Show Answer</button>
+        <div class="answer-box" id="med-ans">
+          Sorted: 0, 1, 2, <strong>3</strong>, 3, 4, 5<br>
+          Middle value (4th of 7) = <strong style="color:var(--success);font-size:1.1rem">3</strong><br><br>
+          ✅ Replace Ananya's blank hours with <strong>3</strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <h3 style="margin-top:32px">Step 2 — Standardize Inconsistent Values</h3>
+    <p style="color:var(--muted);margin-bottom:14px">In Excel: use <strong style="color:#fff">Ctrl + H</strong> (Find & Replace). Or simply click the wrong cell and type the correct value.</p>
+
+    <div class="table-wrap">
+      <table>
+        <tr><th>Column</th><th>Wrong values in data</th><th>Correct standard</th><th>Excel method</th></tr>
         <tr>
-          <th>Reality \ Decision</th>
-          <th>Reject H₀</th>
-          <th>Fail to Reject H₀</th>
+          <td>Gender</td>
+          <td><span class="pill pill-danger">F</span> <span class="pill pill-danger">M</span> <span class="pill pill-danger">male</span></td>
+          <td><span class="pill pill-success">Male</span> <span class="pill pill-success">Female</span></td>
+          <td>Find "F" → Replace "Female" etc.</td>
         </tr>
         <tr>
-          <td><strong>H₀ is TRUE</strong></td>
-          <td><span class="pill danger">Type I Error ❌</span> False positive</td>
-          <td><span class="pill success">Correct ✓</span></td>
-        </tr>
-        <tr>
-          <td><strong>H₀ is FALSE</strong></td>
-          <td><span class="pill success">Correct ✓</span> (Power)</td>
-          <td><span class="pill yellow">Type II Error ⚠️</span> False negative</td>
+          <td>Payment</td>
+          <td><span class="pill pill-danger">upi</span> <span class="pill pill-danger">cash</span></td>
+          <td><span class="pill pill-success">UPI</span> <span class="pill pill-success">Cash</span></td>
+          <td>Find "upi" → Replace "UPI"</td>
         </tr>
       </table>
     </div>
-    <div class="card" style="margin-top:18px;border-color:rgba(167,139,250,.4);">
-      <div class="card-title" style="color:var(--purple);">🎯 Classroom Analogy — Catching a Cheater</div>
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:12px;">
-        <div style="background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.2);border-radius:10px;padding:12px;font-size:.88rem;">
-          <div style="color:var(--success);font-weight:700;margin-bottom:4px;">✅ Correct</div>
-          Student IS cheating → You say cheating
-        </div>
-        <div style="background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);border-radius:10px;padding:12px;font-size:.88rem;">
-          <div style="color:var(--danger);font-weight:700;margin-bottom:4px;">❌ Type I</div>
-          Student is NOT cheating → You say cheating
-        </div>
-        <div style="background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.2);border-radius:10px;padding:12px;font-size:.88rem;">
-          <div style="color:var(--yellow);font-weight:700;margin-bottom:4px;">⚠️ Type II</div>
-          Student IS cheating → You say not cheating
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
 
-<!-- ══════════════ SLIDE 7: SECTION – Correlation ══════════════ -->
-<div class="slide" data-index="7">
-  <div class="hbar">
-    <span class="hbar-title">Section Divider</span>
-    <span class="hbar-chip">📈 CORR</span>
-  </div>
-  <div class="sbody section-slide" style="background:linear-gradient(135deg,#0b1a2c,#0a0e1a);">
-    <div class="section-num" style="opacity:.07;">03</div>
-    <div class="section-inner">
-      <div class="section-tag">Section 3 + 4</div>
-      <div class="section-title" style="color:#fff;">Correlation &<br><span style="color:var(--accent2);">Regression</span></div>
-      <div class="section-desc">Understanding relationships between variables — and predicting the future from the past.</div>
-      <div style="display:flex;gap:14px;margin-top:28px;justify-content:center;flex-wrap:wrap;">
-        <div style="background:rgba(6,182,212,.1);border:1px solid rgba(6,182,212,.3);border-radius:10px;padding:10px 22px;font-size:.88rem;color:var(--accent2);">📈 Positive Correlation</div>
-        <div style="background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);border-radius:10px;padding:10px 22px;font-size:.88rem;color:var(--danger);">📉 Negative Correlation</div>
-        <div style="background:rgba(167,139,250,.1);border:1px solid rgba(167,139,250,.3);border-radius:10px;padding:10px 22px;font-size:.88rem;color:var(--purple);">🔮 Regression Line</div>
-      </div>
-    </div>
-  </div>
-</div>
+    <!-- STEP 3 -->
+    <h3 style="margin-top:32px">Step 3 — Handle Outliers</h3>
 
-<!-- ══════════════ SLIDE 8: Correlation Interactive ══════════════ -->
-<div class="slide" data-index="8">
-  <div class="hbar">
-    <span class="hbar-title">3. Correlation Analysis</span>
-    <span class="hbar-chip">📈 CORR</span>
-  </div>
-  <div class="sbody">
-    <div class="slide-heading">What is <span class="hl2">Correlation?</span></div>
     <div class="two-col">
+      <div class="card danger-card">
+        <div class="card-title">Rahul — Marks = 500</div>
+        <div class="card-body">This is a data entry error. Marks cannot exceed 100.<br><br>
+        <strong style="color:#fff">Fix:</strong> Replace 500 with the mean of valid marks = <span class="pill pill-success">70</span></div>
+      </div>
+      <div class="card danger-card">
+        <div class="card-title">Kabir — Attendance = 110%</div>
+        <div class="card-body">Attendance cannot exceed 100%. This is physically impossible.<br><br>
+        <strong style="color:#fff">Fix:</strong> Cap at <span class="pill pill-success">100</span> OR remove the row entirely (justify your choice)</div>
+      </div>
+    </div>
+
+    <!-- INTERACTIVE damage calculator -->
+    <div class="interactive-box" style="margin-top:8px">
+      <div class="interactive-label">📉 SEE THE DAMAGE — Outlier Impact</div>
+      <div style="margin-top:14px">
+        <div class="metric-row">
+          <div class="metric">
+            <div class="metric-val" style="color:var(--danger)">162.6</div>
+            <div class="metric-lbl">Average WITH 500<br>(before cleaning)</div>
+          </div>
+          <div class="metric">
+            <div class="metric-val" style="color:var(--success)">68.75</div>
+            <div class="metric-lbl">Average AFTER<br>cleaning</div>
+          </div>
+          <div class="metric">
+            <div class="metric-val" style="color:var(--yellow)">93.85</div>
+            <div class="metric-lbl">Damage caused<br>by 1 wrong entry</div>
+          </div>
+        </div>
+        <p style="color:var(--muted);font-size:0.88rem;margin-top:8px">One entry of 500 (instead of ~70) inflated the class average by 93 marks. This proves why outliers must be handled before any analysis.</p>
+      </div>
+    </div>
+
+    <!-- CLEANED DATASET -->
+    <h3 style="margin-top:32px">The Cleaned Dataset ✅</h3>
+    <div class="table-wrap">
+      <table>
+        <tr><th>Reg No</th><th>Name</th><th>Gender</th><th>Attendance %</th><th>Study Hrs</th><th>Marks</th><th>Payment</th></tr>
+        <tr><td>101</td><td>Aman</td><td class="clean">Male</td><td>85</td><td>3</td><td>78</td><td class="clean">UPI</td></tr>
+        <tr><td>102</td><td>Riya</td><td class="clean">Female</td><td>90</td><td>4</td><td class="clean">70 ← filled</td><td>Cash</td></tr>
+        <tr><td>103</td><td>Kabir</td><td class="clean">Male</td><td class="clean">100 ← capped</td><td>2</td><td>65</td><td class="clean">UPI</td></tr>
+        <tr><td>104</td><td>Ananya</td><td>Female</td><td>75</td><td class="clean">3 ← filled</td><td>82</td><td>Card</td></tr>
+        <tr><td>105</td><td>Rahul</td><td class="clean">Male</td><td>60</td><td>1</td><td class="clean">70 ← replaced</td><td>UPI</td></tr>
+        <tr><td>106</td><td>Sneha</td><td>Female</td><td>88</td><td>3</td><td>76</td><td class="clean">Cash</td></tr>
+        <tr><td>107</td><td>Arjun</td><td>Male</td><td>40</td><td>0</td><td>30</td><td>UPI</td></tr>
+        <tr><td>108</td><td>Kavya</td><td class="clean">Female</td><td>95</td><td>5</td><td>89</td><td>Cash</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- ═══════ NORMALIZATION ═══════ -->
+  <div class="panel" id="panel-normalize">
+    <div class="slide-heading">Part C — <span class="hl2">Normalization</span></div>
+
+    <div class="info-strip">
+      <div class="strip-label">Why Normalize?</div>
+      Marks go 0–100. Study hours go 0–5. These different scales make direct comparison unfair. Normalization brings everything to a <strong>0–1 scale</strong> so we compare apples to apples.
+    </div>
+
+    <h3>The Formula</h3>
+    <div class="formula-box">Normalized Value = (X − Min) / (Max − Min)</div>
+
+    <div class="two-col" style="margin-top:18px">
       <div>
-        <div class="three-col" style="margin-bottom:18px;">
-          <div class="card success" style="text-align:center;padding:16px;">
-            <div style="font-size:1.5rem;margin-bottom:4px;">📈</div>
-            <div style="font-weight:700;color:#fff;font-size:.9rem;">Positive</div>
-            <div style="font-size:.8rem;color:var(--muted);">X↑ → Y↑</div>
-            <div style="font-family:'Space Mono',monospace;font-size:1.1rem;color:var(--success);margin-top:6px;">r > 0</div>
-          </div>
-          <div class="card danger" style="text-align:center;padding:16px;">
-            <div style="font-size:1.5rem;margin-bottom:4px;">📉</div>
-            <div style="font-weight:700;color:#fff;font-size:.9rem;">Negative</div>
-            <div style="font-size:.8rem;color:var(--muted);">X↑ → Y↓</div>
-            <div style="font-family:'Space Mono',monospace;font-size:1.1rem;color:var(--danger);margin-top:6px;">r < 0</div>
-          </div>
-          <div class="card" style="text-align:center;padding:16px;">
-            <div style="font-size:1.5rem;margin-bottom:4px;">⭕</div>
-            <div style="font-weight:700;color:#fff;font-size:.9rem;">No Relation</div>
-            <div style="font-size:.8rem;color:var(--muted);">No pattern</div>
-            <div style="font-family:'Space Mono',monospace;font-size:1.1rem;color:var(--muted);margin-top:6px;">r ≈ 0</div>
+        <div class="card accent2">
+          <div class="card-title">What each part means</div>
+          <div class="card-body">
+            <strong style="color:#fff">X</strong> = the value you want to normalize<br><br>
+            <strong style="color:#fff">Min</strong> = lowest value in the column<br><br>
+            <strong style="color:#fff">Max</strong> = highest value in the column<br><br>
+            Result is always between <strong style="color:var(--accent2)">0</strong> (lowest) and <strong style="color:var(--success)">1</strong> (highest)
           </div>
         </div>
-        <div class="table-wrap">
-          <table>
-            <tr><th>r value</th><th>Meaning</th></tr>
-            <tr><td style="color:var(--success);font-family:'Space Mono',monospace;">+1</td><td>Perfect positive correlation</td></tr>
-            <tr><td style="color:var(--accent2);font-family:'Space Mono',monospace;">+0.5 to +1</td><td>Strong positive</td></tr>
-            <tr><td style="color:var(--muted);font-family:'Space Mono',monospace;">0</td><td>No relationship</td></tr>
-            <tr><td style="color:var(--yellow);font-family:'Space Mono',monospace;">-0.5 to -1</td><td>Strong negative</td></tr>
-            <tr><td style="color:var(--danger);font-family:'Space Mono',monospace;">-1</td><td>Perfect negative correlation</td></tr>
-          </table>
-        </div>
-        <div class="card" style="margin-top:16px;background:rgba(239,68,68,.06);border-color:rgba(239,68,68,.25);">
-          <div class="card-title" style="color:var(--danger);">⚠️ Correlation ≠ Causation!</div>
-          <div class="card-body">Ice cream sales ↑ and Drowning ↑ — both caused by Summer, not each other! Always ask: <em>is there a common cause?</em></div>
+        <div class="info-strip">
+          <div class="strip-label">Our values</div>
+          Min Marks = <strong>30</strong> (Arjun) &nbsp;|&nbsp; Max Marks = <strong>89</strong> (Kavya)<br>
+          <span style="color:var(--muted)">So Max − Min = 89 − 30 = 59</span>
         </div>
       </div>
       <div>
-        <div class="interactive-box accent2">
-          <div class="interactive-label" style="background:var(--accent2);">🎨 INTERACTIVE — SCATTER PLOT</div>
-          <div class="scatter-controls" style="margin-top:14px;">
-            <button class="scatter-btn active" onclick="setScatterMode('positive',this)">📈 Positive</button>
-            <button class="scatter-btn" onclick="setScatterMode('negative',this)">📉 Negative</button>
-            <button class="scatter-btn" onclick="setScatterMode('none',this)">⭕ No Corr.</button>
-            <span id="scatterR" style="font-family:'Space Mono',monospace;font-size:.9rem;color:var(--accent2);margin-left:auto;"></span>
+        <div class="interactive-box blue">
+          <div class="interactive-label">🧮 LIVE CALCULATOR</div>
+          <div style="margin-top:14px">
+            <label>Enter any marks value (30 to 89)</label>
+            <input type="number" id="norm-input" value="78" min="30" max="89" oninput="calcNorm()">
+            <div id="norm-result" class="result-box"></div>
           </div>
-          <canvas id="scatterCanvas" width="340" height="220" style="width:100%;height:220px;background:#0d1626;border-radius:10px;"></canvas>
-          <div style="font-size:.8rem;color:var(--muted);text-align:center;margin-top:8px;">Study Hours → Marks (Example Dataset)</div>
-        </div>
-        <div class="example-block" style="margin-top:14px;">
-          <div class="ex-label">📖 Real-Life Examples</div>
-          📈 Study hours & marks → <strong style="color:var(--success);">Positive</strong><br>
-          📉 Mobile usage & marks → <strong style="color:var(--danger);">Negative</strong><br>
-          ⭕ Shoe size & IQ → <strong style="color:var(--muted);">No correlation</strong>
         </div>
       </div>
     </div>
-  </div>
-</div>
 
-<!-- ══════════════ SLIDE 9: Regression ══════════════ -->
-<div class="slide" data-index="9">
-  <div class="hbar">
-    <span class="hbar-title">4. Regression Analysis</span>
-    <span class="hbar-chip">🔮 REG</span>
+    <h3>Excel Formula to Type</h3>
+    <div class="formula-box" style="font-size:0.9rem">=(G2 - MIN($G$2:$G$9)) / (MAX($G$2:$G$9) - MIN($G$2:$G$9))</div>
+    <p style="color:var(--muted);margin-bottom:20px">Type this in a new column "Normalized Marks" (column H). The $ signs lock the range so the formula works when you drag it down.</p>
+
+    <h3>Complete Normalized Marks Table</h3>
+    <div class="table-wrap">
+      <table>
+        <tr><th>Name</th><th>Marks</th><th>Calculation</th><th>Normalized Score</th><th>Rank</th></tr>
+        <tr><td>Arjun</td><td>30</td><td>(30−30)÷59 = 0÷59</td><td><span class="pill pill-danger">0.000</span></td><td>8th — lowest</td></tr>
+        <tr><td>Kabir</td><td>65</td><td>(65−30)÷59 = 35÷59</td><td>0.593</td><td>6th</td></tr>
+        <tr><td>Riya</td><td>70</td><td>(70−30)÷59 = 40÷59</td><td>0.678</td><td>5th</td></tr>
+        <tr><td>Rahul</td><td>70</td><td>(70−30)÷59 = 40÷59</td><td>0.678</td><td>5th</td></tr>
+        <tr><td>Sneha</td><td>76</td><td>(76−30)÷59 = 46÷59</td><td>0.780</td><td>4th</td></tr>
+        <tr><td>Aman</td><td>78</td><td>(78−30)÷59 = 48÷59</td><td>0.814</td><td>3rd</td></tr>
+        <tr><td>Ananya</td><td>82</td><td>(82−30)÷59 = 52÷59</td><td>0.881</td><td>2nd</td></tr>
+        <tr><td>Kavya</td><td>89</td><td>(89−30)÷59 = 59÷59</td><td><span class="pill pill-success">1.000</span></td><td>1st — highest</td></tr>
+      </table>
+    </div>
+
+    <div class="success-strip" style="margin-top:20px">
+      <div class="strip-label">Key Insight</div>
+      Kavya has normalized score = 1.0 (best). Arjun has 0.0 (lowest). Now we can compare these normalized marks fairly against normalized attendance or study hours on the same 0–1 scale.
+    </div>
   </div>
-  <div class="sbody">
-    <div class="slide-heading">Regression — <span class="hl">Predicting</span> the Future</div>
+
+  <!-- ═══════ ANALYSIS ═══════ -->
+  <div class="panel" id="panel-analysis">
+    <div class="slide-heading">Part D — <span class="hl">Excel Analysis</span></div>
+
+    <h3>Step 1 — Summary Statistics Using Excel Functions</h3>
+    <div class="table-wrap">
+      <table>
+        <tr><th>What to find</th><th>Excel Formula</th><th>Where to type it</th><th>Expected Result</th></tr>
+        <tr><td>Average marks (after cleaning)</td><td><code style="color:var(--accent2);">=AVERAGE(G2:G9)</code></td><td>Any empty cell</td><td>~70</td></tr>
+        <tr><td>Total number of students</td><td><code style="color:var(--accent2);">=COUNT(G2:G9)</code></td><td>Any empty cell</td><td>8</td></tr>
+        <tr><td>Students who passed (≥40)</td><td><code style="color:var(--accent2);">=COUNTIF(G2:G9,">=40")</code></td><td>Any empty cell</td><td>7</td></tr>
+        <tr><td>Students who failed (&lt;40)</td><td><code style="color:var(--accent2);">=COUNTIF(G2:G9,"<40")</code></td><td>Any empty cell</td><td>1</td></tr>
+        <tr><td>Highest marks</td><td><code style="color:var(--accent2);">=MAX(G2:G9)</code></td><td>Any empty cell</td><td>89</td></tr>
+        <tr><td>Lowest marks</td><td><code style="color:var(--accent2);">=MIN(G2:G9)</code></td><td>Any empty cell</td><td>30</td></tr>
+      </table>
+    </div>
+
+    <h3 style="margin-top:28px">Step 2 — Create These 3 Charts</h3>
+
+    <ul class="step-list">
+      <li>
+        <div class="step-num">1</div>
+        <div class="step-text">
+          <strong style="color:#fff">Bar Chart — Marks per Student</strong><br>
+          Select the Name column (A2:A9) → hold Ctrl → select Marks column (G2:G9) → Insert tab → Bar Chart. This shows who performed best and worst at a glance.
+        </div>
+      </li>
+      <li>
+        <div class="step-num">2</div>
+        <div class="step-text">
+          <strong style="color:#fff">Pie Chart — Gender Distribution</strong><br>
+          Manually count: Male = 4, Female = 4. Type these in two cells, label them. Select those 4 cells → Insert → Pie Chart. This shows the class is gender-balanced.
+        </div>
+      </li>
+      <li>
+        <div class="step-num">3</div>
+        <div class="step-text">
+          <strong style="color:#fff">Line/Scatter Chart — Attendance vs Marks</strong><br>
+          Select Attendance % column (D2:D9) → hold Ctrl → select Marks (G2:G9) → Insert → Scatter Chart. This visually reveals: does higher attendance = higher marks?
+        </div>
+      </li>
+    </ul>
+
+    <h3 style="margin-top:28px">Section 3 Questions — Answered</h3>
+    <div class="card">
+      <div class="table-wrap" style="margin:0">
+        <table style="margin:0">
+          <tr><th>Question</th><th>Answer</th></tr>
+          <tr><td>Average marks BEFORE cleaning?</td><td><span style="color:var(--danger)">~162.6</span> (because 500 is included)</td></tr>
+          <tr><td>Average marks AFTER cleaning?</td><td><span style="color:var(--success)">~68.75</span> (correct value)</td></tr>
+          <tr><td>How did outlier affect results?</td><td>Inflated the average by ~94 marks, giving a completely false picture</td></tr>
+          <tr><td>Which student has highest normalized score?</td><td><strong style="color:var(--accent2)">Kavya</strong> — normalized score = 1.000</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════ STORYTELLING ═══════ -->
+  <div class="panel" id="panel-story">
+    <div class="slide-heading">Part E — <span class="hl2">Data Storytelling</span></div>
+
+    <div class="info-strip">
+      <div class="strip-label">What is Data Storytelling?</div>
+      Converting raw numbers and charts into <strong>clear insights</strong> and <strong>real decisions</strong>. This is the most important skill — turning data into something a non-technical person can understand and act on.
+    </div>
+
+    <h3>Your 3 Key Insights (Write These in Your Record)</h3>
+
+    <ul class="step-list">
+      <li>
+        <div class="step-num" style="background:linear-gradient(135deg,var(--success),var(--accent2))">1</div>
+        <div class="step-text">
+          <strong style="color:var(--success)">Study hours and marks are positively linked.</strong><br>
+          Kavya (5 study hours) scored 89. Arjun (0 hours) scored only 30. Students who study more consistently score better. This suggests study time is a strong predictor of performance.
+        </div>
+      </li>
+      <li>
+        <div class="step-num" style="background:linear-gradient(135deg,var(--success),var(--accent2))">2</div>
+        <div class="step-text">
+          <strong style="color:var(--success)">Attendance below 50% is linked to poor marks.</strong><br>
+          Arjun (40% attendance) was the only student who failed (30 marks). Rahul (60%) also scored below average. Students with low attendance need extra support before exams.
+        </div>
+      </li>
+      <li>
+        <div class="step-num" style="background:linear-gradient(135deg,var(--success),var(--accent2))">3</div>
+        <div class="step-text">
+          <strong style="color:var(--success)">Dirty data caused a 94-mark error in the class average.</strong><br>
+          Before cleaning, average = 162.6 (impossible — out of 100). After cleaning, average = 68.75. This proves that unvalidated data can completely mislead decision-makers.
+        </div>
+      </li>
+    </ul>
+
+    <h3 style="margin-top:28px">Your 2 Problems Identified</h3>
     <div class="two-col">
-      <div>
-        <div class="card" style="margin-bottom:16px;">
-          <div class="card-icon">📐</div>
-          <div class="card-title">What is Regression?</div>
-          <div class="card-body">Regression finds the <strong style="color:var(--accent2);">Line of Best Fit</strong> — a line that best describes the relationship between X and Y, so we can <strong>predict</strong> Y from any X value.</div>
-        </div>
-        <div class="formula-label">EQUATION OF LINE</div>
-        <div class="formula-box">y = mx + c</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px;">
-          <div class="card accent2" style="padding:14px;">
-            <div style="font-family:'Space Mono',monospace;font-size:.75rem;color:var(--muted);">SLOPE (m)</div>
-            <div style="font-size:.88rem;color:var(--text);margin-top:4px;">m = (y₂−y₁)/(x₂−x₁)<br>How steep the line is</div>
-          </div>
-          <div class="card yellow" style="padding:14px;">
-            <div style="font-family:'Space Mono',monospace;font-size:.75rem;color:var(--muted);">INTERCEPT (c)</div>
-            <div style="font-size:.88rem;color:var(--text);margin-top:4px;">Where line crosses Y-axis when X = 0</div>
-          </div>
-        </div>
-        <div class="example-block" style="margin-top:16px;">
-          <div class="ex-label">📖 Example from Notes</div>
-          Hours: 2→50 marks, 4→70 marks<br>
-          Slope m = (70−50)/(4−2) = <strong style="color:var(--accent2);">10</strong><br>
-          Equation: <strong style="color:var(--accent);">y = 10x + 30</strong><br>
-          5 hours → y = 10(5) + 30 = <strong style="color:var(--success);">80 marks! 🎯</strong>
-        </div>
+      <div class="card">
+        <div class="card-title">Problem 1 — Data Inconsistency</div>
+        <div class="card-body">Gender and Payment columns used multiple formats for the same values (M, Male, F, Female, upi, UPI). This would break any grouping or counting analysis and produce incorrect reports.</div>
       </div>
-      <div>
-        <div class="interactive-box">
-          <div class="interactive-label">🧮 REGRESSION PREDICTOR</div>
-          <div style="margin-top:16px;display:flex;flex-direction:column;gap:12px;">
-            <div class="num-inputs">
-              <div class="num-field"><label>Slope (m)</label><input type="number" id="regM" value="10" step="0.5"></div>
-              <div class="num-field"><label>Intercept (c)</label><input type="number" id="regC" value="30" step="1"></div>
-              <div class="num-field"><label>Hours (X)</label><input type="number" id="regX" value="5" step="0.5" min="0"></div>
-            </div>
-            <button class="solve-btn" onclick="calcRegression()">Predict Marks →</button>
-            <div class="num-result" id="regResult"><span style="color:var(--muted);">Result appears here…</span></div>
-            <hr style="border:none;border-top:1px solid var(--border);">
-            <div style="font-size:.85rem;color:var(--muted);">Line Equation Preview:</div>
-            <div id="regEquation" style="font-family:'Space Mono',monospace;font-size:1.1rem;color:var(--accent2);">y = 10x + 30</div>
-          </div>
-        </div>
-        <div class="card" style="margin-top:16px;">
-          <div class="card-title">📊 Worked Numerical</div>
-          <div class="table-wrap" style="margin-top:10px;">
-            <table>
-              <tr><th>Hours</th><th>Actual Marks</th><th>Predicted (y=10x+30)</th></tr>
-              <tr><td>1</td><td>40</td><td>40 ✓</td></tr>
-              <tr><td>2</td><td>50</td><td>50 ✓</td></tr>
-              <tr><td>3</td><td>65</td><td>60</td></tr>
-              <tr><td>5</td><td>—</td><td style="color:var(--success);font-weight:700;">80</td></tr>
-            </table>
-          </div>
-        </div>
+      <div class="card accent2">
+        <div class="card-title">Problem 2 — Outlier Distortion</div>
+        <div class="card-body">Rahul's marks entry of 500 is a data entry error that inflated the entire class average by ~94 marks. No analyst would trust results from this uncleaned dataset.</div>
       </div>
     </div>
-  </div>
-</div>
 
-<!-- ══════════════ SLIDE 10: Time Series ══════════════ -->
-<div class="slide" data-index="10">
-  <div class="hbar">
-    <span class="hbar-title">5 & 6. Scatter Plot + Time Series</span>
-    <span class="hbar-chip">📅 TS</span>
-  </div>
-  <div class="sbody">
-    <div class="slide-heading">Time Series <span class="hl2">Analysis</span></div>
+    <h3 style="margin-top:28px">Your 2 Decisions / Recommendations</h3>
     <div class="two-col">
-      <div>
-        <div class="card" style="margin-bottom:16px;">
-          <div class="card-icon">📅</div>
-          <div class="card-title">What is Time Series?</div>
-          <div class="card-body">Data collected <strong style="color:var(--accent2);">over time</strong> at regular intervals. Time is always on the X-axis.</div>
-        </div>
-        <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:16px;">
-          <div class="card success" style="padding:16px;">
-            <div style="font-weight:700;color:#fff;">1. Trend 📈</div>
-            <div style="font-size:.88rem;color:var(--muted);margin-top:4px;">Long-term movement (upward/downward)<br>e.g., Sales growing year over year</div>
-          </div>
-          <div class="card accent2" style="padding:16px;">
-            <div style="font-weight:700;color:#fff;">2. Seasonality 🌊</div>
-            <div style="font-size:.88rem;color:var(--muted);margin-top:4px;">Repeating pattern in fixed periods<br>e.g., Ice cream ↑ every summer</div>
-          </div>
-          <div class="card yellow" style="padding:16px;">
-            <div style="font-weight:700;color:#fff;">3. Irregular / Random ⚡</div>
-            <div style="font-size:.88rem;color:var(--muted);margin-top:4px;">Unexpected, unpredictable fluctuations<br>e.g., COVID impact on sales</div>
-          </div>
-        </div>
+      <div class="success-strip">
+        <div class="strip-label">Decision 1</div>
+        <strong style="color:#fff">Arrange extra coaching for low-attendance students.</strong><br>
+        <span style="font-size:0.88rem;color:var(--muted)">Students with attendance below 60% (Arjun, Rahul) should receive mandatory extra classes before the next exam, based on the clear link between attendance and marks.</span>
       </div>
-      <div>
-        <div class="interactive-box accent2">
-          <div class="interactive-label" style="background:var(--accent2);">📅 TIME SERIES MINI CHART</div>
-          <canvas id="tsCanvas" width="340" height="180" style="width:100%;height:180px;background:#0d1626;border-radius:10px;margin-top:14px;"></canvas>
-        </div>
-        <div class="table-wrap" style="margin-top:16px;">
-          <table>
-            <tr><th>Month</th><th>Sales</th><th>Component</th></tr>
-            <tr><td>Jan</td><td>100</td><td><span class="pill accent2">Baseline</span></td></tr>
-            <tr><td>Feb</td><td>120</td><td><span class="pill success">Trend ↑</span></td></tr>
-            <tr><td>Mar</td><td>150</td><td><span class="pill success">Trend ↑</span></td></tr>
-            <tr><td>Jul</td><td>200</td><td><span class="pill yellow">Seasonal peak</span></td></tr>
-            <tr><td>Dec</td><td>85</td><td><span class="pill danger">Irregular ↓</span></td></tr>
-          </table>
-        </div>
+      <div class="success-strip">
+        <div class="strip-label">Decision 2</div>
+        <strong style="color:#fff">Implement data validation in the entry form.</strong><br>
+        <span style="font-size:0.88rem;color:var(--muted)">Marks column should only accept values 0–100. Gender should use a dropdown list. This prevents dirty data from entering the system in the first place.</span>
       </div>
     </div>
-  </div>
-</div>
 
-<!-- ══════════════ SLIDE 11: Interactive Tools ══════════════ -->
-<div class="slide" data-index="11">
-  <div class="hbar">
-    <span class="hbar-title">Interactive Learning Resources</span>
-    <span class="hbar-chip">🔗 TOOLS</span>
-  </div>
-  <div class="sbody">
-    <div class="slide-heading">🔗 Open <span class="hl">Interactive</span> Tools</div>
-    <div style="font-size:.95rem;color:var(--muted);margin-bottom:28px;">Click any card to open the tool — explore these concepts live in your browser!</div>
-    <div style="display:flex;flex-direction:column;gap:16px;">
-      <a class="link-card" href="https://www.desmos.com/calculator" target="_blank">
-        <div class="link-icon">📊</div>
-        <div class="link-body">
-          <div class="link-title">Desmos Graphing Calculator</div>
-          <div class="link-url">desmos.com/calculator</div>
-          <div class="link-desc">Plot regression lines, type y = 10x + 30, adjust slope m and intercept c live. Perfect for visualizing the line of best fit!</div>
-        </div>
-        <div class="link-arrow">→</div>
-      </a>
-      <a class="link-card" href="https://www.geogebra.org/m/MDQ5MhzH" target="_blank">
-        <div class="link-icon">📈</div>
-        <div class="link-body">
-          <div class="link-title">GeoGebra — Correlation & Regression Explorer</div>
-          <div class="link-url">geogebra.org/m/MDQ5MhzH</div>
-          <div class="link-desc">Add your own data points and watch the regression line update instantly. See correlation coefficient change in real time!</div>
-        </div>
-        <div class="link-arrow">→</div>
-      </a>
-      <a class="link-card" href="https://www.geogebra.org/m/zzaxR3XT" target="_blank">
-        <div class="link-icon">🧪</div>
-        <div class="link-body">
-          <div class="link-title">GeoGebra — Hypothesis Testing Simulator</div>
-          <div class="link-url">geogebra.org/m/zzaxR3XT</div>
-          <div class="link-desc">Simulate sampling distributions and see how p-values are computed visually. Adjust α and see the rejection region change!</div>
-        </div>
-        <div class="link-arrow">→</div>
-      </a>
-      <a class="link-card" href="https://www.desmos.com/statistics" target="_blank">
-        <div class="link-icon">🔢</div>
-        <div class="link-body">
-          <div class="link-title">Desmos Statistics</div>
-          <div class="link-url">desmos.com/statistics</div>
-          <div class="link-desc">Enter a dataset, get mean, median, scatter plot, and regression line automatically. Great for class exercises!</div>
-        </div>
-        <div class="link-arrow">→</div>
-      </a>
-    </div>
-    <div class="card" style="margin-top:16px;border-color:rgba(167,139,250,.3);background:rgba(167,139,250,.05);">
-      <div class="card-title" style="color:var(--purple);">💡 In-Class Activity Idea</div>
-      <div class="card-body">Open Desmos → type <code style="background:var(--border);padding:2px 6px;border-radius:4px;">y = mx + c</code> → add sliders → change m and c → observe how the line changes. Then add the ArenaX/Canteen dataset and find the actual regression!</div>
+    <h3 style="margin-top:28px">Why Is Normalization Important Here?</h3>
+    <div class="card accent2" style="margin-top:0">
+      <div class="card-body" style="font-size:0.95rem;line-height:1.7">
+        Marks (0–100), Study Hours (0–5), and Attendance % (0–100) are all on different scales. If we tried to compare them directly, a 1-hour difference in study time would look tiny compared to a 1-mark difference — even though 1 hour may be very significant.<br><br>
+        Normalization puts all three on a 0–1 scale, so we can fairly compare which factor has the most influence on a student's performance. It also prevents one large-scaled variable from dominating in any statistical model.
+      </div>
     </div>
   </div>
-</div>
 
-<!-- ══════════════ SLIDE 12: Case Study ══════════════ -->
-<div class="slide" data-index="12">
-  <div class="hbar">
-    <span class="hbar-title">7. Integrated Case Understanding</span>
-    <span class="hbar-chip">🎯 CASE</span>
-  </div>
-  <div class="sbody">
-    <div class="slide-heading">🎯 <span class="hl">Case Study</span> — ArenaX Canteen Dataset</div>
-    <div class="two-col">
-      <div>
-        <div class="card" style="margin-bottom:16px;border-color:rgba(6,182,212,.35);">
-          <div class="card-title">The Dataset Scenario</div>
-          <div class="card-body">A college canteen tracks: daily footfall, items sold, attendance %, and student marks. We apply all 4 techniques to find insights!</div>
-        </div>
-        <div style="display:flex;flex-direction:column;gap:10px;">
-          <div style="background:rgba(6,182,212,.08);border:1px solid rgba(6,182,212,.2);border-radius:10px;padding:14px;">
-            <div style="font-weight:700;color:var(--accent2);margin-bottom:4px;">📊 Probability</div>
-            <div style="font-size:.88rem;color:var(--text);">P(student makes a purchase) = 120/200 = <strong>0.6</strong></div>
-          </div>
-          <div style="background:rgba(249,115,22,.08);border:1px solid rgba(249,115,22,.2);border-radius:10px;padding:14px;">
-            <div style="font-weight:700;color:var(--accent);margin-bottom:4px;">🧪 Hypothesis Test</div>
-            <div style="font-size:.88rem;color:var(--text);">H₀: Attendance has no effect on marks. p = 0.02 → Reject H₀!</div>
-          </div>
-          <div style="background:rgba(167,139,250,.08);border:1px solid rgba(167,139,250,.2);border-radius:10px;padding:14px;">
-            <div style="font-weight:700;color:var(--purple);margin-bottom:4px;">📈 Correlation</div>
-            <div style="font-size:.88rem;color:var(--text);">r = 0.82 between attendance % and marks → Strong positive!</div>
-          </div>
-          <div style="background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.2);border-radius:10px;padding:14px;">
-            <div style="font-weight:700;color:var(--success);margin-bottom:4px;">🔮 Regression</div>
-            <div style="font-size:.88rem;color:var(--text);">Marks = 0.7 × Attendance + 15. If attendance = 80% → marks ≈ 71</div>
-          </div>
-          <div style="background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.2);border-radius:10px;padding:14px;">
-            <div style="font-weight:700;color:var(--yellow);margin-bottom:4px;">📅 Time Series</div>
-            <div style="font-size:.88rem;color:var(--text);">Monthly canteen sales show upward trend with exam-week seasonality</div>
-          </div>
-        </div>
+  <!-- ═══════ VIVA ═══════ -->
+  <div class="panel" id="panel-viva">
+    <div class="slide-heading">🧠 Viva <span class="hl">Preparation</span></div>
+
+    <p style="color:var(--muted);margin-bottom:24px">Click "Show Answer" only after you've tried answering each question yourself!</p>
+
+    <div class="viva-card">
+      <div class="viva-q">What is dirty data? <span class="q-num">Q1</span></div>
+      <button class="toggle-btn" onclick="toggleAnswer('v1')">▶ Show Answer</button>
+      <div class="answer-box" id="v1">Dirty data is data that contains <strong>errors, missing values, inconsistent formats, or outliers</strong> — making it unreliable for analysis. Example: Gender column having Male, male, M all in the same dataset.</div>
+    </div>
+
+    <div class="viva-card">
+      <div class="viva-q">Why is data cleaning important? <span class="q-num">Q2</span></div>
+      <button class="toggle-btn" onclick="toggleAnswer('v2')">▶ Show Answer</button>
+      <div class="answer-box" id="v2">Because inaccurate data leads to wrong conclusions and poor decisions. In our dataset, one wrong entry (500) changed the class average by 94 marks. <strong>Cleaning improves data quality</strong> and makes analysis trustworthy.</div>
+    </div>
+
+    <div class="viva-card">
+      <div class="viva-q">What is normalization? <span class="q-num">Q3</span></div>
+      <button class="toggle-btn" onclick="toggleAnswer('v3')">▶ Show Answer</button>
+      <div class="answer-box" id="v3">Normalization <strong>scales data to a 0–1 range</strong> using the formula: <code style="color:var(--accent2)">(X − Min) / (Max − Min)</code>. It allows fair comparison between values that are on different scales (like marks out of 100 vs study hours 0–5).</div>
+    </div>
+
+    <div class="viva-card">
+      <div class="viva-q">What is the difference between mean and median? <span class="q-num">Q4</span></div>
+      <button class="toggle-btn" onclick="toggleAnswer('v4')">▶ Show Answer</button>
+      <div class="answer-box" id="v4">
+        <strong>Mean</strong> = Sum ÷ Count. It is affected by extreme values (outliers).<br><br>
+        <strong>Median</strong> = Middle value when data is sorted. It is NOT affected by outliers.<br><br>
+        That is why we used median for Study Hours (in case of outliers) and mean for Marks (after removing the outlier).
       </div>
-      <div>
-        <div class="interactive-box" style="height:100%;">
-          <div class="interactive-label">📝 NUMERICAL PRACTICE</div>
-          <div style="margin-top:18px;display:flex;flex-direction:column;gap:16px;">
-            <div>
-              <div style="font-size:.85rem;color:var(--muted);margin-bottom:8px;">Quick p-value decision test:</div>
-              <div class="num-inputs">
-                <div class="num-field"><label>p-value</label><input type="number" id="qpVal" value="0.03" step="0.01" min="0" max="1"></div>
-                <div class="num-field"><label>α level</label><input type="number" id="qAlpha" value="0.05" step="0.01" min="0" max="1"></div>
-              </div>
-              <button class="solve-btn" style="margin-top:10px;width:100%;" onclick="quickHypTest()">Decide →</button>
-              <div class="num-result" id="qResult" style="margin-top:10px;"><span style="color:var(--muted);">Result appears here…</span></div>
-            </div>
-            <hr style="border:none;border-top:1px solid var(--border);">
-            <div>
-              <div style="font-size:.85rem;color:var(--muted);margin-bottom:8px;">Addition Rule calculator:</div>
-              <div class="num-inputs">
-                <div class="num-field"><label>P(A)</label><input type="number" id="q2A" value="0.6" step="0.01" min="0" max="1"></div>
-                <div class="num-field"><label>P(B)</label><input type="number" id="q2B" value="0.4" step="0.01" min="0" max="1"></div>
-                <div class="num-field"><label>P(A∩B)</label><input type="number" id="q2AB" value="0.1" step="0.01" min="0" max="1"></div>
-              </div>
-              <button class="solve-btn" style="margin-top:10px;width:100%;" onclick="quickAddition()">Calculate P(A∪B) →</button>
-              <div class="num-result" id="q2Result" style="margin-top:10px;"><span style="color:var(--muted);">Result appears here…</span></div>
-            </div>
-          </div>
-        </div>
+    </div>
+
+    <div class="viva-card">
+      <div class="viva-q">Why are outliers dangerous? <span class="q-num">Q5</span></div>
+      <button class="toggle-btn" onclick="toggleAnswer('v5')">▶ Show Answer</button>
+      <div class="answer-box" id="v5">Outliers are extreme values that <strong>distort statistical results</strong>. In our dataset, Marks = 500 inflated the average from ~69 to ~163 — giving a completely false picture. Outliers can ruin averages, charts, and predictions if not handled.</div>
+    </div>
+
+    <div class="viva-card">
+      <div class="viva-q">What is data storytelling? <span class="q-num">Q6</span></div>
+      <button class="toggle-btn" onclick="toggleAnswer('v6')">▶ Show Answer</button>
+      <div class="answer-box" id="v6">Data storytelling is the process of converting raw data and analysis results into <strong>clear, meaningful insights and actionable decisions</strong> — using charts, summaries, and plain language that non-technical people can understand and act upon.</div>
+    </div>
+
+    <div class="viva-card">
+      <div class="viva-q">Why should data be standardized? <span class="q-num">Q7</span></div>
+      <button class="toggle-btn" onclick="toggleAnswer('v7')">▶ Show Answer</button>
+      <div class="answer-box" id="v7">Inconsistent formats like Male/male/M make <strong>grouping, filtering, and counting impossible</strong>. Excel and any other tool treats them as different values. Standardization ensures data can be correctly sorted, filtered, and analyzed — preventing wrong results in reports.</div>
+    </div>
+
+    <!-- ONE LINE DEFS -->
+    <h3 style="margin-top:36px">One-Line Definitions — Memorize These</h3>
+    <div class="card" style="margin-top:0">
+      <div class="def-row">
+        <div class="def-term">Data Cleaning</div>
+        <div class="def-body">Fixing errors, missing values, and inconsistencies to make data reliable.</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">Outlier</div>
+        <div class="def-body">An extreme value far from the rest of the data that distorts analysis.</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">Normalization</div>
+        <div class="def-body">Scaling all values to a 0–1 range using (X−Min)/(Max−Min).</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">Data Storytelling</div>
+        <div class="def-body">Converting data analysis into clear insights and decisions for people to act on.</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">Mean</div>
+        <div class="def-body">Sum of all values divided by the number of values. Affected by outliers.</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">Median</div>
+        <div class="def-body">Middle value when data is arranged in order. Not affected by outliers.</div>
       </div>
     </div>
   </div>
-</div>
 
-<!-- ══════════════ SLIDE 13: Final Revision ══════════════ -->
-<div class="slide" data-index="13">
-  <div class="hbar">
-    <span class="hbar-title">Final Revision Summary</span>
-    <span class="hbar-chip">✅ RECAP</span>
-  </div>
-  <div class="sbody">
-    <div class="slide-heading">✅ Final <span class="hl">Revision</span> Summary</div>
-    <div class="summary-grid">
-      <div class="summary-card">
-        <div class="summary-icon">🎲</div>
-        <div class="summary-term">Probability</div>
-        <div class="summary-def">P(E) = Favourable / Total. Range: 0 to 1.</div>
-      </div>
-      <div class="summary-card">
-        <div class="summary-icon">🧪</div>
-        <div class="summary-term">Hypothesis Testing</div>
-        <div class="summary-def">Test assumptions using data. H₀ vs H₁.</div>
-      </div>
-      <div class="summary-card">
-        <div class="summary-icon">📏</div>
-        <div class="summary-term">p-value</div>
-        <div class="summary-def">p &lt; 0.05 → Reject H₀. Smaller = stronger evidence.</div>
-      </div>
-      <div class="summary-card">
-        <div class="summary-icon">📈</div>
-        <div class="summary-term">Correlation</div>
-        <div class="summary-def">r between −1 and +1. Measures relationship strength.</div>
-      </div>
-      <div class="summary-card">
-        <div class="summary-icon">🔮</div>
-        <div class="summary-term">Regression</div>
-        <div class="summary-def">y = mx + c. Line of best fit. Used for prediction.</div>
-      </div>
-      <div class="summary-card">
-        <div class="summary-icon">🔍</div>
-        <div class="summary-term">Scatter Plot</div>
-        <div class="summary-def">Visual tool. Upward=positive, Downward=negative trend.</div>
-      </div>
-      <div class="summary-card">
-        <div class="summary-icon">📅</div>
-        <div class="summary-term">Time Series</div>
-        <div class="summary-def">Data over time. Components: Trend, Seasonal, Irregular.</div>
-      </div>
-      <div class="summary-card">
-        <div class="summary-icon">❌</div>
-        <div class="summary-term">Type I Error</div>
-        <div class="summary-def">Reject H₀ when it's TRUE. False Positive.</div>
-      </div>
-      <div class="summary-card">
-        <div class="summary-icon">⚠️</div>
-        <div class="summary-term">Type II Error</div>
-        <div class="summary-def">Fail to reject H₀ when it's FALSE. False Negative.</div>
-      </div>
-    </div>
-    <div class="card" style="margin-top:22px;background:linear-gradient(135deg,rgba(6,182,212,.08),rgba(249,115,22,.08));border-color:var(--border);">
-      <div style="display:flex;align-items:center;gap:16px;">
-        <div style="font-size:2.5rem;">🎓</div>
-        <div>
-          <div style="font-weight:700;font-size:1.1rem;color:#fff;margin-bottom:4px;">K.P. Singh · Introduction to Data Science · Unit 4</div>
-          <div style="color:var(--muted);font-size:.9rem;">BCA Semester I · Probability, Hypothesis Testing, Correlation, Regression, Time Series</div>
-        </div>
-        <div style="margin-left:auto;text-align:center;">
-          <div style="font-family:'Space Mono',monospace;font-size:.75rem;color:var(--muted);">SLIDES</div>
-          <div style="font-family:'Space Mono',monospace;font-size:1.5rem;color:var(--accent2);">14</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+</div><!-- /panels -->
 
-</div><!-- /deck -->
-
-<!-- ─── NAV BAR ─── -->
-<div class="nav-bar">
-  <button class="nav-btn" id="prevBtn" onclick="navigate(-1)" disabled>← Prev</button>
-  <div style="display:flex;align-items:center;gap:16px;">
-    <div class="dots" id="dots"></div>
-    <span class="slide-counter" id="counter">1 / 14</span>
-  </div>
-  <button class="nav-btn" id="nextBtn" onclick="navigate(1)">Next →</button>
+<!-- FOOTER -->
+<div style="background:var(--panel);border-top:1px solid var(--border);padding:24px 60px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
+  <div style="font-size:0.85rem;color:var(--muted)">K.P. Singh · Introduction to Data Science · BCA Semester I</div>
+  <div style="font-family:'Space Mono',monospace;font-size:0.72rem;color:var(--muted)">Practical 7 · Data Cleaning, Normalization & Storytelling</div>
+  <a href="https://kpsingh.in" style="font-family:'Space Mono',monospace;font-size:0.72rem;color:var(--accent2);text-decoration:none">← Back to Main Site</a>
 </div>
 
 <script>
-/* ─── SLIDE ENGINE ─── */
-const slides = document.querySelectorAll('.slide');
-const total = slides.length;
-let current = 0;
-
-function buildDots() {
-  const dc = document.getElementById('dots');
-  dc.innerHTML = '';
-  for (let i = 0; i < total; i++) {
-    const d = document.createElement('div');
-    d.className = 'dot' + (i === 0 ? ' active' : '');
-    d.onclick = () => goTo(i);
-    dc.appendChild(d);
-  }
-}
-
-function goTo(idx) {
-  slides[current].classList.remove('active','anim-in');
-  current = Math.max(0, Math.min(total-1, idx));
-  slides[current].classList.add('active','anim-in');
-  document.querySelectorAll('.dot').forEach((d,i) => d.classList.toggle('active', i===current));
-  document.getElementById('counter').textContent = `${current+1} / ${total}`;
-  document.getElementById('prevBtn').disabled = current === 0;
-  document.getElementById('nextBtn').disabled = current === total-1;
-  document.getElementById('pbar').style.width = ((current/(total-1))*100)+'%';
-  // Draw charts when their slide is shown
-  if (current === 8) drawScatter('positive');
-  if (current === 10) drawTS();
-}
-
-function navigate(dir) { goTo(current + dir); }
-
-document.addEventListener('keydown', e => {
-  if (e.key === 'ArrowRight' || e.key === ' ') navigate(1);
-  if (e.key === 'ArrowLeft') navigate(-1);
-});
-
-buildDots();
-goTo(0);
-
-/* ─── COIN FLIP ─── */
-let heads=0, tails=0;
-function flipCoin() {
-  const coin = document.getElementById('coin');
-  coin.classList.remove('flipping');
-  void coin.offsetWidth;
-  coin.classList.add('flipping');
-  const isHead = Math.random() < .5;
-  if (isHead) { heads++; coin.textContent='🪙'; } else { tails++; coin.textContent='⚫'; }
-  const tot = heads + tails;
-  document.getElementById('headCount').textContent = heads;
-  document.getElementById('tailCount').textContent = tails;
-  document.getElementById('totalCount').textContent = tot;
-  document.getElementById('coinResult').textContent = isHead ? '🎉 HEADS!' : '💫 TAILS!';
-  document.getElementById('probDisplay').textContent = `P(Head) so far: ${heads}/${tot} = ${(heads/tot).toFixed(3)}`;
-}
-function resetCoin() {
-  heads=tails=0;
-  document.getElementById('headCount').textContent='0';
-  document.getElementById('tailCount').textContent='0';
-  document.getElementById('totalCount').textContent='0';
-  document.getElementById('coinResult').textContent='👆 Click the coin to flip!';
-  document.getElementById('probDisplay').textContent='P(Head) so far: —';
-  document.getElementById('coin').textContent='🪙';
-}
-
-/* ─── ADDITION RULE ─── */
-function calcAddition() {
-  const pA=+document.getElementById('pA').value,
-        pB=+document.getElementById('pB').value,
-        pAB=+document.getElementById('pAB').value;
-  const result = pA + pB - pAB;
-  document.getElementById('addResult').innerHTML =
-    `<span style="font-family:'Space Mono',monospace;">P(A∪B) = ${pA} + ${pB} − ${pAB} = <strong style="color:var(--success);font-size:1.2rem;">${result.toFixed(4)}</strong></span>`;
-}
-
-function calcConditional() {
-  const cAB=+document.getElementById('cAB').value, cB=+document.getElementById('cB').value;
-  if (cB===0) { document.getElementById('condResult').innerHTML='<span style="color:var(--danger);">P(B) cannot be 0!</span>'; return; }
-  const r = cAB/cB;
-  document.getElementById('condResult').innerHTML =
-    `<span style="font-family:'Space Mono',monospace;">P(A|B) = ${cAB} / ${cB} = <strong style="color:var(--success);font-size:1.2rem;">${r.toFixed(4)}</strong></span>`;
-}
-
-/* ─── p-VALUE SLIDER ─── */
-function updatePval() {
-  const p = +document.getElementById('pvalSlider').value;
-  const num = document.getElementById('pvalNum');
-  const verdict = document.getElementById('pvalVerdict');
-  const explain = document.getElementById('pvalExplain');
-  num.textContent = p.toFixed(2);
-  if (p <= 0.05) {
-    num.style.color = 'var(--success)';
-    verdict.textContent = 'Reject H₀ ✓';
-    verdict.style.background = 'rgba(16,185,129,.15)'; verdict.style.color = 'var(--success)';
-    explain.innerHTML = `p = ${p.toFixed(2)} &lt; α = 0.05 → <strong style="color:var(--success);">Significant result!</strong> There IS an effect.`;
-  } else {
-    num.style.color = 'var(--danger)';
-    verdict.textContent = 'Fail to Reject H₀';
-    verdict.style.background = 'rgba(239,68,68,.15)'; verdict.style.color = 'var(--danger)';
-    explain.innerHTML = `p = ${p.toFixed(2)} &gt; α = 0.05 → <strong style="color:var(--danger);">Not significant.</strong> Not enough evidence to reject H₀.`;
-  }
-}
-
-/* ─── SCATTER PLOT ─── */
-const scatterData = {
-  positive: { pts: [[1,40],[2,52],[3,60],[4,72],[5,80],[6,88],[7,95],[2.5,45],[3.5,58],[4.5,70],[5.5,78]], label:'Study Hours vs Marks', r:'r = +0.98' },
-  negative: { pts: [[1,90],[2,75],[3,70],[4,55],[5,50],[6,35],[7,25],[2.5,80],[3.5,62],[4.5,48],[5.5,38]], label:'Mobile Usage vs Marks', r:'r = −0.97' },
-  none:     { pts: [[1,60],[2,30],[3,80],[4,45],[5,70],[6,20],[7,55],[2.5,65],[3.5,40],[4.5,75],[5.5,35]], label:'Shoe Size vs Marks', r:'r ≈ 0.02' }
-};
-let currentMode = 'positive';
-
-function drawScatter(mode) {
-  currentMode = mode || currentMode;
-  const canvas = document.getElementById('scatterCanvas');
-  if (!canvas) return;
-  const ctx = canvas.getContext('2d');
-  const W=canvas.width, H=canvas.height;
-  const d = scatterData[currentMode];
-  ctx.clearRect(0,0,W,H);
-  const pad=40;
-  // Grid
-  ctx.strokeStyle='#1e2d45'; ctx.lineWidth=1;
-  for (let i=0;i<=5;i++) {
-    const x=pad+(W-2*pad)*i/5, y=pad+(H-2*pad)*i/5;
-    ctx.beginPath(); ctx.moveTo(x,pad); ctx.lineTo(x,H-pad); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(pad,y); ctx.lineTo(W-pad,y); ctx.stroke();
-  }
-  // Axes
-  ctx.strokeStyle='#2d4060'; ctx.lineWidth=1.5;
-  ctx.beginPath(); ctx.moveTo(pad,pad); ctx.lineTo(pad,H-pad); ctx.lineTo(W-pad,H-pad); ctx.stroke();
-  // Labels
-  ctx.fillStyle='#64748b'; ctx.font='11px Space Mono,monospace';
-  ctx.fillText('X (Hours)',W/2-20,H-6); ctx.fillText('Y',16,pad);
-  // Map points
-  const xs=d.pts.map(p=>p[0]), ys=d.pts.map(p=>p[1]);
-  const minX=Math.min(...xs)-0.5, maxX=Math.max(...xs)+0.5;
-  const minY=Math.min(...ys)-10, maxY=Math.max(...ys)+10;
-  const mapX=x=>pad+(x-minX)/(maxX-minX)*(W-2*pad);
-  const mapY=y=>(H-pad)-(y-minY)/(maxY-minY)*(H-2*pad);
-  // Regression line
-  const n=d.pts.length, sumX=xs.reduce((a,b)=>a+b,0), sumY=ys.reduce((a,b)=>a+b,0);
-  const sumXY=d.pts.reduce((a,p)=>a+p[0]*p[1],0), sumX2=xs.reduce((a,b)=>a+b*b,0);
-  const m=(n*sumXY-sumX*sumY)/(n*sumX2-sumX**2);
-  const c=(sumY-m*sumX)/n;
-  const colors={positive:'#06b6d4',negative:'#ef4444',none:'#64748b'};
-  ctx.strokeStyle=colors[currentMode]; ctx.lineWidth=2;
-  ctx.setLineDash([4,3]);
-  ctx.beginPath(); ctx.moveTo(mapX(minX+0.5),mapY(m*(minX+0.5)+c)); ctx.lineTo(mapX(maxX-0.5),mapY(m*(maxX-0.5)+c)); ctx.stroke();
-  ctx.setLineDash([]);
-  // Points
-  d.pts.forEach(([x,y])=>{
-    ctx.beginPath();
-    ctx.arc(mapX(x),mapY(y),5,0,Math.PI*2);
-    ctx.fillStyle=colors[currentMode]+'cc'; ctx.fill();
-    ctx.strokeStyle=colors[currentMode]; ctx.lineWidth=1.5; ctx.stroke();
-  });
-  document.getElementById('scatterR').textContent = d.r;
-}
-
-function setScatterMode(mode, btn) {
-  currentMode = mode;
-  document.querySelectorAll('.scatter-btn').forEach(b=>b.classList.remove('active'));
+function switchTab(id, btn) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
   btn.classList.add('active');
-  drawScatter(mode);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-/* ─── TIME SERIES ─── */
-function drawTS() {
-  const canvas = document.getElementById('tsCanvas');
-  if (!canvas) return;
-  const ctx = canvas.getContext('2d');
-  const W=canvas.width, H=canvas.height, pad=36;
-  const months=['J','F','M','A','M','J','J','A','S','O','N','D'];
-  const sales=[100,120,150,140,160,190,210,200,170,155,130,90];
-  const trend=[95,110,125,140,150,165,175,185,170,155,140,125];
-  ctx.clearRect(0,0,W,H);
-  ctx.strokeStyle='#1e2d45'; ctx.lineWidth=1;
-  for(let i=0;i<=4;i++){const y=pad+(H-2*pad)*i/4;ctx.beginPath();ctx.moveTo(pad,y);ctx.lineTo(W-pad,y);ctx.stroke();}
-  const minV=60,maxV=220;
-  const mx=x=>pad+(W-2*pad)*x/(sales.length-1);
-  const my=y=>(H-pad)-(y-minV)/(maxV-minV)*(H-2*pad);
-  // Actual sales
-  ctx.strokeStyle='#06b6d4'; ctx.lineWidth=2.5; ctx.setLineDash([]);
-  ctx.beginPath();
-  sales.forEach((v,i)=>i===0?ctx.moveTo(mx(i),my(v)):ctx.lineTo(mx(i),my(v)));
-  ctx.stroke();
-  // Trend
-  ctx.strokeStyle='#f97316'; ctx.lineWidth=1.5; ctx.setLineDash([5,4]);
-  ctx.beginPath();
-  trend.forEach((v,i)=>i===0?ctx.moveTo(mx(i),my(v)):ctx.lineTo(mx(i),my(v)));
-  ctx.stroke(); ctx.setLineDash([]);
-  // Dots
-  sales.forEach((v,i)=>{ctx.beginPath();ctx.arc(mx(i),my(v),4,0,Math.PI*2);ctx.fillStyle='#06b6d4';ctx.fill();});
-  // Month labels
-  ctx.fillStyle='#64748b'; ctx.font='10px Space Mono,monospace';
-  months.forEach((m,i)=>ctx.fillText(m,mx(i)-4,H-8));
-  // Legend
-  ctx.fillStyle='#06b6d4'; ctx.fillRect(W-80,8,14,3); ctx.fillStyle='#94a3b8'; ctx.font='10px sans-serif'; ctx.fillText('Actual',W-62,13);
-  ctx.strokeStyle='#f97316'; ctx.lineWidth=1.5; ctx.setLineDash([4,3]); ctx.beginPath(); ctx.moveTo(W-80,22); ctx.lineTo(W-66,22); ctx.stroke(); ctx.setLineDash([]);
-  ctx.fillStyle='#94a3b8'; ctx.fillText('Trend',W-62,26);
+function toggleAnswer(id) {
+  const el = document.getElementById(id);
+  const isOpen = el.style.display === 'block';
+  el.style.display = isOpen ? 'none' : 'block';
+  const btn = el.previousElementSibling;
+  btn.textContent = isOpen ? '▶ Show Answer' : '▼ Hide Answer';
 }
 
-/* ─── REGRESSION ─── */
-function calcRegression() {
-  const m=+document.getElementById('regM').value;
-  const c=+document.getElementById('regC').value;
-  const x=+document.getElementById('regX').value;
-  const y = m*x + c;
-  document.getElementById('regResult').innerHTML =
-    `<span style="font-family:'Space Mono',monospace;">y = ${m}(${x}) + ${c} = <strong style="color:var(--success);font-size:1.3rem;">${y.toFixed(2)} marks</strong></span>`;
-  document.getElementById('regEquation').textContent = `y = ${m}x + ${c >= 0 ? '+' : ''}${c}`;
+function calcNorm() {
+  const x = parseFloat(document.getElementById('norm-input').value);
+  const mn = 30, mx = 89;
+  const el = document.getElementById('norm-result');
+  if (isNaN(x) || x < mn || x > mx) {
+    el.innerHTML = '<span style="color:var(--danger)">Please enter a value between 30 and 89</span>';
+    return;
+  }
+  const norm = ((x - mn) / (mx - mn)).toFixed(3);
+  el.innerHTML = `
+    <div style="color:var(--muted);font-size:0.8rem;margin-bottom:6px">Calculation:</div>
+    (${x} − ${mn}) ÷ (${mx} − ${mn}) = ${x - mn} ÷ ${mx - mn}<br>
+    <span style="color:var(--success);font-size:1.3rem;font-weight:700">${norm}</span>
+    <span style="color:var(--muted);font-size:0.85rem;margin-left:8px">${norm == 1.000 ? '← highest!' : norm == 0.000 ? '← lowest!' : ''}</span>
+  `;
 }
 
-/* ─── CASE STUDY CALCULATORS ─── */
-function quickHypTest() {
-  const p=+document.getElementById('qpVal').value, a=+document.getElementById('qAlpha').value;
-  const reject = p <= a;
-  document.getElementById('qResult').innerHTML = reject
-    ? `<strong style="color:var(--success);">p = ${p} ≤ α = ${a} → REJECT H₀ ✓</strong><br><span style="font-size:.82rem;color:var(--muted);">Result is statistically significant!</span>`
-    : `<strong style="color:var(--danger);">p = ${p} > α = ${a} → FAIL TO REJECT H₀</strong><br><span style="font-size:.82rem;color:var(--muted);">Not enough evidence against H₀.</span>`;
-}
-
-function quickAddition() {
-  const a=+document.getElementById('q2A').value, b=+document.getElementById('q2B').value, ab=+document.getElementById('q2AB').value;
-  const r = a+b-ab;
-  document.getElementById('q2Result').innerHTML =
-    `<span style="font-family:'Space Mono',monospace;">P(A∪B) = ${a}+${b}−${ab} = <strong style="color:var(--success);font-size:1.2rem;">${r.toFixed(4)}</strong></span>`;
-}
-
-// Init slide 5 slider
-document.getElementById('pvalSlider').oninput = updatePval;
-updatePval();
+calcNorm();
 </script>
 </body>
 </html>
