@@ -185,7 +185,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;background:radial-gradi
   <div class="reg-card">
     <div class="reg-badge">Lab Practicals · Excel &amp; Data Tools</div>
     <h1 class="reg-title">Lab <span>Quiz</span></h1>
-    <p class="reg-sub">50 MCQ questions · 45 minutes · Sections 1–10<br>Topics: PivotTable, Charts, Conditional Formatting, Power Query &amp; more.</p>
+    <p class="reg-sub">50 MCQ questions · 20 minutes · Sections 1–10<br>Topics: PivotTable, Charts, Conditional Formatting, Power Query &amp; more.</p>
 
     <div class="practical-list">
       <div class="practical-list-title">Topics Covered</div>
@@ -736,7 +736,7 @@ const TOTAL=allQuestions.length;
 let studentInfo={};
 let answers=new Array(TOTAL).fill(null);
 let timerInterval=null;
-let secondsLeft=45*60;
+let secondsLeft=20*60;
 let quizSubmitted=false;
 
 /* ══ REGISTRATION ══ */
@@ -824,7 +824,7 @@ function finalize(){
   let grade='F';
   if(pct>=90)grade='A+';else if(pct>=80)grade='A';else if(pct>=70)grade='B';else if(pct>=60)grade='C';else if(pct>=50)grade='D';else if(pct>=40)grade='E';
 
-  const elapsed=45*60-secondsLeft;
+  const elapsed=20*60-secondsLeft;
   const timeTaken=`${String(Math.floor(elapsed/60)).padStart(2,'0')}m ${String(elapsed%60).padStart(2,'0')}s`;
   const submissionId=`${studentInfo.roll}-${grade}-${Date.now().toString(36).toUpperCase()}`;
   const submittedAt=new Date().toLocaleString('en-IN',{timeZone:'Asia/Kolkata',day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit',hour12:true});
@@ -884,7 +884,7 @@ function reviewQuiz(){
 
 /* ══ UTILS ══ */
 function switchScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');}
-function retake(){answers=new Array(TOTAL).fill(null);quizSubmitted=false;secondsLeft=45*60;document.querySelector('.submit-section').style.display='block';document.getElementById('timer-box').classList.remove('warning');document.getElementById('timer-display').textContent='45:00';document.getElementById('unanswered-warn').dataset.primed='';renderQuiz();switchScreen('quiz-screen');startTimer();window.scrollTo(0,0);}
+function retake(){answers=new Array(TOTAL).fill(null);quizSubmitted=false;secondsLeft=20*60;document.querySelector('.submit-section').style.display='block';document.getElementById('timer-box').classList.remove('warning');document.getElementById('timer-display').textContent='45:00';document.getElementById('unanswered-warn').dataset.primed='';renderQuiz();switchScreen('quiz-screen');startTimer();window.scrollTo(0,0);}
 </script>
 </body>
 </html>
