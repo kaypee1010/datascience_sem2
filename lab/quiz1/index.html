@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lab Practicals Quiz — Data Science | K.P. Singh · SRHU</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Cinzel:wght@400;600;700&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0d1528;--navy-mid:#162040;--navy-light:#1e2d56;
+  --gold:#c8952a;--gold-bright:#e8b84b;--gold-dim:rgba(200,149,42,.14);
+  --border-gold:rgba(200,149,42,.28);--text-body:#e8e0d0;
+  --text-muted:rgba(232,224,208,.55);--green:#2ecc8a;--red:#e05555;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Source Serif 4',Georgia,serif;background:var(--navy);color:var(--text-body);min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;z-index:0;background:radial-gradient(ellipse 70% 50% at 5% 15%,rgba(200,149,42,.06),transparent),radial-gradient(ellipse 60% 70% at 95% 80%,rgba(30,45,86,.8),transparent);pointer-events:none}
+
+/* NAV */
+.kps-nav{position:fixed;top:0;left:0;right:0;z-index:9999;display:flex;align-items:center;justify-content:space-between;padding:12px 20px;background:rgba(13,21,40,.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--border-gold)}
+.kps-nav-brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+.kps-nav-logo{width:34px;height:34px;border-radius:50%;object-fit:cover;border:1.5px solid var(--gold)}
+.kps-nav-name{font-family:'Cinzel',serif;font-size:13px;font-weight:600;color:var(--gold-bright);letter-spacing:.4px;line-height:1}
+.kps-nav-sub{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1.5px;color:var(--text-muted);text-transform:uppercase;margin-top:2px}
+.kps-nav-links{display:flex;align-items:center;gap:5px}
+.kps-nav-links a{color:var(--text-muted);text-decoration:none;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:1px;padding:5px 10px;border-radius:6px;border:1px solid transparent;transition:all .2s;white-space:nowrap}
+.kps-nav-links a:hover{color:var(--gold-bright);border-color:var(--border-gold)}
+.kps-nav-links a.ext{background:var(--gold);color:#0d1528;font-weight:600;border:none}
+.kps-nav-links a.ext:hover{background:var(--gold-bright)}
+
+/* SCREENS */
+.screen{display:none;position:relative;z-index:1}
+.screen.active{display:block}
+
+/* REGISTRATION */
+#reg-screen{min-height:100vh;display:none;align-items:center;justify-content:center;padding:90px 20px 40px;flex-direction:column}
+#reg-screen.active{display:flex}
+.reg-card{background:linear-gradient(145deg,var(--navy-mid),var(--navy-light));border:1px solid var(--border-gold);border-radius:20px;padding:36px 30px;width:100%;max-width:480px;position:relative;overflow:hidden}
+.reg-card::before{content:'';position:absolute;top:-60px;right:-60px;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(200,149,42,.08),transparent 70%)}
+.reg-badge{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);background:var(--gold-dim);border:1px solid var(--border-gold);padding:4px 14px;border-radius:20px;display:inline-block;margin-bottom:16px}
+.reg-title{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:700;color:#fff;line-height:1.15;margin-bottom:4px}
+.reg-title span{color:var(--gold-bright);font-style:italic}
+.reg-sub{font-size:13px;color:var(--text-muted);margin-bottom:28px;line-height:1.6}
+.practical-list{background:rgba(255,255,255,.03);border:1px solid var(--border-gold);border-radius:10px;padding:14px 16px;margin-bottom:22px}
+.practical-list-title{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:10px}
+.practical-list ol{padding-left:18px;list-style-type:decimal}
+.practical-list li{font-size:12px;color:var(--text-muted);line-height:1.7}
+.form-group{margin-bottom:16px}
+.form-label{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:6px}
+.form-input,.form-select{width:100%;padding:11px 14px;background:rgba(255,255,255,.05);border:1px solid var(--border-gold);border-radius:9px;color:var(--text-body);font-family:'Source Serif 4',serif;font-size:15px;outline:none;transition:border-color .2s,background .2s;appearance:none;-webkit-appearance:none}
+.form-input:focus,.form-select:focus{border-color:var(--gold);background:rgba(200,149,42,.07)}
+.form-input::placeholder{color:var(--text-muted)}
+.form-select option{background:var(--navy-mid);color:var(--text-body)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.form-fixed{display:flex;align-items:center;gap:8px;padding:11px 14px;background:rgba(255,255,255,.03);border:1px solid rgba(200,149,42,.15);border-radius:9px;color:var(--text-muted);font-size:14px}
+.form-fixed .lock{font-size:12px;color:var(--gold);opacity:.6}
+.start-btn{width:100%;margin-top:24px;padding:14px;border:none;cursor:pointer;background:linear-gradient(135deg,var(--gold),var(--gold-bright));color:var(--navy);border-radius:12px;font-family:'Cinzel',serif;font-size:14px;font-weight:700;letter-spacing:1px;transition:all .3s;box-shadow:0 4px 24px rgba(200,149,42,.3)}
+.start-btn:hover{transform:translateY(-2px);box-shadow:0 8px 36px rgba(200,149,42,.45)}
+.form-error{color:var(--red);font-size:12px;margin-top:16px;text-align:center;display:none;font-family:'JetBrains Mono',monospace}
+
+/* QUIZ SCREEN */
+#quiz-screen{padding-top:125px;padding-bottom:60px}
+.quiz-header{position:fixed;top:62px;left:0;right:0;z-index:900;background:rgba(13,21,40,.96);backdrop-filter:blur(12px);border-bottom:1px solid var(--border-gold);padding:10px 20px}
+.quiz-header-inner{max-width:800px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.qh-student{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold);letter-spacing:.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:160px}
+.qh-progress-wrap{flex:1}
+.qh-progress-label{display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text-muted);margin-bottom:4px;letter-spacing:.5px}
+.qh-progress-bar{height:4px;background:rgba(255,255,255,.08);border-radius:4px;overflow:hidden}
+.qh-progress-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--gold),var(--gold-bright));border-radius:4px;transition:width .4s ease}
+.timer-box{display:flex;align-items:center;gap:6px;background:var(--gold-dim);border:1px solid var(--border-gold);border-radius:8px;padding:5px 12px;font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:500;color:var(--gold-bright);white-space:nowrap}
+.timer-box.warning{background:rgba(224,85,85,.15);border-color:rgba(224,85,85,.4);color:var(--red)}
+
+/* QUIZ CONTENT */
+.quiz-content{max-width:800px;margin:0 auto;padding:0 16px}
+.section-divider{margin:32px 0 20px;display:flex;align-items:center;gap:14px}
+.sec-line{flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--border-gold))}
+.sec-line.right{background:linear-gradient(270deg,transparent,var(--border-gold))}
+.sec-badge{font-family:'Cinzel',serif;font-size:10px;letter-spacing:2px;color:var(--gold);background:var(--gold-dim);border:1px solid var(--border-gold);padding:5px 16px;border-radius:20px;white-space:nowrap;text-align:center}
+.sec-badge small{display:block;font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:1px;color:var(--text-muted);margin-top:2px;text-transform:uppercase}
+.q-card{background:linear-gradient(145deg,var(--navy-mid),rgba(30,45,86,.7));border:1px solid var(--border-gold);border-radius:14px;padding:20px 18px;margin-bottom:14px;transition:border-color .2s}
+.q-card.answered{border-color:rgba(200,149,42,.5)}
+.q-top{display:flex;align-items:flex-start;gap:12px;margin-bottom:14px}
+.q-num{min-width:32px;height:32px;border-radius:50%;background:var(--navy);border:1.5px solid var(--border-gold);display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;color:var(--gold);flex-shrink:0;margin-top:2px}
+.q-num.done{background:var(--gold-dim);border-color:var(--gold)}
+.q-stem{font-size:15px;line-height:1.65;color:var(--text-body)}
+.q-stem em{color:var(--gold-bright);font-style:italic}
+.q-tag{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1px;color:var(--text-muted);background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);padding:2px 8px;border-radius:10px;white-space:nowrap;margin-bottom:12px;display:inline-block}
+.options-grid{display:flex;flex-direction:column;gap:8px}
+.opt-btn{width:100%;text-align:left;display:flex;align-items:flex-start;gap:12px;background:rgba(255,255,255,.03);border:1.5px solid rgba(255,255,255,.08);border-radius:9px;padding:11px 14px;cursor:pointer;color:var(--text-body);font-family:'Source Serif 4',serif;font-size:14px;line-height:1.5;transition:all .2s;-webkit-tap-highlight-color:transparent}
+.opt-btn:hover:not(:disabled){background:var(--gold-dim);border-color:var(--border-gold)}
+.opt-btn:disabled{cursor:default}
+.opt-btn.selected{background:var(--gold-dim);border-color:var(--gold)}
+.opt-letter{min-width:24px;height:24px;border-radius:50%;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;color:var(--text-muted);flex-shrink:0;margin-top:1px;transition:all .2s}
+.opt-btn.selected .opt-letter{background:var(--gold);border-color:var(--gold);color:var(--navy)}
+
+/* SUBMIT */
+.submit-section{max-width:800px;margin:28px auto 0;padding:0 16px 40px;text-align:center}
+.unanswered-warn{background:rgba(224,85,85,.1);border:1px solid rgba(224,85,85,.3);border-radius:10px;padding:12px 16px;margin-bottom:16px;font-size:13px;color:var(--red);font-family:'JetBrains Mono',monospace;display:none}
+.submit-btn{padding:15px 48px;border:none;cursor:pointer;background:linear-gradient(135deg,var(--gold),var(--gold-bright));color:var(--navy);border-radius:50px;font-family:'Cinzel',serif;font-size:15px;font-weight:700;letter-spacing:1px;transition:all .3s;box-shadow:0 4px 24px rgba(200,149,42,.3)}
+.submit-btn:hover{transform:translateY(-2px);box-shadow:0 8px 36px rgba(200,149,42,.45)}
+
+/* RESULT SCREEN */
+#result-screen{min-height:100vh;display:none;align-items:center;justify-content:center;padding:100px 16px 60px;flex-direction:column}
+#result-screen.active{display:flex}
+.result-card{background:linear-gradient(145deg,var(--navy-mid),var(--navy-light));border:1px solid var(--border-gold);border-radius:20px;padding:32px 26px;width:100%;max-width:580px;position:relative;overflow:hidden}
+.result-card::before{content:'';position:absolute;top:-80px;right:-80px;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,rgba(200,149,42,.07),transparent 70%)}
+.result-header{text-align:center;margin-bottom:24px}
+.result-emoji{font-size:48px;display:block;margin-bottom:10px}
+.result-grade{font-family:'Cormorant Garamond',serif;font-size:60px;font-weight:700;color:var(--gold-bright);line-height:1;margin-bottom:4px}
+.result-score-label{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--text-muted);letter-spacing:1px}
+.result-verdict{font-family:'Cinzel',serif;font-size:14px;margin-top:8px;letter-spacing:1px}
+.verdict-pass{color:var(--green)}
+.verdict-fail{color:var(--red)}
+.result-info-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:20px 0}
+.result-info-item{background:rgba(255,255,255,.04);border:1px solid var(--border-gold);border-radius:10px;padding:10px 12px}
+.ri-label{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);margin-bottom:3px}
+.ri-val{font-size:13px;color:#fff;font-weight:600;word-break:break-word}
+.section-breakdown{margin-top:20px}
+.sb-title{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:10px}
+.sb-row{display:flex;align-items:center;gap:8px;margin-bottom:7px}
+.sb-name{flex:1;color:var(--text-muted);font-size:11px}
+.sb-score{font-family:'JetBrains Mono',monospace;color:var(--gold-bright);min-width:28px;text-align:right;font-size:12px}
+.sb-bar-wrap{width:70px;height:4px;background:rgba(255,255,255,.08);border-radius:5px;overflow:hidden}
+.sb-bar-fill{height:100%;border-radius:5px;background:linear-gradient(90deg,var(--gold),var(--gold-bright))}
+.result-actions{display:flex;gap:10px;margin-top:22px;flex-wrap:wrap}
+.action-btn{flex:1;min-width:100px;padding:11px 8px;border:none;cursor:pointer;border-radius:10px;font-family:'Cinzel',serif;font-size:11px;font-weight:600;letter-spacing:.5px;transition:all .25s}
+.action-primary{background:linear-gradient(135deg,var(--gold),var(--gold-bright));color:var(--navy)}
+.action-primary:hover{transform:translateY(-2px)}
+.action-secondary{background:var(--gold-dim);border:1px solid var(--border-gold);color:var(--gold-bright)}
+.action-secondary:hover{background:rgba(200,149,42,.2)}
+.sub-id-box{margin-top:18px;padding:14px;background:rgba(255,255,255,.02);border:1px dashed rgba(200,149,42,.25);border-radius:10px;text-align:center}
+.sub-id-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text-muted);margin-bottom:6px}
+.sub-id-value{font-family:'JetBrains Mono',monospace;font-size:15px;font-weight:600;color:var(--gold);letter-spacing:2px;word-break:break-all}
+.sub-id-hint{font-size:11px;color:var(--text-muted);margin-top:6px;font-style:italic}
+.sending-badge{display:inline-flex;align-items:center;gap:6px;background:var(--gold-dim);border:1px solid var(--border-gold);border-radius:20px;padding:4px 14px;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--gold);margin-top:10px}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.sending-dot{width:6px;height:6px;border-radius:50%;background:var(--gold);animation:pulse 1.2s ease infinite}
+
+/* PRINT */
+@media print{
+  .kps-nav,.quiz-header,.result-actions,.timer-box,.sub-id-hint{display:none!important}
+  body{background:#fff;color:#000}
+  .result-card{border:2px solid #c8952a;box-shadow:none;background:#fff}
+  .result-grade,.ri-val,.sub-id-value{color:#c8952a!important}
+  .ri-label,.sb-name,.sub-id-label,.result-score-label{color:#555!important}
+  .result-info-item,.sub-id-box{border-color:#c8952a}
+  .sb-bar-fill{background:#c8952a!important}
+}
+
+/* MOBILE */
+@media(max-width:520px){
+  .kps-nav-links a.hide-mobile{display:none}
+  .qh-student{max-width:90px}
+  .timer-box{font-size:11px;padding:4px 8px}
+  .result-info-grid{grid-template-columns:1fr 1fr}
+  .form-row{grid-template-columns:1fr}
+  .q-stem{font-size:14px}
+  .opt-btn{font-size:13px;padding:10px 12px}
+  .reg-card{padding:28px 18px}
+}
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="kps-nav">
+  <a href="/datascience_sem2/" class="kps-nav-brand">
+    <img src="../../KP_Singh.png" onerror="this.style.display='none'" alt="KP" class="kps-nav-logo">
+    <div>
+      <div class="kps-nav-name">K.P. Singh</div>
+      <div class="kps-nav-sub">SRHU · Data Science</div>
+    </div>
+  </a>
+  <div class="kps-nav-links">
+    <a href="/datascience_sem2/lab/" class="hide-mobile">← Lab Home</a>
+    <a href="https://kpsingh.in" target="_blank" rel="noopener" class="ext">kpsingh.in ↗</a>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════════════
+     SCREEN 1 — REGISTRATION
+══════════════════════════════════════ -->
+<div id="reg-screen" class="screen active">
+  <div class="reg-card">
+    <div class="reg-badge">Lab Practicals · Excel &amp; Data Tools</div>
+    <h1 class="reg-title">Lab <span>Quiz</span></h1>
+    <p class="reg-sub">50 MCQ questions · 45 minutes · Sections 1–10<br>Topics: PivotTable, Charts, Conditional Formatting, Power Query &amp; more.</p>
+
+    <div class="practical-list">
+      <div class="practical-list-title">Topics Covered</div>
+      <ol>
+        <li>PivotTable — summarise &amp; analyse datasets</li>
+        <li>PivotChart — create &amp; customise from PivotTable</li>
+        <li>Conditional Formatting — highlight trends &amp; values</li>
+        <li>Data Bars, Colour Scales &amp; Icon Sets</li>
+        <li>Charts — column, line, pie &amp; more</li>
+        <li>Sparklines — in-cell trend visualisation</li>
+        <li>Power Query — import, clean &amp; transform data</li>
+      </ol>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="inp-name">Full Name</label>
+      <input class="form-input" id="inp-name" type="text" placeholder="e.g. Rahul Sharma" autocomplete="name">
+    </div>
+    <div class="form-group">
+      <label class="form-label" for="inp-roll">Roll Number</label>
+      <input class="form-input" id="inp-roll" type="text" placeholder="e.g. DD121BCA001" autocomplete="off" style="text-transform:uppercase">
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label" for="inp-section">Section</label>
+        <select class="form-select" id="inp-section">
+          <option value="">Select…</option>
+          <option value="B1">B1</option>
+          <option value="B2">B2</option>
+          <option value="C1">C1</option>
+          <option value="C2">C2</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Branch</label>
+        <div class="form-fixed"><span class="lock">🔒</span> BCA</div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Semester</label>
+      <div class="form-fixed"><span class="lock">🔒</span> 2nd Semester</div>
+    </div>
+    <div class="form-error" id="form-error">Please fill in all fields before starting.</div>
+    <button class="start-btn" onclick="startQuiz()">Start Quiz →</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     SCREEN 2 — QUIZ
+══════════════════════════════════════ -->
+<div id="quiz-screen" class="screen">
+  <div class="quiz-header">
+    <div class="quiz-header-inner">
+      <div class="qh-student" id="qh-name">—</div>
+      <div class="qh-progress-wrap">
+        <div class="qh-progress-label">
+          <span id="prog-answered">0 answered</span>
+          <span>50 questions</span>
+        </div>
+        <div class="qh-progress-bar"><div class="qh-progress-fill" id="prog-fill"></div></div>
+      </div>
+      <div class="timer-box" id="timer-box">⏱ <span id="timer-display">45:00</span></div>
+    </div>
+  </div>
+  <div class="quiz-content" id="quiz-content"></div>
+  <div class="submit-section">
+    <div class="unanswered-warn" id="unanswered-warn"></div>
+    <button class="submit-btn" onclick="submitQuiz()">Submit Quiz ✓</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     SCREEN 3 — RESULTS
+══════════════════════════════════════ -->
+<div id="result-screen" class="screen">
+  <div class="result-card">
+    <div class="result-header">
+      <span class="result-emoji" id="res-emoji">🎓</span>
+      <div class="result-grade" id="res-grade">—</div>
+      <div class="result-score-label" id="res-score-label">— / 50</div>
+      <div class="result-verdict" id="res-verdict"></div>
+      <div id="res-sending" style="display:none">
+        <span class="sending-badge"><span class="sending-dot"></span> Saving to records…</span>
+      </div>
+    </div>
+    <div class="result-info-grid" id="res-info-grid"></div>
+    <div class="section-breakdown">
+      <div class="sb-title">Score by Section</div>
+      <div id="res-breakdown"></div>
+    </div>
+    <div class="result-actions">
+      <button class="action-btn action-primary" onclick="window.print()">🖨 Save / Print</button>
+      <button class="action-btn action-secondary" onclick="reviewQuiz()">Review Answers</button>
+      <button class="action-btn action-secondary" onclick="retake()">Retake Quiz</button>
+    </div>
+    <div class="sub-id-box">
+      <div class="sub-id-label">Submission ID — show this to your faculty</div>
+      <div class="sub-id-value" id="sub-id-value">—</div>
+      <div class="sub-id-hint">Screenshot this screen and present it to K.P. Singh sir for evaluation.</div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════
+   CONFIG
+═══════════════════════════════════════════ */
+// Replace with your deployed Google Apps Script URL
+const SHEET_URL = 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE';
+
+/* ═══════════════════════════════════════════
+   QUIZ DATA — 50 QUESTIONS, 10 SECTIONS × 5
+═══════════════════════════════════════════ */
+const sections = [
+{
+  id:1, title:"Section 1 — Analogy-Based", subtitle:"Daily-life comparisons",
+  questions:[
+    {
+      stem:"You walk into a warehouse full of unsorted goods. A manager hands you a clean summary table showing total stock by category and supplier — generated in seconds. This 'instant summary from messy raw data' maps perfectly to which Excel feature?",
+      tag:"PivotTable",
+      opts:["Sparkline","PivotTable","Conditional Formatting","Power Query"],
+      ans:1
+    },
+    {
+      stem:"A traffic signal turns red automatically for dangerous speeds, yellow for borderline, and green for safe — no one paints each signal manually. Which Excel feature works exactly like this — auto-coloring cells based on their values?",
+      tag:"Conditional Formatting",
+      opts:["PivotChart","Sparklines","Conditional Formatting","Data Validation"],
+      ans:2
+    },
+    {
+      stem:"A cricket scorecard shows the run trend of an entire innings compressed into a tiny thumbnail graphic that fits in one box. Which Excel feature places a similarly tiny trend visual <em>inside a single cell</em>?",
+      tag:"Sparklines",
+      opts:["Line Chart","Sparkline","Data Bar","Mini PivotChart"],
+      ans:1
+    },
+    {
+      stem:"A shopkeeper imports yesterday's billing data from a WhatsApp-exported CSV. The data arrives dirty — extra spaces, wrong date formats, merged columns. He cleans it all in a pipeline without touching the original file. Which Excel tool does this describe?",
+      tag:"Power Query",
+      opts:["VLOOKUP","Macro Recorder","Power Query","PivotTable"],
+      ans:2
+    },
+    {
+      stem:"A fuel gauge in a car fills proportionally — more fuel, longer bar; less fuel, shorter bar — all inside the same dashboard slot. Which Excel Conditional Formatting type works exactly like this inside cells?",
+      tag:"Data Bars",
+      opts:["Color Scale","Icon Set","Data Bar","Sparkline"],
+      ans:2
+    }
+  ]
+},
+{
+  id:2, title:"Section 2 — Witty Concept", subtitle:"Light sarcasm, still accurate",
+  questions:[
+    {
+      stem:"A student spent three hours manually painting every FAIL cell red and every PASS cell green. You do the same in 30 seconds. What feature did you use that your friend clearly didn't know about?",
+      tag:"Conditional Formatting",
+      opts:["Find & Replace","Conditional Formatting","Cell Styles","Data Validation"],
+      ans:1
+    },
+    {
+      stem:"Your classmate celebrates: 'My PivotTable is perfect — it shows grand totals as zero for every field!' You check and discover all the Value fields were accidentally placed in the Rows area instead. The lesson is that PivotTable values must be dragged into:",
+      tag:"PivotTable",
+      opts:["The Rows area","The Columns area","The Values area","The Filters area"],
+      ans:2
+    },
+    {
+      stem:"A pie chart strides into a meeting and announces: 'I can show trends across 18 months perfectly!' A line chart smirks. When is the pie chart actually the <em>wrong</em> choice?",
+      tag:"Charts",
+      opts:["When showing a single snapshot of proportions","When fewer than 6 categories exist","When comparing values across many time periods or categories","When the data sums to exactly 100%"],
+      ans:2
+    },
+    {
+      stem:"A student insists: 'My Sparkline IS a chart — I can click it and add axis labels!' You explain that Sparklines differ from regular charts because they:",
+      tag:"Sparklines",
+      opts:["Can only show bar data, not line data","Live inside a cell and have no axes, legends, or titles","Are only available in Excel 365","Can only be added through the Insert Chart menu"],
+      ans:1
+    },
+    {
+      stem:"After applying a Green–Yellow–Red Color Scale, a teacher notices ALL cells turned the same flat green. The class laughs. The most likely explanation is:",
+      tag:"Conditional Formatting",
+      opts:["Color Scales only support two colors","All values in the column are identical — no gradient can form with zero variance","Color Scales require at least 100 rows","She applied it to a column containing text"],
+      ans:1
+    }
+  ]
+},
+{
+  id:3, title:"Section 3 — Riddle / Puzzle", subtitle:"Clues, metaphors, tiny stories",
+  questions:[
+    {
+      stem:"I live right inside a cell. I have no axes, no legend, no title. I show rises and falls at a glance. I can be a line, column, or win/loss shape. Charts envy my compactness. What am I?",
+      tag:"Sparklines",
+      opts:["Data Bar","Sparkline","Mini PivotChart","Embedded Scatter"],
+      ans:1
+    },
+    {
+      stem:"I start as a flat, messy table. You drag my fields into four zones: Rows, Columns, Values, Filters. Instantly I reshape into a meaningful cross-tabulation. A right-click refreshes me. Who am I?",
+      tag:"PivotTable",
+      opts:["Power Query Table","Named Range","PivotTable","Data Validation List"],
+      ans:2
+    },
+    {
+      stem:"I am born from a PivotTable. I inherit her data. I update when she does. I have Field Buttons that let users filter me interactively — something ordinary charts cannot do. What am I?",
+      tag:"PivotChart",
+      opts:["Dynamic Chart","SmartArt Diagram","PivotChart","Linked Sparkline"],
+      ans:2
+    },
+    {
+      stem:"I connect to external files, web pages, and databases. I let you filter rows, rename columns, merge tables, and fix data types — all without writing a single formula. My steps are recorded and replay automatically on refresh. Who am I?",
+      tag:"Power Query",
+      opts:["VLOOKUP","PivotTable","Power Query","Macro"],
+      ans:2
+    },
+    {
+      stem:"I fill each cell's background with a gradient proportional to its value. No separate chart needed — I live inside the column itself. The taller the number, the longer I stretch. What am I?",
+      tag:"Data Bars",
+      opts:["Sparkline","Data Bar (Conditional Formatting)","Bar Chart embedded in cell","Icon Set"],
+      ans:1
+    }
+  ]
+},
+{
+  id:4, title:"Section 4 — Scenario-Based", subtitle:"Student-life mini-situations",
+  questions:[
+    {
+      stem:"Meena has 5,000 sales records across 12 cities and 6 product categories. Her manager needs total sales per city per product — in under two minutes. Which feature should Meena use?",
+      tag:"PivotTable",
+      opts:["Nested IF formulas","VLOOKUP across sheets","PivotTable","SUMIF with manual grouping"],
+      ans:2
+    },
+    {
+      stem:"Raj wants exam scores below 40 to appear red, 40–59 yellow, and 60+ green — automatically, without painting cells manually. He should use:",
+      tag:"Conditional Formatting",
+      opts:["Manual cell fill colour","Conditional Formatting with custom colour rules","Data Bars","Sparklines"],
+      ans:1
+    },
+    {
+      stem:"Ananya has monthly revenue for 12 months and needs to show the trend, identify the peak month, and compare month-to-month clearly. The most appropriate chart type is:",
+      tag:"Charts",
+      opts:["Pie Chart","Line Chart or Column Chart","Doughnut Chart","Scatter Plot"],
+      ans:1
+    },
+    {
+      stem:"Vikram imports a CSV using Power Query. Before loading he must: remove blanks, fix date formats, and split 'Full Name' into First and Last columns. Where does he perform all these steps?",
+      tag:"Power Query",
+      opts:["Directly in the Excel sheet using formulas","In the Power Query Editor (Transform tab) before clicking Close & Load","Using a PivotTable filter after import","Using Find & Replace in the worksheet"],
+      ans:1
+    },
+    {
+      stem:"A teacher wants any student with attendance below 75% to instantly highlight the <em>entire row</em> red — not just the cell. The best Excel approach is:",
+      tag:"Conditional Formatting",
+      opts:["Use a Macro to colour rows manually","Apply Conditional Formatting using a formula rule applied to the full row selection","Use Data Bars for percentage visualisation","Use VLOOKUP to flag attendance rows"],
+      ans:1
+    }
+  ]
+},
+{
+  id:5, title:"Section 5 — Misconception Busters", subtitle:"Correct the wrong belief",
+  questions:[
+    {
+      stem:"A student claims: 'PivotTables only work with numeric data — you cannot use them for text fields like names or categories.' The correct response is:",
+      tag:"PivotTable",
+      opts:["Agree — PivotTables require at least one numeric column to function","Disagree — PivotTables can group, count, and summarise both numeric and text fields","Agree — text fields must be converted to numbers first","Disagree — but only the Rows area accepts text"],
+      ans:1
+    },
+    {
+      stem:"A classmate insists: 'Conditional Formatting permanently changes cell values — if I remove it, my data will be altered.' The correct response is:",
+      tag:"Conditional Formatting",
+      opts:["Agree — it writes formatting codes into the cells","Agree — it changes fill colour permanently","Disagree — Conditional Formatting only changes visual appearance; it never alters cell data","Disagree — but only if you use Manage Rules to remove it"],
+      ans:2
+    },
+    {
+      stem:"A lab partner says: 'A PivotChart and a regular chart are identical — PivotChart just sounds fancier.' The correct clarification is:",
+      tag:"PivotChart",
+      opts:["Agree — they are functionally identical","Disagree — PivotCharts are linked to a PivotTable and have interactive Field Buttons for filtering; regular charts do not","Agree — both update automatically when source data changes","Disagree — PivotCharts can only display bar charts"],
+      ans:1
+    },
+    {
+      stem:"A student argues: 'Sparklines are just tiny versions of regular charts — same properties, just smaller.' The correct clarification is:",
+      tag:"Sparklines",
+      opts:["Agree — Sparklines are miniaturized full charts with axes and legends","Disagree — Sparklines are in-cell visualisations with no axes, labels, or titles; they are fundamentally different from chart objects","Agree — Sparklines can be resized into full charts at any time","Disagree — Sparklines only support bar format"],
+      ans:1
+    },
+    {
+      stem:"Someone tells you: 'Power Query is only for importing data — once imported, transformations must happen in the worksheet using formulas.' The correct response is:",
+      tag:"Power Query",
+      opts:["Agree — Power Query is import-only; transformations happen in the sheet","Agree — transformations require Excel formulas after import","Disagree — Power Query has a full Editor with Transform tools for cleaning and reshaping data before it loads into Excel","Disagree — but only for CSV files, not databases"],
+      ans:2
+    }
+  ]
+},
+{
+  id:6, title:"Section 6 — Debug the Mistake", subtitle:"Find the flaw in logic or steps",
+  questions:[
+    {
+      stem:"A student right-clicks a PivotTable to refresh it, but values don't update even though the source data has new rows. The most likely cause is:",
+      tag:"PivotTable",
+      opts:["PivotTables cannot be refreshed once created","The PivotTable's source range was not extended to include the new rows","Refresh only works for PivotCharts","The data was sorted before insertion"],
+      ans:1
+    },
+    {
+      stem:"Ravi creates a PivotChart but sees only a blank chart area. He has dragged fields into the PivotTable but not into the PivotChart Field List. The problem is:",
+      tag:"PivotChart",
+      opts:["PivotCharts don't support field filtering","He needs to first insert a regular chart and convert it","PivotChart Field List controls the chart independently — he must configure fields there too","PivotCharts only display after clicking Refresh"],
+      ans:2
+    },
+    {
+      stem:"A student fits a Sparkline for each product row but the lines look completely flat even though the data varies widely. The most likely reason is:",
+      tag:"Sparklines",
+      opts:["Sparklines don't support row-based data","She selected the Sparkline data range incorrectly — possibly including header or blank cells","Sparklines only work with PivotTable data","She used Column Sparklines instead of Line Sparklines"],
+      ans:1
+    },
+    {
+      stem:"After using Power Query to import data, a student edits the source CSV and re-opens Excel — but the table shows old data. What should he do?",
+      tag:"Power Query",
+      opts:["Delete and re-import the query from scratch","Go to Data → Refresh All (or right-click the table → Refresh) to reload the query","Power Query does not support refreshing after the first load","Copy-paste the new CSV data over the existing table manually"],
+      ans:1
+    },
+    {
+      stem:"A student creates a Pie Chart to compare sales across 15 product categories. The chart is completely unreadable. The best corrective action is:",
+      tag:"Charts",
+      opts:["Increase chart size until all labels fit","Switch to a Column or Bar Chart — it handles many categories far more clearly","Use a 3D Pie Chart for better slice separation","Add a trendline to the Pie Chart to aid readability"],
+      ans:1
+    }
+  ]
+},
+{
+  id:7, title:"Section 7 — Concept Application", subtitle:"Short case → which concept fits?",
+  questions:[
+    {
+      stem:"The examination department has marks for 800 students across 6 subjects and 4 departments. They need average marks per department per subject displayed in a single cross-tabulation. The best tool is:",
+      tag:"PivotTable",
+      opts:["AVERAGEIF formulas across sheets","PivotTable with Department in Rows, Subject in Columns, Average Marks in Values","Conditional Formatting","Power Query merge operation"],
+      ans:1
+    },
+    {
+      stem:"A financial dashboard must show whether each branch's revenue this quarter is UP, SAME, or DOWN vs last quarter — using directional arrow icons directly inside the data cells. The most precise feature is:",
+      tag:"Conditional Formatting",
+      opts:["Data Bars","Color Scales","Icon Sets with directional arrows","Sparklines"],
+      ans:2
+    },
+    {
+      stem:"A student wants to visualize the monthly sales trend for 25 products — all fitting within the product list table, one trend per row, without creating separate charts. The ideal feature is:",
+      tag:"Sparklines",
+      opts:["Embedded PivotCharts per row","Sparklines — one per product row in an adjacent column","Conditional Formatting color scale","Mini Pie Charts"],
+      ans:1
+    },
+    {
+      stem:"The HR department has employee records in three separate sources: Oracle DB, MySQL, and Excel files. They need all records merged into one clean table in Excel. The most appropriate feature is:",
+      tag:"Power Query",
+      opts:["Copy-paste from each source manually","VLOOKUP across files","Power Query — Get Data, Append Queries, and Merge Queries","PivotTable with multiple consolidation ranges"],
+      ans:2
+    },
+    {
+      stem:"A sales manager wants to instantly see which products are in the Top 10% of revenue — highlighted automatically in green — without manually sorting or scanning the list. The best approach is:",
+      tag:"Conditional Formatting",
+      opts:["Sort by revenue descending and manually colour the top 10","Use Conditional Formatting → Top/Bottom Rules → Top 10%","Create a PivotChart and filter top products","Use a Sparkline to highlight high values"],
+      ans:1
+    }
+  ]
+},
+{
+  id:8, title:"Section 8 — Spot the Best Definition", subtitle:"Four close definitions — pick the most precise",
+  questions:[
+    {
+      stem:"Which definition most precisely describes a PivotTable in Excel?",
+      tag:"PivotTable",
+      opts:[
+        "A table that automatically sorts data alphabetically by the first column",
+        "An interactive summary tool that dynamically reorganises, groups, and aggregates data from a source dataset without altering the original data",
+        "A table with built-in formulas that lock cell references to prevent editing",
+        "A filtered copy of the original dataset displayed on a separate sheet"
+      ],
+      ans:1
+    },
+    {
+      stem:"Which definition best captures what Conditional Formatting does in Excel?",
+      tag:"Conditional Formatting",
+      opts:[
+        "It applies permanent visual styles to cells selected manually by the user",
+        "It changes the font colour of cells that contain formulas",
+        "It automatically applies formatting such as colours, icons, or bars to cells based on user-defined rules or cell values — without altering the data",
+        "It converts cell data into categories and groups for further analysis"
+      ],
+      ans:2
+    },
+    {
+      stem:"Four students define a Sparkline. Which is the most accurate?",
+      tag:"Sparklines",
+      opts:[
+        "A small chart object placed over a cell to show data trends with full chart features",
+        "A miniature in-cell visualisation representing data trends for a row or column, with no axes, labels, or chart titles — distinct from regular chart objects",
+        "A conditional format that draws a line through cells based on their relative values",
+        "A type of PivotChart condensed to fit inside a PivotTable cell"
+      ],
+      ans:1
+    },
+    {
+      stem:"Which of the following best defines Power Query in Excel?",
+      tag:"Power Query",
+      opts:[
+        "A formula-based lookup tool that retrieves matching data from other sheets",
+        "A built-in ETL (Extract, Transform, Load) tool that connects to various data sources, applies transformation steps, and loads clean data into Excel — with all steps reproducible on refresh",
+        "A macro recorder that automates repetitive formatting tasks in worksheets",
+        "A pivot-based interface for importing structured data from relational databases only"
+      ],
+      ans:1
+    },
+    {
+      stem:"Which definition most accurately describes Data Bars in Excel Conditional Formatting?",
+      tag:"Data Bars",
+      opts:[
+        "A bar chart type embedded in a worksheet as a separate floating chart object",
+        "A Conditional Formatting feature that fills each cell with a proportional gradient bar — longer for larger values — enabling instant visual comparison within a column without leaving the cell",
+        "A column chart that uses cell-width bars for each individual data point in a range",
+        "A Sparkline variant that displays horizontal bars representing trend data over time"
+      ],
+      ans:1
+    }
+  ]
+},
+{
+  id:9, title:"Section 9 — Sequence / Order the Steps", subtitle:"Choose the correct process order",
+  questions:[
+    {
+      stem:"What is the correct sequence to create a PivotTable from a dataset in Excel?",
+      tag:"PivotTable",
+      opts:[
+        "Insert → PivotTable → Drag fields → Format → Analyse data",
+        "Click inside dataset → Insert → PivotTable → Choose location → Drag fields into Rows / Columns / Values / Filters → Analyse",
+        "Sort data → Insert → PivotTable → Refresh → Drag fields",
+        "Insert → PivotTable → Refresh → Drag fields → Choose source range"
+      ],
+      ans:1
+    },
+    {
+      stem:"What is the correct sequence to apply a custom formula-based Conditional Formatting rule?",
+      tag:"Conditional Formatting",
+      opts:[
+        "Select cells → Home → Conditional Formatting → New Rule → Use a formula → Enter formula → Set format → OK",
+        "Insert → Format → Conditional → New Rule → Select cells → Apply formula",
+        "Select cells → Format Cells → Conditional → New Rule → Apply formula → OK",
+        "Home → Styles → Conditional → Format → Apply → OK → Select cells"
+      ],
+      ans:0
+    },
+    {
+      stem:"What is the correct sequence to insert Sparklines for a product-by-month table?",
+      tag:"Sparklines",
+      opts:[
+        "Select data range → Insert → Sparklines → Choose type → Select output location → OK",
+        "Select output location cells → Insert → Sparklines → Choose type → Select data range → OK",
+        "Insert → Chart → Sparklines → Select data → Choose location → OK",
+        "Select data → Home → Sparklines → Choose type → Apply to selection → OK"
+      ],
+      ans:1
+    },
+    {
+      stem:"What is the correct sequence to import and transform a CSV file using Power Query?",
+      tag:"Power Query",
+      opts:[
+        "Open CSV in Excel → Copy data → Paste into Power Query → Clean → Load",
+        "Data tab → Get Data → From File → From CSV → Transform Data (opens Editor) → Apply transformations → Close &amp; Load",
+        "Insert → Query → From CSV → Transform → Load to sheet",
+        "File → Import → CSV → Power Query opens automatically with clean data"
+      ],
+      ans:1
+    },
+    {
+      stem:"To create a PivotChart directly from a dataset (without a pre-existing PivotTable), what is the correct sequence?",
+      tag:"PivotChart",
+      opts:[
+        "Insert → Chart → PivotChart option → Choose fields → Format chart",
+        "Click inside dataset → Insert → PivotChart → Select chart type → Excel creates linked PivotTable → Drag fields into PivotChart Field List",
+        "Create PivotTable first → Right-click → Insert Chart → Select PivotChart type",
+        "Insert → PivotTable → Right-click → Convert to PivotChart → Select fields"
+      ],
+      ans:1
+    }
+  ]
+},
+{
+  id:10, title:"Section 10 — Cause → Effect Reasoning", subtitle:"Identify the correct consequence",
+  questions:[
+    {
+      stem:"A manager adds 300 new rows to the source data of an existing PivotTable but does NOT update the source range or click Refresh. What is the effect?",
+      tag:"PivotTable",
+      opts:[
+        "The PivotTable automatically detects and includes all new rows",
+        "The PivotTable continues to summarise only the original, smaller data range — new rows are silently excluded",
+        "Excel throws a #REF! error inside the PivotTable cells",
+        "The PivotTable becomes empty until manually rebuilt"
+      ],
+      ans:1
+    },
+    {
+      stem:"A teacher applies a 'Top 10 Items' Conditional Formatting rule to exam scores. Later, five students retake the exam and their scores increase significantly. What happens to the highlighting?",
+      tag:"Conditional Formatting",
+      opts:[
+        "The highlighting stays on the original 10 students regardless of score changes",
+        "The highlighting dynamically updates — it now reflects the current top 10 based on the new values",
+        "Conditional Formatting must be manually reapplied after any data changes",
+        "The rule breaks and all highlights are removed when values change"
+      ],
+      ans:1
+    },
+    {
+      stem:"In Power Query, a user applied a 'Remove Blank Rows' step. Later the source file is updated with new data containing more blank rows and the query is refreshed. What happens?",
+      tag:"Power Query",
+      opts:[
+        "The blank rows appear in Excel — Power Query forgets steps after the first load",
+        "Power Query automatically reapplies ALL previous steps — including Remove Blank Rows — on every refresh",
+        "The query fails because new blank rows cause a load error",
+        "Only the newly added blank rows are removed; earlier blanks remain visible"
+      ],
+      ans:1
+    },
+    {
+      stem:"A Sparkline is tracking monthly revenue for each product (data in columns B–M). A student deletes columns D and E. What is the most likely effect on the Sparkline?",
+      tag:"Sparklines",
+      opts:[
+        "The Sparkline freezes its last-rendered image and shows no change",
+        "The Sparkline updates and reflects the remaining data — two months are now missing from the trend",
+        "Excel automatically expands the Sparkline range to compensate for the deleted columns",
+        "The Sparkline moves to a new sheet to avoid the gap created by deleted columns"
+      ],
+      ans:1
+    },
+    {
+      stem:"A PivotChart is displaying a bar chart of quarterly sales by region. A user drags a new field ('Product Category') into the Legend/Series area. What is the immediate effect on the chart?",
+      tag:"PivotChart",
+      opts:[
+        "The PivotChart converts to a Pie Chart automatically to accommodate the new field",
+        "The chart now shows grouped/stacked bars — one bar segment per Product Category — within each region",
+        "The original bars disappear and only the new category field is displayed",
+        "The PivotTable linked to the PivotChart is reset to remove previous configurations"
+      ],
+      ans:1
+    }
+  ]
+}
+];
+
+/* Flatten */
+const allQuestions=[];
+sections.forEach(sec=>sec.questions.forEach(q=>allQuestions.push({...q,sectionId:sec.id})));
+const TOTAL=allQuestions.length;
+
+/* State */
+let studentInfo={};
+let answers=new Array(TOTAL).fill(null);
+let timerInterval=null;
+let secondsLeft=45*60;
+let quizSubmitted=false;
+
+/* ══ REGISTRATION ══ */
+function startQuiz(){
+  const name=document.getElementById('inp-name').value.trim();
+  const roll=document.getElementById('inp-roll').value.trim().toUpperCase();
+  const section=document.getElementById('inp-section').value;
+  const err=document.getElementById('form-error');
+  if(!name||!roll||!section){err.style.display='block';return}
+  err.style.display='none';
+  studentInfo={name,roll,section,branch:'BCA',semester:'2nd'};
+  document.getElementById('qh-name').textContent=name+' · '+section;
+  renderQuiz();
+  switchScreen('quiz-screen');
+  startTimer();
+  window.scrollTo(0,0);
+}
+
+/* ══ RENDER ══ */
+function renderQuiz(){
+  const L=['A','B','C','D'];
+  let html='',qi=0;
+  sections.forEach(sec=>{
+    html+=`<div class="section-divider"><div class="sec-line"></div><div class="sec-badge">${sec.title}<small>${sec.subtitle}</small></div><div class="sec-line right"></div></div>`;
+    sec.questions.forEach(q=>{
+      const i=qi++;
+      html+=`<div class="q-card" id="qcard-${i}"><div class="q-top"><div class="q-num" id="qnum-${i}">${i+1}</div><div class="q-stem">${q.stem}</div></div><div class="q-tag">${q.tag}</div><div class="options-grid" id="opts-${i}">${q.opts.map((o,oi)=>`<button class="opt-btn" id="opt-${i}-${oi}" onclick="selectAnswer(${i},${oi})"><span class="opt-letter">${L[oi]}</span><span>${o}</span></button>`).join('')}</div></div>`;
+    });
+  });
+  document.getElementById('quiz-content').innerHTML=html;
+}
+
+/* ══ SELECT ══ */
+function selectAnswer(qi,oi){
+  if(quizSubmitted)return;
+  answers[qi]=oi;
+  document.querySelectorAll(`#opts-${qi} .opt-btn`).forEach((b,i)=>b.classList.toggle('selected',i===oi));
+  document.getElementById(`qcard-${qi}`).classList.add('answered');
+  document.getElementById(`qnum-${qi}`).classList.add('done');
+  updateProgress();
+}
+function updateProgress(){
+  const done=answers.filter(a=>a!==null).length;
+  document.getElementById('prog-answered').textContent=done+' answered';
+  document.getElementById('prog-fill').style.width=(done/TOTAL*100)+'%';
+}
+
+/* ══ TIMER ══ */
+function startTimer(){
+  timerInterval=setInterval(()=>{
+    secondsLeft--;
+    const m=String(Math.floor(secondsLeft/60)).padStart(2,'0');
+    const s=String(secondsLeft%60).padStart(2,'0');
+    document.getElementById('timer-display').textContent=`${m}:${s}`;
+    if(secondsLeft<=300)document.getElementById('timer-box').classList.add('warning');
+    if(secondsLeft<=0){clearInterval(timerInterval);finalize();}
+  },1000);
+}
+
+/* ══ SUBMIT GATE ══ */
+function submitQuiz(){
+  const u=answers.filter(a=>a===null).length;
+  const warn=document.getElementById('unanswered-warn');
+  if(u>0&&!warn.dataset.primed){
+    warn.textContent=`⚠ ${u} question${u>1?'s':''} unanswered. Tap here to submit anyway.`;
+    warn.style.display='block';warn.style.cursor='pointer';
+    warn.dataset.primed='1';
+    warn.onclick=()=>{warn.style.display='none';finalize();};
+    return;
+  }
+  finalize();
+}
+
+/* ══ FINALIZE ══ */
+function finalize(){
+  clearInterval(timerInterval);
+  quizSubmitted=true;
+
+  let total=0;
+  const secScores=sections.map(()=>0);
+  allQuestions.forEach((q,i)=>{if(answers[i]===q.ans){total++;secScores[q.sectionId-1]++;}});
+
+  const pct=Math.round(total/TOTAL*100);
+  const pass=pct>=40;
+  let grade='F';
+  if(pct>=90)grade='A+';else if(pct>=80)grade='A';else if(pct>=70)grade='B';else if(pct>=60)grade='C';else if(pct>=50)grade='D';else if(pct>=40)grade='E';
+
+  const elapsed=45*60-secondsLeft;
+  const timeTaken=`${String(Math.floor(elapsed/60)).padStart(2,'0')}m ${String(elapsed%60).padStart(2,'0')}s`;
+  const submissionId=`${studentInfo.roll}-${grade}-${Date.now().toString(36).toUpperCase()}`;
+  const submittedAt=new Date().toLocaleString('en-IN',{timeZone:'Asia/Kolkata',day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit',hour12:true});
+
+  /* Send to Google Sheets */
+  const payload={
+    name:studentInfo.name,roll:studentInfo.roll,section:studentInfo.section,
+    branch:studentInfo.branch,semester:studentInfo.semester,
+    score:total,total:TOTAL,percentage:pct,grade,timeTaken,passed:pass,
+    submissionId,submittedAt,quizType:'Lab Practicals',
+    ...Object.fromEntries(sections.map((_,i)=>[`s${i+1}`,secScores[i]]))
+  };
+  document.getElementById('res-sending').style.display='block';
+  fetch(SHEET_URL,{method:'POST',mode:'no-cors',body:JSON.stringify(payload)})
+    .catch(()=>{}).finally(()=>document.getElementById('res-sending').style.display='none');
+
+  /* Populate result */
+  const emojis={'A+':'🏆','A':'🌟','B':'🎯','C':'📚','D':'💪','E':'🤞','F':'📖'};
+  document.getElementById('res-emoji').textContent=emojis[grade];
+  document.getElementById('res-grade').textContent=`${total}/${TOTAL}`;
+  document.getElementById('res-score-label').textContent=`${pct}% · Grade ${grade}`;
+  document.getElementById('res-verdict').innerHTML=pass
+    ?`<span class="verdict-pass">✓ PASSED</span>`
+    :`<span class="verdict-fail">✗ Needs Improvement</span>`;
+
+  document.getElementById('res-info-grid').innerHTML=`
+    <div class="result-info-item"><div class="ri-label">Name</div><div class="ri-val">${studentInfo.name}</div></div>
+    <div class="result-info-item"><div class="ri-label">Roll No.</div><div class="ri-val">${studentInfo.roll}</div></div>
+    <div class="result-info-item"><div class="ri-label">Section</div><div class="ri-val">${studentInfo.section}</div></div>
+    <div class="result-info-item"><div class="ri-label">Branch / Sem</div><div class="ri-val">BCA · 2nd</div></div>
+    <div class="result-info-item"><div class="ri-label">Time Taken</div><div class="ri-val">${timeTaken}</div></div>
+    <div class="result-info-item"><div class="ri-label">Submitted At</div><div class="ri-val">${submittedAt}</div></div>`;
+
+  document.getElementById('res-breakdown').innerHTML=sections.map((sec,i)=>{
+    const got=secScores[i];const name=sec.title.replace(/Section \d+ — /,'');
+    return`<div class="sb-row"><div class="sb-name">${name}</div><div class="sb-bar-wrap"><div class="sb-bar-fill" style="width:${got/5*100}%"></div></div><div class="sb-score">${got}/5</div></div>`;
+  }).join('');
+
+  document.getElementById('sub-id-value').textContent=submissionId;
+  switchScreen('result-screen');
+  window.scrollTo(0,0);
+}
+
+/* ══ REVIEW ══ */
+function reviewQuiz(){
+  switchScreen('quiz-screen');
+  document.querySelector('.submit-section').style.display='none';
+  allQuestions.forEach((q,i)=>{
+    document.querySelectorAll(`#opts-${i} .opt-btn`).forEach((btn,oi)=>{
+      btn.disabled=true;
+      if(oi===q.ans){btn.style.background='rgba(46,204,138,.15)';btn.style.borderColor='#2ecc8a';btn.querySelector('.opt-letter').style.background='#2ecc8a';btn.querySelector('.opt-letter').style.color='#0d1528';}
+      if(oi===answers[i]&&oi!==q.ans){btn.style.background='rgba(224,85,85,.15)';btn.style.borderColor='#e05555';btn.querySelector('.opt-letter').style.background='#e05555';btn.querySelector('.opt-letter').style.color='#fff';}
+    });
+  });
+  window.scrollTo(0,0);
+}
+
+/* ══ UTILS ══ */
+function switchScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');}
+function retake(){answers=new Array(TOTAL).fill(null);quizSubmitted=false;secondsLeft=45*60;document.querySelector('.submit-section').style.display='block';document.getElementById('timer-box').classList.remove('warning');document.getElementById('timer-display').textContent='45:00';document.getElementById('unanswered-warn').dataset.primed='';renderQuiz();switchScreen('quiz-screen');startTimer();window.scrollTo(0,0);}
+</script>
+</body>
+</html>
