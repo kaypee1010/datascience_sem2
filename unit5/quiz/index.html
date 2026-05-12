@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unit 5 Quiz — Ethics & Data Science | K.P. Singh · SRHU</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=Nunito:wght@400;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<style>
+:root{
+  --bg:#0f1a0d;--surface:#182515;--surface2:#1e2f1a;
+  --amber:#e8852a;--amber-bright:#f5aa4a;--amber-dim:rgba(232,133,42,.15);
+  --border:rgba(232,133,42,.28);--text:#edf2e0;--muted:rgba(237,242,224,.55);
+  --mint:#52d68a;--red:#ff6b6b;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;z-index:0;background:radial-gradient(ellipse 70% 50% at 5% 15%,rgba(232,133,42,.05),transparent);pointer-events:none}
+
+/* NAV */
+.kps-nav{position:fixed;top:0;left:0;right:0;z-index:9999;display:flex;align-items:center;justify-content:space-between;padding:12px 20px;background:rgba(15,26,13,.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+.kps-nav-brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+.kps-nav-logo{width:34px;height:34px;border-radius:50%;object-fit:cover;border:1.5px solid var(--amber)}
+.brand-name{font-family:'Lora',serif;font-size:14px;font-weight:700;color:var(--amber-bright);line-height:1}
+.brand-sub{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase;margin-top:2px}
+.kps-nav-links{display:flex;align-items:center;gap:5px}
+.kps-nav-links a{color:var(--muted);text-decoration:none;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:1px;padding:5px 10px;border-radius:6px;border:1px solid transparent;transition:all .2s;white-space:nowrap}
+.kps-nav-links a:hover{color:var(--amber-bright);border-color:var(--border)}
+.kps-nav-links a.ext{background:var(--amber);color:#0f1a0d;font-weight:700;border:none}
+
+/* SCREENS */
+.screen{display:none;position:relative;z-index:1}
+.screen.active{display:block}
+
+/* REGISTRATION */
+#reg-screen{min-height:100vh;display:none;align-items:center;justify-content:center;padding:90px 20px 40px;flex-direction:column}
+#reg-screen.active{display:flex}
+.reg-card{background:linear-gradient(145deg,var(--surface),var(--surface2));border:1px solid var(--border);border-radius:20px;padding:36px 30px;width:100%;max-width:480px;position:relative;overflow:hidden}
+.reg-card::before{content:'';position:absolute;top:-60px;right:-60px;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(232,133,42,.08),transparent 70%)}
+.reg-badge{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--amber);background:var(--amber-dim);border:1px solid var(--border);padding:4px 14px;border-radius:20px;display:inline-block;margin-bottom:16px}
+.reg-title{font-family:'Lora',serif;font-size:28px;font-weight:700;color:#fff;line-height:1.15;margin-bottom:4px}
+.reg-title span{color:var(--amber-bright);font-style:italic}
+.reg-sub{font-size:13px;color:var(--muted);margin-bottom:28px;line-height:1.6}
+.topics-box{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:22px}
+.topics-title{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--amber);margin-bottom:10px}
+.topics-box ol{padding-left:18px}
+.topics-box li{font-size:12px;color:var(--muted);line-height:1.7}
+.form-group{margin-bottom:16px}
+.form-label{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--amber);display:block;margin-bottom:6px}
+.form-input,.form-select{width:100%;padding:11px 14px;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:9px;color:var(--text);font-family:'Nunito',sans-serif;font-size:15px;outline:none;transition:border-color .2s,background .2s;appearance:none;-webkit-appearance:none}
+.form-input:focus,.form-select:focus{border-color:var(--amber);background:rgba(232,133,42,.07)}
+.form-input::placeholder{color:var(--muted)}
+.form-select option{background:var(--surface);color:var(--text)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.form-fixed{display:flex;align-items:center;gap:8px;padding:11px 14px;background:rgba(255,255,255,.03);border:1px solid rgba(232,133,42,.15);border-radius:9px;color:var(--muted);font-size:14px}
+.form-fixed .lock{font-size:12px;color:var(--amber);opacity:.6}
+.start-btn{width:100%;margin-top:24px;padding:14px;border:none;cursor:pointer;background:linear-gradient(135deg,var(--amber),var(--amber-bright));color:#0f1a0d;border-radius:12px;font-family:'Lora',serif;font-size:14px;font-weight:700;letter-spacing:1px;transition:all .3s;box-shadow:0 4px 24px rgba(232,133,42,.3)}
+.start-btn:hover{transform:translateY(-2px);box-shadow:0 8px 36px rgba(232,133,42,.45)}
+.form-error{color:var(--red);font-size:12px;margin-top:16px;text-align:center;display:none;font-family:'Space Mono',monospace}
+
+/* QUIZ SCREEN */
+#quiz-screen{padding-top:125px;padding-bottom:60px}
+.quiz-header{position:fixed;top:62px;left:0;right:0;z-index:900;background:rgba(15,26,13,.96);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:10px 20px}
+.quiz-header-inner{max-width:800px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.qh-student{font-family:'Space Mono',monospace;font-size:11px;color:var(--amber);letter-spacing:.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:160px}
+.qh-progress-wrap{flex:1}
+.qh-progress-label{display:flex;justify-content:space-between;font-family:'Space Mono',monospace;font-size:9px;color:var(--muted);margin-bottom:4px;letter-spacing:.5px}
+.qh-progress-bar{height:4px;background:rgba(255,255,255,.08);border-radius:4px;overflow:hidden}
+.qh-progress-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--amber),var(--amber-bright));border-radius:4px;transition:width .4s ease}
+.timer-box{display:flex;align-items:center;gap:6px;background:var(--amber-dim);border:1px solid var(--border);border-radius:8px;padding:5px 12px;font-family:'Space Mono',monospace;font-size:13px;font-weight:700;color:var(--amber-bright);white-space:nowrap}
+.timer-box.warning{background:rgba(255,107,107,.15);border-color:rgba(255,107,107,.4);color:var(--red)}
+.review-mode-label{display:none;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--mint)}
+.review-back-btn{display:none;align-items:center;gap:6px;padding:6px 14px;border:1px solid var(--mint);background:rgba(82,214,138,.12);color:var(--mint);border-radius:20px;font-family:'Lora',serif;font-size:11px;font-weight:700;cursor:pointer;letter-spacing:.4px;white-space:nowrap;transition:all .2s}
+.review-back-btn:hover{background:rgba(82,214,138,.25)}
+
+/* QUIZ CONTENT */
+.quiz-content{max-width:800px;margin:0 auto;padding:0 16px}
+.section-divider{margin:32px 0 20px;display:flex;align-items:center;gap:14px}
+.sec-line{flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--border))}
+.sec-line.right{background:linear-gradient(270deg,transparent,var(--border))}
+.sec-badge{font-family:'Lora',serif;font-size:10px;letter-spacing:2px;color:var(--amber);background:var(--amber-dim);border:1px solid var(--border);padding:5px 16px;border-radius:20px;white-space:nowrap;text-align:center}
+.sec-badge small{display:block;font-family:'Space Mono',monospace;font-size:8px;letter-spacing:1px;color:var(--muted);margin-top:2px;text-transform:uppercase}
+.q-card{background:linear-gradient(145deg,var(--surface),rgba(30,47,26,.7));border:1px solid var(--border);border-radius:14px;padding:20px 18px;margin-bottom:14px;transition:border-color .2s}
+.q-card.answered{border-color:rgba(232,133,42,.5)}
+.q-top{display:flex;align-items:flex-start;gap:12px;margin-bottom:14px}
+.q-num{min-width:32px;height:32px;border-radius:50%;background:var(--bg);border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-family:'Space Mono',monospace;font-size:11px;font-weight:700;color:var(--amber);flex-shrink:0;margin-top:2px}
+.q-num.done{background:var(--amber-dim);border-color:var(--amber)}
+.q-stem{font-size:15px;line-height:1.7;color:var(--text);font-family:'Nunito',sans-serif}
+.q-stem em{color:var(--amber-bright);font-style:italic}
+.q-tag{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:1px;color:var(--muted);background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);padding:2px 8px;border-radius:10px;white-space:nowrap;margin-bottom:12px;display:inline-block}
+.options-grid{display:flex;flex-direction:column;gap:8px}
+.opt-btn{width:100%;text-align:left;display:flex;align-items:flex-start;gap:12px;background:rgba(255,255,255,.03);border:1.5px solid rgba(255,255,255,.08);border-radius:9px;padding:11px 14px;cursor:pointer;color:var(--text);font-family:'Nunito',sans-serif;font-size:14px;line-height:1.5;transition:all .2s;-webkit-tap-highlight-color:transparent}
+.opt-btn:hover:not(:disabled){background:var(--amber-dim);border-color:var(--border)}
+.opt-btn:disabled{cursor:default}
+.opt-btn.selected{background:var(--amber-dim);border-color:var(--amber)}
+.opt-letter{min-width:24px;height:24px;border-radius:50%;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;font-family:'Space Mono',monospace;font-size:11px;font-weight:700;color:var(--muted);flex-shrink:0;margin-top:1px;transition:all .2s}
+.opt-btn.selected .opt-letter{background:var(--amber);border-color:var(--amber);color:#0f1a0d}
+
+/* SUBMIT */
+.submit-section{max-width:800px;margin:28px auto 0;padding:0 16px 40px;text-align:center}
+.unanswered-warn{background:rgba(255,107,107,.1);border:1px solid rgba(255,107,107,.3);border-radius:10px;padding:12px 16px;margin-bottom:16px;font-size:13px;color:var(--red);font-family:'Space Mono',monospace;display:none}
+.submit-btn{padding:15px 48px;border:none;cursor:pointer;background:linear-gradient(135deg,var(--amber),var(--amber-bright));color:#0f1a0d;border-radius:50px;font-family:'Lora',serif;font-size:15px;font-weight:700;letter-spacing:1px;transition:all .3s;box-shadow:0 4px 24px rgba(232,133,42,.3)}
+.submit-btn:hover{transform:translateY(-2px);box-shadow:0 8px 36px rgba(232,133,42,.45)}
+
+/* RESULT SCREEN */
+#result-screen{min-height:100vh;display:none;align-items:center;justify-content:center;padding:100px 16px 60px;flex-direction:column}
+#result-screen.active{display:flex}
+.result-card{background:linear-gradient(145deg,var(--surface),var(--surface2));border:1px solid var(--border);border-radius:20px;padding:32px 26px;width:100%;max-width:580px;position:relative;overflow:hidden}
+.result-card::before{content:'';position:absolute;top:-80px;right:-80px;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,rgba(232,133,42,.07),transparent 70%)}
+.result-header{text-align:center;margin-bottom:24px}
+.result-emoji{font-size:48px;display:block;margin-bottom:10px}
+.result-grade{font-family:'Lora',serif;font-size:60px;font-weight:700;color:var(--amber-bright);line-height:1;margin-bottom:4px}
+.result-score-label{font-family:'Space Mono',monospace;font-size:13px;color:var(--muted);letter-spacing:1px}
+.result-verdict{font-family:'Lora',serif;font-size:14px;margin-top:8px;letter-spacing:1px}
+.verdict-pass{color:var(--mint)}
+.verdict-fail{color:var(--red)}
+.result-info-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:20px 0}
+.result-info-item{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:10px;padding:10px 12px}
+.ri-label{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:1.5px;text-transform:uppercase;color:var(--amber);margin-bottom:3px}
+.ri-val{font-size:13px;color:#fff;font-weight:700;word-break:break-word;font-family:'Nunito',sans-serif}
+.section-breakdown{margin-top:20px}
+.sb-title{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--amber);margin-bottom:10px}
+.sb-row{display:flex;align-items:center;gap:8px;margin-bottom:7px}
+.sb-name{flex:1;color:var(--muted);font-size:11px;font-family:'Nunito',sans-serif}
+.sb-score{font-family:'Space Mono',monospace;color:var(--amber-bright);min-width:28px;text-align:right;font-size:12px}
+.sb-bar-wrap{width:70px;height:4px;background:rgba(255,255,255,.08);border-radius:5px;overflow:hidden}
+.sb-bar-fill{height:100%;border-radius:5px;background:linear-gradient(90deg,var(--amber),var(--amber-bright))}
+.result-actions{display:flex;gap:10px;margin-top:22px;flex-wrap:wrap}
+.action-btn{flex:1;min-width:100px;padding:11px 8px;border:none;cursor:pointer;border-radius:10px;font-family:'Lora',serif;font-size:11px;font-weight:700;letter-spacing:.5px;transition:all .25s}
+.action-primary{background:linear-gradient(135deg,var(--amber),var(--amber-bright));color:#0f1a0d}
+.action-primary:hover{transform:translateY(-2px)}
+.action-secondary{background:var(--amber-dim);border:1px solid var(--border);color:var(--amber-bright)}
+.action-secondary:hover{background:rgba(232,133,42,.2)}
+.sub-id-box{margin-top:18px;padding:14px;background:rgba(255,255,255,.02);border:1px dashed rgba(232,133,42,.25);border-radius:10px;text-align:center}
+.sub-id-label{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.sub-id-value{font-family:'Space Mono',monospace;font-size:14px;font-weight:700;color:var(--amber);letter-spacing:2px;word-break:break-all}
+.sub-id-hint{font-size:11px;color:var(--muted);margin-top:6px;font-style:italic}
+.status-badge{display:inline-flex;align-items:center;gap:6px;background:var(--amber-dim);border:1px solid var(--border);border-radius:20px;padding:4px 14px;font-family:'Space Mono',monospace;font-size:10px;color:var(--amber);margin-top:10px}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.pulse-dot{width:6px;height:6px;border-radius:50%;background:var(--amber);animation:pulse 1.2s ease infinite}
+.pdf-notice{display:inline-flex;align-items:center;gap:6px;margin-top:10px;font-family:'Space Mono',monospace;font-size:10px;color:var(--muted);background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:20px;padding:4px 12px}
+
+@media print{
+  .kps-nav,.quiz-header,.result-actions,.timer-box,.sub-id-hint,.status-badge{display:none!important}
+  body{background:#fff;color:#000;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .result-card{border:2px solid #e8852a;background:#182515!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;page-break-inside:avoid}
+  .result-grade,.ri-val,.sub-id-value{color:#f5aa4a!important}
+  .ri-label,.sb-name,.sub-id-label,.result-score-label{color:#ccc!important}
+  .result-info-item,.sub-id-box{border-color:#e8852a}
+  .sb-bar-fill{background:#e8852a!important}
+  #result-screen{padding:20px!important;align-items:flex-start!important}
+}
+
+@media(max-width:520px){
+  .kps-nav-links a.hide-mobile{display:none}
+  .qh-student{max-width:80px}
+  .timer-box{font-size:11px;padding:4px 8px}
+  .result-info-grid{grid-template-columns:1fr 1fr}
+  .form-row{grid-template-columns:1fr}
+  .q-stem{font-size:14px}
+  .opt-btn{font-size:13px;padding:10px 12px}
+  .reg-card{padding:28px 18px}
+}
+</style>
+</head>
+<body>
+
+<nav class="kps-nav">
+  <a href="/datascience_sem2/" class="kps-nav-brand">
+    <img src="../../KP_Singh.png" onerror="this.style.display='none'" alt="KP" class="kps-nav-logo">
+    <div>
+      <div class="brand-name">K.P. Singh</div>
+      <div class="brand-sub">SRHU · Data Science</div>
+    </div>
+  </a>
+  <div class="kps-nav-links">
+    <a href="/datascience_sem2/unit5/" class="hide-mobile">← Unit 5 Notes</a>
+    <a href="https://kpsingh.in" target="_blank" rel="noopener" class="ext">kpsingh.in ↗</a>
+  </div>
+</nav>
+
+<!-- REGISTRATION -->
+<div id="reg-screen" class="screen active">
+  <div class="reg-card">
+    <div class="reg-badge">Unit 5 · Ethics &amp; Data Science</div>
+    <h1 class="reg-title">Unit 5 <span>Quiz</span></h1>
+    <p class="reg-sub">30 MCQ questions · 30 minutes · 6 sections<br>Your result PDF will download automatically on submission.</p>
+    <div class="topics-box">
+      <div class="topics-title">Topics Covered</div>
+      <ol>
+        <li>Data Ownership</li>
+        <li>The Five Cs (Consent, Clarity, Consistency, Control, Confidentiality)</li>
+        <li>Implementing Ethics &amp; Security</li>
+        <li>Guiding Principles &amp; Data-Driven Culture</li>
+        <li>Regulations — GDPR, DPDP, HIPAA</li>
+        <li>Real-World Applications — Healthcare, Finance, Education</li>
+      </ol>
+    </div>
+    <div class="form-group">
+      <label class="form-label" for="inp-name">Full Name</label>
+      <input class="form-input" id="inp-name" type="text" placeholder="e.g. Priya Sharma" autocomplete="name">
+    </div>
+    <div class="form-group">
+      <label class="form-label" for="inp-roll">Roll Number</label>
+      <input class="form-input" id="inp-roll" type="text" placeholder="e.g. DD121BCA001" autocomplete="off" style="text-transform:uppercase">
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label" for="inp-section">Section</label>
+        <select class="form-select" id="inp-section">
+          <option value="">Select…</option>
+          <option value="B1">B1</option>
+          <option value="B2">B2</option>
+          <option value="C1">C1</option>
+          <option value="C2">C2</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Branch</label>
+        <div class="form-fixed"><span class="lock">🔒</span> BCA</div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Semester</label>
+      <div class="form-fixed"><span class="lock">🔒</span> 2nd Semester</div>
+    </div>
+    <div class="form-error" id="form-error">Please fill in all fields before starting.</div>
+    <button class="start-btn" onclick="startQuiz()">Start Quiz →</button>
+  </div>
+</div>
+
+<!-- QUIZ -->
+<div id="quiz-screen" class="screen">
+  <div class="quiz-header">
+    <div class="quiz-header-inner">
+      <div class="qh-student" id="qh-name">—</div>
+      <div class="qh-progress-wrap" id="qh-progress-wrap">
+        <div class="qh-progress-label"><span id="prog-answered">0 answered</span><span>30 questions</span></div>
+        <div class="qh-progress-bar"><div class="qh-progress-fill" id="prog-fill"></div></div>
+      </div>
+      <div class="timer-box" id="timer-box">⏱ <span id="timer-display">30:00</span></div>
+      <span class="review-mode-label" id="review-mode-label">📋 REVIEW MODE</span>
+      <button class="review-back-btn" id="review-back-btn" onclick="backToResults()">← Back to Score</button>
+    </div>
+  </div>
+  <div class="quiz-content" id="quiz-content"></div>
+  <div class="submit-section" id="submit-section">
+    <div class="unanswered-warn" id="unanswered-warn"></div>
+    <button class="submit-btn" onclick="submitQuiz()">Submit Quiz ✓</button>
+  </div>
+</div>
+
+<!-- RESULTS -->
+<div id="result-screen" class="screen">
+  <div class="result-card" id="result-card-el">
+    <div class="result-header">
+      <span class="result-emoji" id="res-emoji">🎓</span>
+      <div class="result-grade" id="res-grade">—</div>
+      <div class="result-score-label" id="res-score-label">— / 30</div>
+      <div class="result-verdict" id="res-verdict"></div>
+      <div id="res-sending" style="display:none"><span class="status-badge"><span class="pulse-dot"></span> Saving to records…</span></div>
+      <div id="pdf-saving" style="display:none"><span class="status-badge"><span class="pulse-dot"></span> Downloading PDF…</span></div>
+      <div id="pdf-done" style="display:none"><span class="pdf-notice">✓ PDF saved to your device</span></div>
+    </div>
+    <div class="result-info-grid" id="res-info-grid"></div>
+    <div class="section-breakdown">
+      <div class="sb-title">Score by Section</div>
+      <div id="res-breakdown"></div>
+    </div>
+    <div class="result-actions">
+      <button class="action-btn action-primary" onclick="manualSavePDF()">⬇ Save PDF</button>
+      <button class="action-btn action-secondary" onclick="reviewQuiz()">Review Answers</button>
+      <button class="action-btn action-secondary" onclick="retake()">Retake Quiz</button>
+    </div>
+    <div class="sub-id-box">
+      <div class="sub-id-label">Submission ID — Show to faculty</div>
+      <div class="sub-id-value" id="sub-id-value">—</div>
+      <div class="sub-id-hint">Your result PDF has been saved. Show this screen or the PDF to K.P. Singh sir.</div>
+    </div>
+  </div>
+</div>
+
+<script>
+const SHEET_URL='YOUR_GOOGLE_APPS_SCRIPT_URL_HERE';
+
+const sections=[
+{id:1,title:"Section 1 — Data Ownership",subtitle:"Rights and control over data",questions:[
+  {stem:"A user uploads vacation photos to a social media platform. According to most platform Terms of Service, what actually happens to ownership?",tag:"Data Ownership",opts:["The user retains full, exclusive ownership","The platform gains a broad license to use, display and distribute the content while the user retains copyright","The platform becomes the sole legal owner immediately","The government retains copyright of all digital content"],ans:1},
+  {stem:"A fitness app collects heart rate data, sleep patterns, and step counts. This type of information is best classified as:",tag:"Data Ownership",opts:["Public data — freely shareable","Organizational data — owned by the company","Personal sensitive data — highest protection required","Shared data — jointly owned by user and app"],ans:2},
+  {stem:"A company sells employee health data from its wellness program to insurance companies without telling employees. Which ethical violation is MOST clear?",tag:"Data Ownership",opts:["Lack of encryption","Violation of Consent and Control — data was used for a purpose beyond what employees agreed to","Poor data quality","Inefficient data storage"],ans:1},
+  {stem:"Which of the following is the BEST example of PUBLIC data?",tag:"Data Ownership",opts:["Your Aadhaar card number","A hospital's patient records","Government census statistics published for everyone","A company's internal financial report"],ans:2},
+  {stem:"The phrase 'If the product is free, you are the product' most directly relates to:",tag:"Data Ownership",opts:["Open-source software licensing","Data ownership — companies monetize user behavior and personal data","Free trial marketing strategies","Cloud storage pricing models"],ans:1}
+]},
+{id:2,title:"Section 2 — The Five Cs",subtitle:"Consent, Clarity, Consistency, Control, Confidentiality",questions:[
+  {stem:"A mobile app installs on a phone and automatically enables location tracking in the background without informing the user or requesting permission. Which of the Five Cs is violated MOST fundamentally?",tag:"The Five Cs",opts:["Confidentiality — data is insecure","Consistency — different rules for different users","Consent — no permission was obtained before collecting data","Control — users cannot download their data"],ans:2},
+  {stem:"A bank's privacy policy is 80 pages of dense legal language that average users cannot realistically understand. Which of the Five Cs is being poorly implemented?",tag:"The Five Cs",opts:["Consistency — unequal treatment","Clarity — users cannot understand what they're agreeing to","Confidentiality — data is exposed","Control — users cannot edit their data"],ans:1},
+  {stem:"A recruitment AI was trained on 10 years of employee data where 90% were male. It now systematically ranks female candidates lower. This violates which of the Five Cs?",tag:"The Five Cs",opts:["Consent — candidates didn't agree to AI screening","Confidentiality — candidate data is leaked","Consistency — the system treats people unequally based on gender, not merit","Control — candidates cannot delete their profiles"],ans:2},
+  {stem:"A social media platform allows users to download all their data, delete individual posts, deactivate their account, or permanently delete all records. This best demonstrates which of the Five Cs?",tag:"The Five Cs",opts:["Clarity — users understand the platform","Consent — users agreed to terms","Consistency — same rules for everyone","Control — users can manage their own data"],ans:3},
+  {stem:"A hospital encrypts all patient records, restricts access to authorized doctors only, and uses audit logs to track who viewed what. This primarily implements which of the Five Cs?",tag:"The Five Cs",opts:["Consent — patients permitted data storage","Clarity — patients know their data is used","Control — patients can delete records","Confidentiality — data is protected from unauthorized access"],ans:3}
+]},
+{id:3,title:"Section 3 — Implementing Ethics & Security",subtitle:"Practical steps and security risks",questions:[
+  {stem:"An employee receives an email: 'Your account will be suspended in 24 hours. Click here to verify credentials immediately.' This is most likely a:",tag:"Security",opts:["Legitimate system notification from IT department","Phishing attack — fake urgency to trick users into giving credentials","GDPR compliance request from regulators","Routine password reset reminder"],ans:1},
+  {stem:"A company conducts quarterly security audits of its data systems. The PRIMARY purpose is to:",tag:"Security",opts:["Increase server storage capacity","Reduce operational costs by finding unused data","Detect vulnerabilities, unauthorized access patterns, and ensure ongoing data protection","Train new employees on basic software use"],ans:2},
+  {stem:"'Data minimization' as an ethical principle means:",tag:"Ethics",opts:["Compressing data files to save storage space","Collecting ONLY the data that is strictly necessary for the clearly stated purpose","Deleting all user data every 30 days automatically","Limiting the number of users who can access a database"],ans:1},
+  {stem:"A student shares their college ERP login with a friend to 'just check the timetable.' The PRIMARY ethical and security concern is:",tag:"Security",opts:["It slows down the college server","The friend gains unauthorized access — marks, personal details, and attendance could be viewed or tampered with","It violates anti-plagiarism policies","It uses excessive mobile data"],ans:1},
+  {stem:"An organization implements 'Privacy by Design.' This means:",tag:"Ethics",opts:["Privacy features are added to products only after user complaints","Privacy protections are built into systems from the very beginning of design, not added as an afterthought","Privacy laws are reviewed by designers monthly","Designers are given privacy training once a year"],ans:1}
+]},
+{id:4,title:"Section 4 — Guiding Principles & Data Culture",subtitle:"Organizational ethics and data-driven decisions",questions:[
+  {stem:"A college analyzes attendance, assignments, and test scores to identify at-risk students early and assign mentors proactively. This is BEST described as:",tag:"Data Culture",opts:["Unethical surveillance of students","Violation of student privacy rights","Data-driven culture used ethically — evidence-based intervention to help students succeed","Unfair profiling that should be discontinued"],ans:2},
+  {stem:"An e-commerce platform's guiding principle states: 'We will never promote products using fake reviews or manipulate rankings for payment.' This falls under which ethical principle?",tag:"Guiding Principles",opts:["Data minimization — collect less data","Scalability — handle more users","Transparency and Accountability — honest, verifiable processes","Cost efficiency — save operational expenses"],ans:2},
+  {stem:"A company's AI creates realistic deepfake videos of its competitors making false statements about safety issues. Which core guiding principle is MOST fundamentally violated?",tag:"Guiding Principles",opts:["Data minimization — too much data used","Scalability — system can't handle volume","Transparency and Honesty — deliberately creating deceptive content","Purpose limitation — data used for wrong purpose"],ans:2},
+  {stem:"'Wrong data leads to wrong decisions' is a warning about data-driven culture. Which scenario BEST illustrates this?",tag:"Data Culture",opts:["A system processes 1 million records quickly","A hospital using biased historical data gives systematically worse care to certain patient communities","A company stores data in multiple backup locations","An algorithm processes financial transactions in milliseconds"],ans:1},
+  {stem:"A food delivery platform uses past order data to predict demand and pre-position delivery partners near popular restaurants before peak hours. This BEST represents:",tag:"Data Culture",opts:["Violation of customer privacy","Unethical use of personal order history","Ethical data-driven business optimization that improves service for everyone","Manipulation of customer behavior"],ans:2}
+]},
+{id:5,title:"Section 5 — Regulations",subtitle:"GDPR, DPDP Act, HIPAA and legal frameworks",questions:[
+  {stem:"GDPR stands for:",tag:"Regulations",opts:["General Data Protection Regulation","Global Digital Privacy Rights Act","Government Data Processing Rules","General Digital Protocol Regulation"],ans:0},
+  {stem:"Under GDPR, which of the following rights does a user have?",tag:"Regulations",opts:["Right to prevent the company from ever earning a profit","Right to demand the company shut down its servers","Right to access their data, delete it, and know how it is used","Right to receive compensation every time their data is viewed"],ans:2},
+  {stem:"India's comprehensive data protection legislation is called:",tag:"Regulations",opts:["GDPR India — the Indian adaptation of European privacy law","HIPAA India — the health data protection act","Digital Personal Data Protection (DPDP) Act","Information Technology Cybersecurity Amendment"],ans:2},
+  {stem:"HIPAA is a data regulation that specifically applies to:",tag:"Regulations",opts:["All digital businesses in Europe","Financial institutions worldwide","Healthcare organizations in the United States","Government agencies in India"],ans:2},
+  {stem:"A fraudster calls claiming to be a bank employee: 'Your account will be frozen — share your OTP for immediate KYC verification.' This scenario demonstrates that:",tag:"Regulations",opts:["OTP systems are fundamentally insecure and should be replaced","Banks have poorly designed security protocols","Regulations alone are insufficient — digital literacy and user awareness are equally critical to prevent fraud","The DPDP Act has failed to protect Indian users"],ans:2}
+]},
+{id:6,title:"Section 6 — Real-World Applications",subtitle:"Healthcare, finance, education, sports",questions:[
+  {stem:"During COVID-19, apps tracked location and contact history to break transmission chains. The primary ethical tension this created was:",tag:"Applications",opts:["App development costs versus government budgets","Public health benefit versus individual privacy rights — how much tracking is acceptable in an emergency?","Government revenue versus healthcare spending priorities","Mobile data consumption versus network capacity"],ans:1},
+  {stem:"A bank's AI loan system rejects applications from people in specific zip codes — even when their individual credit scores are good — because historical data reflects decades of lending discrimination. This is an example of:",tag:"Applications",opts:["Efficient and accurate risk management","Algorithmic bias — AI amplifying historical human discrimination","Proper implementation of GDPR data minimization","Data-driven culture working correctly"],ans:1},
+  {stem:"In education analytics, a college predicts which students are likely to fail using attendance and submission data. The MOST ethical use of this prediction is:",tag:"Applications",opts:["Publishing the predictions publicly so all students know their status","Using the predictions to deny scholarships to 'at-risk' students","Providing timely, confidential support and mentoring while protecting student privacy","Sharing detailed student-level data with all faculty members without restriction"],ans:2},
+  {stem:"A sports organization wants to track players' biometric data 24/7 including sleep quality, stress levels, and heart rate variability. The primary ethical concern is:",tag:"Applications",opts:["The cost of the tracking technology","Player consent and privacy — continuous health monitoring requires explicit agreement and clear limits","Whether other teams will gain competitive advantage","Data storage and server capacity requirements"],ans:1},
+  {stem:"A smart college campus introduces face recognition attendance, CCTV behavior analytics, and an AI that flags 'suspicious' student patterns. Students raise serious concerns. The MOST ethical administrative response is:",tag:"Applications",opts:["Ignore concerns since attendance monitoring is a legitimate college function","Explain the full purpose of each system, obtain informed consent, strictly limit data use, implement strong security, and provide opt-out alternatives where possible","Make all systems optional only for faculty and mandatory for students","Share all collected data with parents to increase transparency"],ans:1}
+]}
+];
+
+const allQuestions=[];
+sections.forEach(sec=>sec.questions.forEach(q=>allQuestions.push({...q,sectionId:sec.id})));
+const TOTAL=allQuestions.length;
+
+let studentInfo={};
+let answers=new Array(TOTAL).fill(null);
+let timerInterval=null;
+let secondsLeft=30*60;
+let quizSubmitted=false;
+let inReviewMode=false;
+
+function startQuiz(){
+  const name=document.getElementById('inp-name').value.trim();
+  const roll=document.getElementById('inp-roll').value.trim().toUpperCase();
+  const section=document.getElementById('inp-section').value;
+  const err=document.getElementById('form-error');
+  if(!name||!roll||!section){err.style.display='block';return;}
+  err.style.display='none';
+  studentInfo={name,roll,section,branch:'BCA',semester:'2nd'};
+  document.getElementById('qh-name').textContent=name+' · '+section;
+  renderQuiz();
+  switchScreen('quiz-screen');
+  startTimer();
+  window.scrollTo(0,0);
+}
+
+function renderQuiz(){
+  const L=['A','B','C','D'];
+  let html='',qi=0;
+  sections.forEach(sec=>{
+    html+=`<div class="section-divider"><div class="sec-line"></div><div class="sec-badge">${sec.title}<small>${sec.subtitle}</small></div><div class="sec-line right"></div></div>`;
+    sec.questions.forEach(q=>{
+      const i=qi++;
+      html+=`<div class="q-card" id="qcard-${i}"><div class="q-top"><div class="q-num" id="qnum-${i}">${i+1}</div><div class="q-stem">${q.stem}</div></div><div class="q-tag">${q.tag}</div><div class="options-grid" id="opts-${i}">${q.opts.map((o,oi)=>`<button class="opt-btn" id="opt-${i}-${oi}" onclick="selectAnswer(${i},${oi})"><span class="opt-letter">${L[oi]}</span><span>${o}</span></button>`).join('')}</div></div>`;
+    });
+  });
+  document.getElementById('quiz-content').innerHTML=html;
+}
+
+function selectAnswer(qi,oi){
+  if(quizSubmitted)return;
+  answers[qi]=oi;
+  document.querySelectorAll(`#opts-${qi} .opt-btn`).forEach((b,i)=>b.classList.toggle('selected',i===oi));
+  document.getElementById(`qcard-${qi}`).classList.add('answered');
+  document.getElementById(`qnum-${qi}`).classList.add('done');
+  const done=answers.filter(a=>a!==null).length;
+  document.getElementById('prog-answered').textContent=done+' answered';
+  document.getElementById('prog-fill').style.width=(done/TOTAL*100)+'%';
+}
+
+function startTimer(){
+  timerInterval=setInterval(()=>{
+    secondsLeft--;
+    const m=String(Math.floor(secondsLeft/60)).padStart(2,'0');
+    const s=String(secondsLeft%60).padStart(2,'0');
+    document.getElementById('timer-display').textContent=`${m}:${s}`;
+    if(secondsLeft<=300)document.getElementById('timer-box').classList.add('warning');
+    if(secondsLeft<=0){clearInterval(timerInterval);finalize();}
+  },1000);
+}
+
+function submitQuiz(){
+  const u=answers.filter(a=>a===null).length;
+  const warn=document.getElementById('unanswered-warn');
+  if(u>0&&!warn.dataset.primed){
+    warn.textContent=`⚠ ${u} question${u>1?'s':''} unanswered. Tap here to submit anyway.`;
+    warn.style.display='block';warn.style.cursor='pointer';
+    warn.dataset.primed='1';
+    warn.onclick=()=>{warn.style.display='none';finalize();};
+    return;
+  }
+  finalize();
+}
+
+function finalize(){
+  clearInterval(timerInterval);
+  quizSubmitted=true;
+  let total=0;
+  const secScores=sections.map(()=>0);
+  allQuestions.forEach((q,i)=>{if(answers[i]===q.ans){total++;secScores[q.sectionId-1]++;}});
+  const pct=Math.round(total/TOTAL*100);
+  const pass=pct>=40;
+  let grade='F';
+  if(pct>=90)grade='A+';else if(pct>=80)grade='A';else if(pct>=70)grade='B';
+  else if(pct>=60)grade='C';else if(pct>=50)grade='D';else if(pct>=40)grade='E';
+  const elapsed=30*60-secondsLeft;
+  const timeTaken=`${String(Math.floor(elapsed/60)).padStart(2,'0')}m ${String(elapsed%60).padStart(2,'0')}s`;
+  const submissionId=`${studentInfo.roll}-U5-${grade}-${Date.now().toString(36).toUpperCase()}`;
+  const submittedAt=new Date().toLocaleString('en-IN',{timeZone:'Asia/Kolkata',day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit',hour12:true});
+
+  const payload={name:studentInfo.name,roll:studentInfo.roll,section:studentInfo.section,branch:studentInfo.branch,semester:studentInfo.semester,score:total,total:TOTAL,percentage:pct,grade,timeTaken,passed:pass,submissionId,submittedAt,quizType:'Unit 5 Ethics',...Object.fromEntries(sections.map((_,i)=>[`s${i+1}`,secScores[i]]))};
+  document.getElementById('res-sending').style.display='block';
+  fetch(SHEET_URL,{method:'POST',mode:'no-cors',body:JSON.stringify(payload)}).catch(()=>{}).finally(()=>document.getElementById('res-sending').style.display='none');
+
+  const emojis={'A+':'🏆','A':'🌟','B':'🎯','C':'📚','D':'💪','E':'🤞','F':'📖'};
+  document.getElementById('res-emoji').textContent=emojis[grade];
+  document.getElementById('res-grade').textContent=`${total}/${TOTAL}`;
+  document.getElementById('res-score-label').textContent=`${pct}% · Grade ${grade}`;
+  document.getElementById('res-verdict').innerHTML=pass?`<span class="verdict-pass">✓ PASSED</span>`:`<span class="verdict-fail">✗ Needs Improvement</span>`;
+
+  document.getElementById('res-info-grid').innerHTML=`
+    <div class="result-info-item"><div class="ri-label">Name</div><div class="ri-val">${studentInfo.name}</div></div>
+    <div class="result-info-item"><div class="ri-label">Roll No.</div><div class="ri-val">${studentInfo.roll}</div></div>
+    <div class="result-info-item"><div class="ri-label">Section</div><div class="ri-val">${studentInfo.section}</div></div>
+    <div class="result-info-item"><div class="ri-label">Branch / Sem</div><div class="ri-val">BCA · 2nd</div></div>
+    <div class="result-info-item"><div class="ri-label">Time Taken</div><div class="ri-val">${timeTaken}</div></div>
+    <div class="result-info-item"><div class="ri-label">Submitted At</div><div class="ri-val">${submittedAt}</div></div>`;
+
+  document.getElementById('res-breakdown').innerHTML=sections.map((sec,i)=>{
+    const got=secScores[i];const name=sec.title.replace(/Section \d+ — /,'');
+    return`<div class="sb-row"><div class="sb-name">${name}</div><div class="sb-bar-wrap"><div class="sb-bar-fill" style="width:${got/5*100}%"></div></div><div class="sb-score">${got}/5</div></div>`;
+  }).join('');
+
+  document.getElementById('sub-id-value').textContent=submissionId;
+  switchScreen('result-screen');
+  window.scrollTo(0,0);
+  setTimeout(()=>autoSavePDF(submissionId),1200);
+}
+
+function autoSavePDF(sid){
+  if(typeof html2pdf==='undefined'){window.print();return;}
+  const el=document.getElementById('result-card-el');
+  const filename=`${studentInfo.roll||'student'}-Unit5Ethics-${sid||'result'}.pdf`;
+  document.getElementById('pdf-saving').style.display='block';
+  document.getElementById('pdf-done').style.display='none';
+  html2pdf().set({margin:[12,10,12,10],filename,image:{type:'jpeg',quality:.97},html2canvas:{scale:2,useCORS:true,backgroundColor:'#182515',logging:false},jsPDF:{unit:'mm',format:'a4',orientation:'portrait'}}).from(el).save().then(()=>{document.getElementById('pdf-saving').style.display='none';document.getElementById('pdf-done').style.display='block';}).catch(()=>{document.getElementById('pdf-saving').style.display='none';});
+}
+
+function manualSavePDF(){const sid=document.getElementById('sub-id-value').textContent||'result';autoSavePDF(sid);}
+
+function reviewQuiz(){
+  inReviewMode=true;
+  switchScreen('quiz-screen');
+  document.getElementById('submit-section').style.display='none';
+  document.getElementById('qh-name').textContent='📋 Review Mode';
+  document.getElementById('qh-progress-wrap').style.display='none';
+  document.getElementById('timer-box').style.display='none';
+  document.getElementById('review-mode-label').style.display='block';
+  document.getElementById('review-back-btn').style.display='flex';
+  allQuestions.forEach((q,i)=>{
+    document.querySelectorAll(`#opts-${i} .opt-btn`).forEach((btn,oi)=>{
+      btn.disabled=true;
+      if(oi===q.ans){btn.style.background='rgba(82,214,138,.18)';btn.style.borderColor='#52d68a';btn.querySelector('.opt-letter').style.background='#52d68a';btn.querySelector('.opt-letter').style.color='#0f1a0d';btn.querySelector('.opt-letter').style.borderColor='#52d68a';}
+      if(answers[i]!==null&&oi===answers[i]&&oi!==q.ans){btn.style.background='rgba(255,107,107,.18)';btn.style.borderColor='#ff6b6b';btn.querySelector('.opt-letter').style.background='#ff6b6b';btn.querySelector('.opt-letter').style.color='#fff';btn.querySelector('.opt-letter').style.borderColor='#ff6b6b';}
+    });
+  });
+  window.scrollTo(0,0);
+}
+
+function backToResults(){
+  inReviewMode=false;
+  document.getElementById('qh-name').textContent=studentInfo.name+' · '+studentInfo.section;
+  document.getElementById('qh-progress-wrap').style.display='block';
+  document.getElementById('timer-box').style.display='flex';
+  document.getElementById('review-mode-label').style.display='none';
+  document.getElementById('review-back-btn').style.display='none';
+  switchScreen('result-screen');
+  window.scrollTo(0,0);
+}
+
+function switchScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');}
+
+function retake(){
+  answers=new Array(TOTAL).fill(null);quizSubmitted=false;inReviewMode=false;secondsLeft=30*60;
+  document.getElementById('submit-section').style.display='block';
+  document.getElementById('qh-progress-wrap').style.display='block';
+  document.getElementById('timer-box').style.display='flex';
+  document.getElementById('timer-box').classList.remove('warning');
+  document.getElementById('timer-display').textContent='30:00';
+  document.getElementById('review-mode-label').style.display='none';
+  document.getElementById('review-back-btn').style.display='none';
+  document.getElementById('unanswered-warn').dataset.primed='';
+  document.getElementById('pdf-done').style.display='none';
+  document.getElementById('pdf-saving').style.display='none';
+  renderQuiz();switchScreen('quiz-screen');startTimer();window.scrollTo(0,0);
+}
+</script>
+</body>
+</html>
