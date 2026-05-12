@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unit 5 — Ethics & Data Science | K.P. Singh · SRHU</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=Nunito:wght@400;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0f1a0d;--surface:#182515;--surface2:#1e2f1a;
+  --amber:#e8852a;--amber-bright:#f5aa4a;--amber-dim:rgba(232,133,42,.15);
+  --border:rgba(232,133,42,.28);--text:#edf2e0;--muted:rgba(237,242,224,.55);
+  --mint:#52d68a;--red:#ff6b6b;--blue:#5aacdb;--purple:#b07af5;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;font-size:16px;line-height:1.7}
+
+/* SCROLL PROGRESS */
+#scroll-progress{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--amber),var(--amber-bright));z-index:99999;width:0%;transition:width .1s}
+
+/* NAV */
+.kps-nav{position:fixed;top:3px;left:0;right:0;z-index:9998;display:flex;align-items:center;justify-content:space-between;padding:12px 20px;background:rgba(15,26,13,.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+.kps-nav-brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+.kps-nav-logo{width:34px;height:34px;border-radius:50%;object-fit:cover;border:1.5px solid var(--amber)}
+.brand-name{font-family:'Lora',serif;font-size:14px;font-weight:700;color:var(--amber-bright);line-height:1}
+.brand-sub{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase;margin-top:2px}
+.kps-nav-links{display:flex;align-items:center;gap:5px}
+.kps-nav-links a{color:var(--muted);text-decoration:none;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:1px;padding:5px 10px;border-radius:6px;border:1px solid transparent;transition:all .2s;white-space:nowrap}
+.kps-nav-links a:hover{color:var(--amber-bright);border-color:var(--border)}
+.kps-nav-links a.ext{background:var(--amber);color:#0f1a0d;font-weight:700;border:none}
+.kps-nav-links a.ext:hover{background:var(--amber-bright)}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:100px 20px 60px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 30%,rgba(232,133,42,.07),transparent 70%);pointer-events:none}
+.hero-badge{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--amber);background:var(--amber-dim);border:1px solid var(--border);padding:6px 18px;border-radius:20px;display:inline-block;margin-bottom:24px}
+.hero-title{font-family:'Lora',serif;font-size:clamp(2rem,6vw,3.5rem);font-weight:700;color:#fff;line-height:1.1;margin-bottom:16px}
+.hero-title span{color:var(--amber-bright);font-style:italic}
+.hero-sub{font-size:clamp(15px,2.5vw,17px);color:var(--muted);max-width:620px;margin:0 auto 32px;line-height:1.7}
+.hero-chips{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:40px}
+.chip{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.5px;padding:6px 14px;border-radius:20px;border:1px solid var(--border);color:var(--muted);background:rgba(255,255,255,.03)}
+.hero-cta{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+.btn-primary{padding:13px 28px;background:linear-gradient(135deg,var(--amber),var(--amber-bright));color:#0f1a0d;border:none;border-radius:30px;font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;cursor:pointer;text-decoration:none;transition:all .3s;box-shadow:0 4px 20px rgba(232,133,42,.3)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(232,133,42,.45)}
+.btn-secondary{padding:13px 28px;background:transparent;color:var(--amber-bright);border:1.5px solid var(--border);border-radius:30px;font-family:'Nunito',sans-serif;font-size:14px;font-weight:700;cursor:pointer;text-decoration:none;transition:all .3s}
+.btn-secondary:hover{background:var(--amber-dim)}
+
+/* TABLE OF CONTENTS */
+.toc-section{max-width:760px;margin:0 auto;padding:40px 20px}
+.toc-card{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:28px 24px}
+.toc-title{font-family:'Lora',serif;font-size:18px;font-weight:700;color:var(--amber-bright);margin-bottom:20px;display:flex;align-items:center;gap:10px}
+.toc-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.toc-item{display:flex;align-items:center;gap:10px;padding:10px 14px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:10px;text-decoration:none;color:var(--muted);font-size:14px;transition:all .2s;font-family:'Nunito',sans-serif}
+.toc-item:hover{border-color:var(--border);color:var(--amber-bright);background:var(--amber-dim)}
+.toc-num{font-family:'Space Mono',monospace;font-size:10px;color:var(--amber);min-width:22px}
+
+/* SECTION WRAPPER */
+.content-wrap{max-width:760px;margin:0 auto;padding:0 20px 80px}
+
+/* SECTION */
+.unit-section{margin-bottom:48px}
+.section-header{display:flex;align-items:flex-start;gap:16px;margin-bottom:24px;padding-bottom:16px;border-bottom:1px solid var(--border)}
+.section-icon{width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;background:var(--amber-dim);border:1px solid var(--border)}
+.section-num{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--amber);margin-bottom:4px}
+.section-title{font-family:'Lora',serif;font-size:clamp(20px,4vw,26px);font-weight:700;color:#fff;line-height:1.2}
+
+/* PROSE */
+.prose p{margin-bottom:16px;color:var(--text);line-height:1.75}
+.prose p:last-child{margin-bottom:0}
+.prose strong{color:var(--amber-bright);font-weight:700}
+.prose em{color:var(--text);font-style:italic}
+
+/* CALLOUT BOXES */
+.callout{border-radius:14px;padding:18px 20px;margin:20px 0;border-left:4px solid}
+.callout-example{background:rgba(90,172,219,.08);border-color:var(--blue)}
+.callout-example .callout-label{color:var(--blue)}
+.callout-case{background:rgba(232,133,42,.08);border-color:var(--amber)}
+.callout-case .callout-label{color:var(--amber-bright)}
+.callout-think{background:rgba(176,122,245,.08);border-color:var(--purple)}
+.callout-think .callout-label{color:var(--purple)}
+.callout-warn{background:rgba(255,107,107,.08);border-color:var(--red)}
+.callout-warn .callout-label{color:var(--red)}
+.callout-tip{background:rgba(82,214,138,.08);border-color:var(--mint)}
+.callout-tip .callout-label{color:var(--mint)}
+.callout-label{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.callout p{color:var(--text);font-size:15px;line-height:1.7;margin:0}
+.callout p+p{margin-top:10px}
+
+/* THINK ABOUT IT — interactive reveal */
+.think-box{background:rgba(176,122,245,.06);border:1px solid rgba(176,122,245,.25);border-radius:14px;margin:20px 0;overflow:hidden}
+.think-toggle{width:100%;padding:16px 20px;background:none;border:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;-webkit-tap-highlight-color:transparent}
+.think-toggle-left{display:flex;align-items:center;gap:10px}
+.think-q{font-family:'Nunito',sans-serif;font-size:15px;font-weight:700;color:var(--purple);text-align:left;line-height:1.4}
+.think-icon{font-size:18px;color:var(--purple);flex-shrink:0}
+.think-arrow{font-size:14px;color:var(--purple);transition:transform .3s;flex-shrink:0}
+.think-arrow.open{transform:rotate(180deg)}
+.think-answer{padding:0 20px 16px;border-top:1px solid rgba(176,122,245,.15)}
+.think-answer p{color:var(--text);font-size:14px;line-height:1.7;margin:12px 0 0}
+
+/* ACTIVITY BOX */
+.activity-box{background:linear-gradient(135deg,rgba(82,214,138,.06),rgba(90,172,219,.06));border:1px solid rgba(82,214,138,.2);border-radius:14px;padding:20px;margin:20px 0}
+.activity-label{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--mint);margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.activity-title{font-family:'Lora',serif;font-size:16px;font-weight:700;color:#fff;margin-bottom:10px}
+.activity-body{font-size:14px;color:var(--muted);line-height:1.7}
+
+/* SCENARIO BUTTONS — click to reveal outcome */
+.scenario-group{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+.scenario-btn{padding:12px 16px;background:rgba(255,255,255,.04);border:1.5px solid rgba(255,255,255,.1);border-radius:10px;cursor:pointer;text-align:left;color:var(--text);font-family:'Nunito',sans-serif;font-size:14px;transition:all .2s;-webkit-tap-highlight-color:transparent}
+.scenario-btn:hover{border-color:var(--border);background:var(--amber-dim)}
+.scenario-btn.ethical{border-color:var(--mint);background:rgba(82,214,138,.1);color:var(--mint)}
+.scenario-btn.unethical{border-color:var(--red);background:rgba(255,107,107,.1);color:var(--red)}
+.scenario-result{display:none;margin-top:8px;padding:10px 14px;border-radius:8px;font-size:13px;line-height:1.6}
+.scenario-result.show{display:block}
+.scenario-result.good{background:rgba(82,214,138,.1);border:1px solid rgba(82,214,138,.3);color:var(--mint)}
+.scenario-result.bad{background:rgba(255,107,107,.1);border:1px solid rgba(255,107,107,.3);color:var(--red)}
+
+/* TABLE */
+.data-table{width:100%;border-collapse:collapse;margin:16px 0;font-size:14px;border-radius:12px;overflow:hidden}
+.data-table th{background:var(--surface2);color:var(--amber-bright);font-family:'Space Mono',monospace;font-size:11px;letter-spacing:1px;text-transform:uppercase;padding:12px 16px;text-align:left}
+.data-table td{padding:11px 16px;border-top:1px solid rgba(255,255,255,.06);color:var(--text);vertical-align:top;line-height:1.6}
+.data-table tr:nth-child(even) td{background:rgba(255,255,255,.02)}
+.data-table tr:hover td{background:var(--amber-dim)}
+
+/* FIVE CS GRID */
+.five-cs{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin:20px 0}
+.c-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px 14px;text-align:center;transition:all .2s;cursor:default}
+.c-card:hover{transform:translateY(-3px);border-color:var(--amber);box-shadow:0 8px 24px rgba(232,133,42,.15)}
+.c-icon{font-size:28px;margin-bottom:8px}
+.c-name{font-family:'Lora',serif;font-size:16px;font-weight:700;color:var(--amber-bright);margin-bottom:4px}
+.c-meaning{font-size:12px;color:var(--muted)}
+
+/* HIGHLIGHT */
+.highlight{background:var(--amber-dim);border:1px solid var(--border);border-radius:8px;padding:2px 8px;font-weight:700;color:var(--amber-bright);font-size:.9em}
+
+/* QUOTE BLOCK */
+.quote-block{border-left:3px solid var(--amber);padding:16px 20px;margin:20px 0;background:var(--amber-dim);border-radius:0 12px 12px 0}
+.quote-text{font-family:'Lora',serif;font-size:16px;font-style:italic;color:#fff;line-height:1.6}
+.quote-attr{font-family:'Space Mono',monospace;font-size:10px;color:var(--amber);letter-spacing:1px;margin-top:8px;text-transform:uppercase}
+
+/* REGULATION BADGES */
+.reg-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin:16px 0}
+.reg-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px}
+.reg-name{font-family:'Space Mono',monospace;font-size:13px;font-weight:700;color:var(--amber-bright);margin-bottom:6px}
+.reg-full{font-size:12px;color:var(--muted);margin-bottom:6px}
+.reg-region{display:inline-block;font-size:11px;padding:2px 10px;border-radius:20px;background:rgba(82,214,138,.12);border:1px solid rgba(82,214,138,.3);color:var(--mint)}
+
+/* APPS SECTION */
+.apps-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin:16px 0}
+.app-card{background:var(--surface2);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:16px;text-align:center}
+.app-icon{font-size:28px;margin-bottom:8px}
+.app-name{font-size:13px;font-weight:700;color:#fff;margin-bottom:6px}
+.app-concern{font-size:11px;color:var(--red);line-height:1.4}
+
+/* QUICK REVISION */
+.revision-section{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:28px 24px;margin:40px 0}
+.revision-title{font-family:'Lora',serif;font-size:20px;font-weight:700;color:var(--amber-bright);margin-bottom:20px}
+.revision-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.rev-item{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:10px;padding:12px 14px}
+.rev-topic{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--amber);margin-bottom:4px}
+.rev-key{font-size:14px;color:var(--text)}
+
+/* QUIZ CTA */
+.quiz-cta{background:linear-gradient(135deg,rgba(232,133,42,.12),rgba(245,170,74,.08));border:1px solid var(--border);border-radius:20px;padding:32px 24px;text-align:center;margin:40px 0}
+.quiz-cta h2{font-family:'Lora',serif;font-size:22px;font-weight:700;color:#fff;margin-bottom:10px}
+.quiz-cta p{color:var(--muted);font-size:15px;margin-bottom:24px}
+
+/* FOOTER */
+.page-footer{text-align:center;padding:28px 20px 40px;border-top:1px solid var(--border);color:var(--muted);font-size:13px;font-family:'Space Mono',monospace}
+
+/* MOBILE */
+@media(max-width:520px){
+  .kps-nav-links a.hide-mobile{display:none}
+  .toc-grid{grid-template-columns:1fr}
+  .five-cs{grid-template-columns:1fr 1fr}
+  .revision-grid{grid-template-columns:1fr}
+  .reg-grid{grid-template-columns:1fr 1fr}
+  .apps-grid{grid-template-columns:1fr 1fr}
+  .hero-cta{flex-direction:column;align-items:center}
+  .btn-primary,.btn-secondary{width:100%;text-align:center}
+}
+</style>
+</head>
+<body>
+<div id="scroll-progress"></div>
+
+<nav class="kps-nav">
+  <a href="/datascience_sem2/" class="kps-nav-brand">
+    <img src="../KP_Singh.png" onerror="this.style.display='none'" alt="KP" class="kps-nav-logo">
+    <div>
+      <div class="brand-name">K.P. Singh</div>
+      <div class="brand-sub">SRHU · Data Science</div>
+    </div>
+  </a>
+  <div class="kps-nav-links">
+    <a href="/datascience_sem2/" class="hide-mobile">← Home</a>
+    <a href="/datascience_sem2/unit5/quiz/" class="ext">Take Quiz ↗</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">Unit 5 · BCA Semester 2</div>
+  <h1 class="hero-title">Ethics &amp; <span>Data Science</span></h1>
+  <p class="hero-sub">Data is powerful. But with power comes responsibility. Understand the principles, laws, and real-world implications of ethical data use.</p>
+  <div class="hero-chips">
+    <span class="chip">Data Ownership</span>
+    <span class="chip">Five Cs</span>
+    <span class="chip">GDPR &amp; DPDP</span>
+    <span class="chip">Security Training</span>
+    <span class="chip">Data-Driven Culture</span>
+    <span class="chip">Real-World Apps</span>
+  </div>
+  <div class="hero-cta">
+    <a href="#content" class="btn-primary">Start Reading ↓</a>
+    <a href="/datascience_sem2/unit5/quiz/" class="btn-secondary">Take the Quiz →</a>
+  </div>
+</section>
+
+<!-- TABLE OF CONTENTS -->
+<div class="toc-section" id="content">
+  <div class="toc-card">
+    <div class="toc-title">📋 Topics in This Unit</div>
+    <div class="toc-grid">
+      <a href="#intro" class="toc-item"><span class="toc-num">01</span>Why Ethics Matters</a>
+      <a href="#ownership" class="toc-item"><span class="toc-num">02</span>Data Ownership</a>
+      <a href="#fivecs" class="toc-item"><span class="toc-num">03</span>The Five Cs</a>
+      <a href="#implementing" class="toc-item"><span class="toc-num">04</span>Implementing the Five Cs</a>
+      <a href="#training" class="toc-item"><span class="toc-num">05</span>Ethics &amp; Security Training</a>
+      <a href="#principles" class="toc-item"><span class="toc-num">06</span>Guiding Principles</a>
+      <a href="#culture" class="toc-item"><span class="toc-num">07</span>Data-Driven Culture</a>
+      <a href="#regulation" class="toc-item"><span class="toc-num">08</span>Regulations</a>
+      <a href="#applications" class="toc-item"><span class="toc-num">09</span>Real-World Applications</a>
+      <a href="#revision" class="toc-item"><span class="toc-num">10</span>Quick Revision</a>
+    </div>
+  </div>
+</div>
+
+<div class="content-wrap">
+
+<!-- ══ SECTION 1 — INTRO ══ -->
+<div class="unit-section" id="intro">
+  <div class="section-header">
+    <div class="section-icon">🤔</div>
+    <div>
+      <div class="section-num">Section 01</div>
+      <h2 class="section-title">Why Ethics Matters in Data Science</h2>
+    </div>
+  </div>
+
+  <!-- INTERACTIVE OPENING ACTIVITY -->
+  <div class="activity-box">
+    <div class="activity-label">🎯 Opening Activity — Do It Now!</div>
+    <div class="activity-title">The App Permissions Game</div>
+    <div class="activity-body">Pick up your phone. Open any free app you installed recently. Go to Settings → App Permissions.<br><br>
+    How many of these did you allow without thinking?</div>
+    <div class="scenario-group">
+      <button class="scenario-btn" onclick="revealScenario(this,'good')">📍 Location Access</button>
+      <div class="scenario-result good">Every time the app runs, it knows exactly where you are. This can be useful for maps — but what if a free game app is collecting it?</div>
+      <button class="scenario-btn" onclick="revealScenario(this,'bad')">🎤 Microphone Access (for a calculator app)</button>
+      <div class="scenario-result bad">⚠️ A calculator has NO legitimate reason to access your microphone. This is a red flag for spyware or data harvesting.</div>
+      <button class="scenario-btn" onclick="revealScenario(this,'bad')">📒 Contacts Access (for a flashlight app)</button>
+      <div class="scenario-result bad">⚠️ A flashlight doesn't need your contacts. This data is often sold to advertisers or telemarketers. Classic unethical data collection!</div>
+    </div>
+  </div>
+
+  <div class="prose">
+    <p>You've just experienced the core question of Data Ethics: <strong>just because data CAN be collected, does that mean it SHOULD be?</strong></p>
+  </div>
+
+  <div class="quote-block">
+    <div class="quote-text">"Just because data can be collected does not mean it should be collected."</div>
+    <div class="quote-attr">— Foundation of Ethical Data Science</div>
+  </div>
+
+  <div class="prose">
+    <p><strong>Ethics in Data Science</strong> means doing the right thing while collecting, using, storing, and analyzing data. Data Science gives us powerful tools — but without ethical boundaries, those tools become weapons.</p>
+    <p>When data is used irresponsibly:</p>
+  </div>
+
+  <table class="data-table">
+    <tr><th>What Goes Wrong</th><th>Real Example</th></tr>
+    <tr><td>Privacy violation</td><td>Health data sold without consent</td></tr>
+    <tr><td>Manipulation</td><td>Targeted political ads based on psychological profiling</td></tr>
+    <tr><td>Wrong decisions</td><td>AI denying loans due to biased training data</td></tr>
+    <tr><td>Discrimination</td><td>Hiring algorithm rejecting women candidates</td></tr>
+    <tr><td>Identity theft</td><td>Data breach exposing 50 million phone numbers</td></tr>
+  </table>
+
+  <div class="callout callout-example">
+    <div class="callout-label">📱 Real-Life Example — YouTube &amp; Instagram</div>
+    <p>Have you ever searched for "laptops" and then suddenly seen laptop ads everywhere — on Instagram, YouTube, and even news websites?</p>
+    <p>This is not a coincidence. These platforms analyze your search history, click patterns, watch time, and scroll behavior to build a detailed profile of your interests. Ethically, you should know exactly what data is collected and why.</p>
+  </div>
+
+  <div class="think-box">
+    <button class="think-toggle" onclick="toggleThink(this)">
+      <div class="think-toggle-left">
+        <span class="think-icon">💭</span>
+        <span class="think-q">Think About It: "If the app is free, then how does the company earn money?"</span>
+      </div>
+      <span class="think-arrow">▼</span>
+    </button>
+    <div class="think-answer">
+      <p>👉 <strong>Your data IS the product.</strong> Free apps are monetized by collecting, analyzing, and selling user behavior data to advertisers, data brokers, and sometimes governments. When you use a free service, you're paying with your personal information — often without fully realizing it.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SECTION 2 — DATA OWNERSHIP ══ -->
+<div class="unit-section" id="ownership">
+  <div class="section-header">
+    <div class="section-icon">🏛️</div>
+    <div>
+      <div class="section-num">Section 02</div>
+      <h2 class="section-title">Data Ownership</h2>
+    </div>
+  </div>
+
+  <div class="prose">
+    <p><strong>Data Ownership</strong> answers the question: <em>who actually controls data?</em> This seems simple — but in the digital world, it becomes surprisingly complex.</p>
+  </div>
+
+  <div class="callout callout-think">
+    <div class="callout-label">🤳 Scenario</div>
+    <p>You upload a photo to Instagram. You own your phone, you took the photo, and you pressed "upload." So who owns the photo now?</p>
+    <p>According to Instagram's Terms of Service, they get a <strong>non-exclusive, royalty-free license</strong> to use, display, and distribute your content. Many users click "Agree" without reading this.</p>
+  </div>
+
+  <table class="data-table">
+    <tr><th>Type</th><th>Example</th><th>Owner</th></tr>
+    <tr><td>Personal Data</td><td>Aadhaar number, phone, biometrics</td><td>The individual</td></tr>
+    <tr><td>Organizational Data</td><td>Company sales records</td><td>The organization</td></tr>
+    <tr><td>Public Data</td><td>Census statistics, court records</td><td>Government / public</td></tr>
+    <tr><td>Shared Data</td><td>Google Docs shared with team</td><td>Jointly owned / creator</td></tr>
+  </table>
+
+  <div class="callout callout-case">
+    <div class="callout-label">📂 Case Study — Fitness App &amp; Insurance</div>
+    <p>A popular fitness app collected heart rate, sleep patterns, and daily step counts from users. Unknown to them, the company sold this data to insurance companies. Insurers used it to <strong>increase premiums for users deemed "unhealthy."</strong></p>
+    <p>Users felt violated. They had agreed to share data to track fitness — not to have it used against them financially. This case sparked major debates about data ownership rights.</p>
+  </div>
+
+  <div class="think-box">
+    <button class="think-toggle" onclick="toggleThink(this)">
+      <div class="think-toggle-left">
+        <span class="think-icon">💭</span>
+        <span class="think-q">If you delete your social media account, should the company delete ALL your data too?</span>
+      </div>
+      <span class="think-arrow">▼</span>
+    </button>
+    <div class="think-answer">
+      <p>Under <strong>GDPR (Europe)</strong> and India's <strong>DPDP Act</strong>, yes — users have the right to request deletion of their personal data. However, many companies retain backups for varying periods. This right is called the <strong>"Right to be Forgotten"</strong> — and it's one of the most debated areas of digital privacy law.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SECTION 3 — FIVE CS ══ -->
+<div class="unit-section" id="fivecs">
+  <div class="section-header">
+    <div class="section-icon">⭐</div>
+    <div>
+      <div class="section-num">Section 03</div>
+      <h2 class="section-title">The Five Cs of Ethical Data Science</h2>
+    </div>
+  </div>
+
+  <div class="prose">
+    <p>The Five Cs are a framework that helps organizations collect and use data <strong>responsibly and ethically</strong>. Think of them as the five pillars of trustworthy data practice.</p>
+  </div>
+
+  <div class="five-cs">
+    <div class="c-card"><div class="c-icon">🤝</div><div class="c-name">Consent</div><div class="c-meaning">Permission first</div></div>
+    <div class="c-card"><div class="c-icon">🔍</div><div class="c-name">Clarity</div><div class="c-meaning">Be transparent</div></div>
+    <div class="c-card"><div class="c-icon">⚖️</div><div class="c-name">Consistency</div><div class="c-meaning">Same rules for all</div></div>
+    <div class="c-card"><div class="c-icon">🎮</div><div class="c-name">Control</div><div class="c-meaning">User controls data</div></div>
+    <div class="c-card"><div class="c-icon">🔒</div><div class="c-name">Confidentiality</div><div class="c-meaning">Keep data secure</div></div>
+  </div>
+
+  <!-- 3.1 CONSENT -->
+  <div class="callout callout-tip">
+    <div class="callout-label">🤝 C1 — Consent</div>
+    <p><strong>Before collecting any data, you must ask for and receive clear permission.</strong> Consent must be informed (the user understands what they're agreeing to), freely given (not forced), and specific (for a stated purpose).</p>
+  </div>
+
+  <div class="activity-box">
+    <div class="activity-label">🎯 Ethical or Unethical? — Click to Find Out</div>
+    <div class="activity-title">Consent Scenarios</div>
+    <div class="scenario-group">
+      <button class="scenario-btn" onclick="revealScenario(this,'good')">✅ A food delivery app shows: "Allow location access to track your delivery in real time?"</button>
+      <div class="scenario-result good">✅ ETHICAL — Clear purpose stated. User can choose. This is proper consent.</div>
+      <button class="scenario-btn" onclick="revealScenario(this,'bad')">❓ A college feedback form asks: Name, email, family income, medical history, caste certificate</button>
+      <div class="scenario-result bad">⚠️ QUESTIONABLE — Why does a feedback form need medical history or caste data? Ethical data collection means collecting ONLY what's necessary for the stated purpose.</div>
+      <button class="scenario-btn" onclick="revealScenario(this,'bad')">❌ An app secretly enables the microphone to listen for "hot words" without telling users</button>
+      <div class="scenario-result bad">❌ UNETHICAL — No consent at all. This is illegal in most countries and violates every principle of the Five Cs simultaneously.</div>
+    </div>
+  </div>
+
+  <!-- 3.2 CLARITY -->
+  <div class="callout callout-tip">
+    <div class="callout-label">🔍 C2 — Clarity</div>
+    <p><strong>Users must clearly understand what data is collected, why it's collected, and how it will be used.</strong> A privacy policy written in 80 pages of legal jargon that nobody reads does NOT satisfy clarity — even if it's technically "there."</p>
+  </div>
+
+  <div class="think-box">
+    <button class="think-toggle" onclick="toggleThink(this)">
+      <div class="think-toggle-left"><span class="think-icon">💭</span>
+      <span class="think-q">Have you ever actually READ a terms &amp; conditions document fully before clicking "Agree"?</span></div>
+      <span class="think-arrow">▼</span>
+    </button>
+    <div class="think-answer">
+      <p>Studies show that if you were to read every Terms &amp; Conditions document you click "Agree" to in a year, it would take <strong>approximately 76 full working days</strong>. Clarity means making policies readable, short, and understandable — not hiding important information in fine print.</p>
+    </div>
+  </div>
+
+  <!-- 3.3 CONSISTENCY -->
+  <div class="callout callout-tip">
+    <div class="callout-label">⚖️ C3 — Consistency</div>
+    <p><strong>The same data rules and practices must apply equally to all users — no discrimination, no favoritism.</strong> If an AI system treats different groups differently with no justifiable reason, it violates consistency.</p>
+  </div>
+
+  <div class="callout callout-case">
+    <div class="callout-label">📂 Case Study — The Biased Hiring AI</div>
+    <p>A major global company trained their recruitment AI on 10 years of employee data. The problem? Most of their previous employees were male. The AI learned this pattern and began <strong>automatically ranking female candidates lower</strong> — even when equally qualified.</p>
+    <p>This is called <strong>algorithmic bias</strong>: when data inherits human prejudices and amplifies them at scale. The AI wasn't "choosing" to discriminate — it was reflecting patterns in its training data. The company eventually scrapped the system entirely.</p>
+  </div>
+
+  <!-- 3.4 CONTROL -->
+  <div class="callout callout-tip">
+    <div class="callout-label">🎮 C4 — Control</div>
+    <p><strong>Users should be able to access, edit, download, and delete their own data.</strong> They should not be helplessly locked into a system with no ability to manage their personal information.</p>
+  </div>
+
+  <div class="apps-grid">
+    <div class="app-card"><div class="app-icon">📸</div><div class="app-name">Instagram</div><div class="app-concern" style="color:var(--mint)">✅ Allows data download, account deletion, post removal</div></div>
+    <div class="app-card"><div class="app-icon">🔍</div><div class="app-name">Google</div><div class="app-concern" style="color:var(--mint)">✅ My Activity dashboard — view and delete all history</div></div>
+    <div class="app-card"><div class="app-icon">❓</div><div class="app-name">Random Free App</div><div class="app-concern">⚠️ No data export, no delete option, no privacy dashboard</div></div>
+  </div>
+
+  <!-- 3.5 CONFIDENTIALITY -->
+  <div class="callout callout-tip">
+    <div class="callout-label">🔒 C5 — Confidentiality</div>
+    <p><strong>Private data must be kept secure and not shared with unauthorized parties.</strong> This requires encryption, access controls, and security systems that prevent breaches.</p>
+  </div>
+
+  <div class="callout callout-warn">
+    <div class="callout-label">⚠️ Data Breach Scenario</div>
+    <p>In 2021, a major food delivery app's database was breached. Hackers obtained the phone numbers, home addresses, and partial card details of millions of users. This led to phishing calls, scams, and identity theft. The company faced massive fines and permanent reputation damage.</p>
+    <p>Confidentiality failures don't just break trust — they cause real financial and personal harm to real people.</p>
+  </div>
+</div>
+
+<!-- ══ SECTION 4 — IMPLEMENTING ══ -->
+<div class="unit-section" id="implementing">
+  <div class="section-header">
+    <div class="section-icon">⚙️</div>
+    <div>
+      <div class="section-num">Section 04</div>
+      <h2 class="section-title">Implementing the Five Cs</h2>
+    </div>
+  </div>
+
+  <div class="prose">
+    <p>Knowing the Five Cs is step one. Actually implementing them in systems, workflows, and policies is the real challenge. Organizations must convert ethical principles into <strong>practical, measurable actions</strong>.</p>
+  </div>
+
+  <table class="data-table">
+    <tr><th>Action</th><th>Which C It Implements</th><th>Example</th></tr>
+    <tr><td>Consent forms &amp; pop-ups</td><td>Consent</td><td>"Allow notifications?" prompt</td></tr>
+    <tr><td>Plain-language privacy policy</td><td>Clarity</td><td>One-page summary with simple language</td></tr>
+    <tr><td>Encryption</td><td>Confidentiality</td><td>AES-256 for stored health records</td></tr>
+    <tr><td>Access logs &amp; audits</td><td>Consistency + Confidentiality</td><td>Only HR can view salary data</td></tr>
+    <tr><td>User dashboards</td><td>Control</td><td>Delete/download data anytime</td></tr>
+    <tr><td>Bias testing of AI models</td><td>Consistency</td><td>Monthly fairness audits on loan AI</td></tr>
+  </table>
+
+  <div class="callout callout-case">
+    <div class="callout-label">🏥 Case Study — Hospital Data System</div>
+    <p>A hospital stores patient blood tests, medical histories, and reports digitally. Implementing the Five Cs means: Patients consent to what data is stored (Consent). They're told exactly how it's used (Clarity). All records are encrypted and access is restricted to treating doctors (Confidentiality). Patients can request copies of their records (Control). All staff are trained on the same policies (Consistency).</p>
+  </div>
+
+  <div class="activity-box">
+    <div class="activity-label">🎯 Class Discussion Activity</div>
+    <div class="activity-title">What if your college marks database leaked before results?</div>
+    <div class="activity-body">Think about: Who would be harmed? How? Which of the Five Cs were violated? What security measures should the college have had? Share your answers with a partner — then with the class.</div>
+  </div>
+</div>
+
+<!-- ══ SECTION 5 — SECURITY TRAINING ══ -->
+<div class="unit-section" id="training">
+  <div class="section-header">
+    <div class="section-icon">🛡️</div>
+    <div>
+      <div class="section-num">Section 05</div>
+      <h2 class="section-title">Ethics and Security Training</h2>
+    </div>
+  </div>
+
+  <div class="prose">
+    <p>Here's a surprising fact: <strong>the biggest security vulnerability in any organization is not a technical flaw — it's the people inside it.</strong> Most major data breaches happen not because systems were hacked through code exploits, but because someone clicked a fake link, used a weak password, or accidentally shared sensitive files.</p>
+  </div>
+
+  <div class="callout callout-warn">
+    <div class="callout-label">🎣 Phishing Attack — Real Scenario</div>
+    <p>An employee gets an email from "HR Department" saying: <em>"Your salary for this month has been held. Verify your bank account immediately by clicking here."</em> They click, enter their credentials, and within minutes, hackers have full access to company systems.</p>
+    <p>This is called <strong>phishing</strong> — and it's responsible for over 80% of data breaches worldwide. No firewall stops it. Only <strong>trained awareness</strong> does.</p>
+  </div>
+
+  <table class="data-table">
+    <tr><th>Training Type</th><th>What It Covers</th></tr>
+    <tr><td>Phishing simulations</td><td>Fake phishing emails sent to employees as tests</td></tr>
+    <tr><td>Password hygiene workshops</td><td>Strong passwords, two-factor authentication</td></tr>
+    <tr><td>Data handling guidelines</td><td>What you can/cannot share, store, or forward</td></tr>
+    <tr><td>Privacy law awareness</td><td>GDPR, DPDP Act basics for all staff</td></tr>
+    <tr><td>Social engineering training</td><td>Recognizing manipulation tactics over phone/email</td></tr>
+  </table>
+
+  <div class="think-box">
+    <button class="think-toggle" onclick="toggleThink(this)">
+      <div class="think-toggle-left"><span class="think-icon">💭</span>
+      <span class="think-q">A classmate shares their college ERP login with you "just to check the timetable." What could go wrong?</span></div>
+      <span class="think-arrow">▼</span>
+    </button>
+    <div class="think-answer">
+      <p>Once you have their login: you could access grades, internal marks, attendance records. If you were malicious (or if someone found out their credentials), marks could be tampered, attendance changed, or personal data exposed. <strong>Credentials are like keys — you wouldn't give your house key to someone just to "borrow something."</strong></p>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SECTION 6 — GUIDING PRINCIPLES ══ -->
+<div class="unit-section" id="principles">
+  <div class="section-header">
+    <div class="section-icon">📜</div>
+    <div>
+      <div class="section-num">Section 06</div>
+      <h2 class="section-title">Developing Guiding Principles</h2>
+    </div>
+  </div>
+
+  <div class="prose">
+    <p>Organizations that take data ethics seriously don't rely on individuals deciding what's right in each situation. Instead, they create <strong>formal guiding principles</strong> — documented rules that define acceptable behavior with data. Think of them as the "constitution" for how data is handled inside a company.</p>
+  </div>
+
+  <table class="data-table">
+    <tr><th>Principle</th><th>Meaning in Practice</th></tr>
+    <tr><td><strong>Transparency</strong></td><td>Tell users exactly what data you collect and why</td></tr>
+    <tr><td><strong>Fairness</strong></td><td>No discrimination in algorithms or data use</td></tr>
+    <tr><td><strong>Privacy by Design</strong></td><td>Build privacy into the system from the start, not as an afterthought</td></tr>
+    <tr><td><strong>Accountability</strong></td><td>Someone is responsible when something goes wrong</td></tr>
+    <tr><td><strong>Data Minimization</strong></td><td>Collect only what is strictly necessary</td></tr>
+    <tr><td><strong>Purpose Limitation</strong></td><td>Data collected for X cannot be used for Y without consent</td></tr>
+  </table>
+
+  <div class="callout callout-case">
+    <div class="callout-label">🤖 Case Study — Deepfake Technology</div>
+    <p>Deepfake AI can create near-perfect fake videos of real people saying things they never said. This technology has been used to create fake political speeches, fake celebrity content, and financial scams where fraudsters fake a CEO's voice to authorize wire transfers.</p>
+    <p>Without guiding principles about responsible AI deployment, powerful tools become weapons. This raises the fundamental ethical question: <strong>"Should a technology that CAN be built, actually be built — and if so, with what controls?"</strong></p>
+  </div>
+
+  <div class="activity-box">
+    <div class="activity-label">🎯 Group Activity — Write Your Own Principles</div>
+    <div class="activity-title">Imagine you're building a college attendance app</div>
+    <div class="activity-body">In groups of 3, write 5 guiding principles for how your app will handle student data. Consider: What data do you collect? Who can see it? How long do you keep it? What if data is breached? Can students access their own records?<br><br><em>Present your principles to the class and compare approaches.</em></div>
+  </div>
+</div>
+
+<!-- ══ SECTION 7 — DATA-DRIVEN CULTURE ══ -->
+<div class="unit-section" id="culture">
+  <div class="section-header">
+    <div class="section-icon">📊</div>
+    <div>
+      <div class="section-num">Section 07</div>
+      <h2 class="section-title">Building a Data-Driven Culture</h2>
+    </div>
+  </div>
+
+  <div class="prose">
+    <p>A <strong>data-driven culture</strong> means making decisions based on evidence and data analysis — instead of assumptions, gut feelings, or tradition. When done ethically, it leads to better outcomes. When done carelessly, it leads to surveillance and manipulation.</p>
+  </div>
+
+  <div class="callout callout-example">
+    <div class="callout-label">🎓 Example — Smart College Analytics</div>
+    <p>A college analyzes attendance records, assignment submissions, and internal marks. Data reveals that students with attendance below 60% fail with 85% probability. Armed with this insight, the college doesn't just punish these students — it <strong>proactively assigns mentors, sends early warning alerts, and arranges extra coaching sessions</strong>. Results improve significantly.</p>
+    <p>This is data-driven culture working ethically — data used to help, not harm.</p>
+  </div>
+
+  <div class="callout callout-example">
+    <div class="callout-label">🍕 Example — Swiggy / Zomato</div>
+    <p>Food delivery platforms analyze peak order times by neighborhood, which dishes spike on rainy days, and which delivery routes cause the most delays. Using this data, they pre-position delivery riders, adjust restaurant recommendations, and reduce average delivery time. This is <strong>data-driven business optimization</strong> — and when done transparently, it's entirely ethical.</p>
+  </div>
+
+  <div class="callout callout-warn">
+    <div class="callout-label">⚠️ When Data-Driven Culture Goes Wrong</div>
+    <p>A data-driven culture is only as good as the data feeding it. <strong>Wrong data → wrong decisions.</strong> A hospital using biased patient data might give worse care to certain communities. A school using flawed exam data might label capable students as "at-risk." Garbage in = garbage out — with real-world consequences.</p>
+  </div>
+
+  <div class="think-box">
+    <button class="think-toggle" onclick="toggleThink(this)">
+      <div class="think-toggle-left"><span class="think-icon">💭</span>
+      <span class="think-q">A company tracks employee keystrokes, emails, and camera feeds using AI to measure "productivity." Is this data-driven culture or surveillance?</span></div>
+      <span class="think-arrow">▼</span>
+    </button>
+    <div class="think-answer">
+      <p>This is a genuinely contested debate. Some companies argue it's legitimate productivity measurement. Critics argue it creates a hostile, dehumanizing work environment and violates employee privacy. The ethical line depends on: Did employees consent? Is the data used to help or punish? Is it proportionate to a legitimate business need? These are the kinds of questions guiding principles help organizations answer consistently.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SECTION 8 — REGULATIONS ══ -->
+<div class="unit-section" id="regulation">
+  <div class="section-header">
+    <div class="section-icon">⚖️</div>
+    <div>
+      <div class="section-num">Section 08</div>
+      <h2 class="section-title">Regulation and Data Laws</h2>
+    </div>
+  </div>
+
+  <div class="prose">
+    <p>When companies self-regulate, they don't always get it right. Governments worldwide have therefore created <strong>legal frameworks</strong> that mandate minimum standards for data protection, giving users legally enforceable rights.</p>
+  </div>
+
+  <div class="reg-grid">
+    <div class="reg-card">
+      <div class="reg-name">GDPR</div>
+      <div class="reg-full">General Data Protection Regulation</div>
+      <div class="reg-region">🇪🇺 Europe — 2018</div>
+      <p style="font-size:12px;color:var(--muted);margin-top:8px;line-height:1.5">Strongest data law globally. Fines up to €20 million or 4% of global revenue.</p>
+    </div>
+    <div class="reg-card">
+      <div class="reg-name">DPDP Act</div>
+      <div class="reg-full">Digital Personal Data Protection Act</div>
+      <div class="reg-region">🇮🇳 India — 2023</div>
+      <p style="font-size:12px;color:var(--muted);margin-top:8px;line-height:1.5">India's first comprehensive data protection law. Establishes rights and duties for data principals and fiduciaries.</p>
+    </div>
+    <div class="reg-card">
+      <div class="reg-name">HIPAA</div>
+      <div class="reg-full">Health Insurance Portability &amp; Accountability Act</div>
+      <div class="reg-region">🇺🇸 USA Healthcare</div>
+      <p style="font-size:12px;color:var(--muted);margin-top:8px;line-height:1.5">Governs health data privacy. Hospitals and insurers must meet strict data handling standards.</p>
+    </div>
+  </div>
+
+  <div class="callout callout-tip">
+    <div class="callout-label">✅ Key GDPR User Rights</div>
+    <p><strong>Right to Know</strong> — what data is collected and why.<br>
+    <strong>Right to Access</strong> — get a copy of your data anytime.<br>
+    <strong>Right to Delete</strong> — request erasure ("Right to be Forgotten").<br>
+    <strong>Right to Portability</strong> — transfer your data to another service.<br>
+    <strong>Right to Object</strong> — stop processing for direct marketing.</p>
+  </div>
+
+  <div class="callout callout-case">
+    <div class="callout-label">📱 Indian Context — OTP Fraud &amp; Why Laws Aren't Enough</div>
+    <p>A common fraud in India: someone calls pretending to be a bank employee and says "Your account will be blocked — share your OTP for KYC verification." Thousands of people lose money daily to this scam.</p>
+    <p>India now has the DPDP Act — but regulations alone cannot stop fraud. People also need <strong>digital literacy</strong>: the awareness to recognize that banks NEVER ask for OTPs over the phone. Laws protect rights. Education protects people in real time.</p>
+  </div>
+
+  <div class="think-box">
+    <button class="think-toggle" onclick="toggleThink(this)">
+      <div class="think-toggle-left"><span class="think-icon">💭</span>
+      <span class="think-q">Should India's data protection laws be as strict as GDPR? What are the challenges of implementing such strong regulations in India?</span></div>
+      <span class="think-arrow">▼</span>
+    </button>
+    <div class="think-answer">
+      <p>Strong regulations protect citizens — but they also increase compliance costs for startups and small businesses. India's DPDP Act tries to balance both. Challenges include: enforcement across a country of 1.4 billion users, digital literacy gaps in rural areas, and the fact that many apps are headquartered outside India's jurisdiction. It's a genuinely complex policy challenge with no perfect answer.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SECTION 9 — APPLICATIONS ══ -->
+<div class="unit-section" id="applications">
+  <div class="section-header">
+    <div class="section-icon">🌍</div>
+    <div>
+      <div class="section-num">Section 09</div>
+      <h2 class="section-title">Real-World Applications &amp; Ethical Tensions</h2>
+    </div>
+  </div>
+
+  <div class="prose">
+    <p>Data Science affects every major domain of human life. In each domain, the same pattern emerges: powerful benefits alongside serious ethical risks. Understanding both sides is the mark of an ethical data professional.</p>
+  </div>
+
+  <table class="data-table">
+    <tr><th>Domain</th><th>How Data Science Helps</th><th>Ethical Risk</th></tr>
+    <tr><td>🏥 Healthcare</td><td>Disease prediction, medical imaging, COVID tracking</td><td>Patient privacy, data being sold to insurers</td></tr>
+    <tr><td>🏦 Finance</td><td>Fraud detection, loan risk assessment, trading</td><td>Biased loan rejections, algorithmic discrimination</td></tr>
+    <tr><td>🎓 Education</td><td>Early identification of at-risk students</td><td>Student profiling, surveillance, data sharing</td></tr>
+    <tr><td>🛒 Business</td><td>Customer recommendations, demand forecasting</td><td>Manipulative advertising, psychological profiling</td></tr>
+    <tr><td>🏏 Sports</td><td>Player performance analysis, fitness optimization</td><td>Player health privacy, contract leverage</td></tr>
+    <tr><td>🏛️ Governance</td><td>Service delivery optimization, traffic management</td><td>Mass surveillance, social credit systems</td></tr>
+  </table>
+
+  <div class="callout callout-case">
+    <div class="callout-label">🦠 Case Study — COVID-19 Contact Tracing</div>
+    <p>During COVID-19, India launched the Aarogya Setu app. It tracked GPS location and Bluetooth contacts to identify people who may have been exposed to infected individuals. The public health benefit was real: it helped break transmission chains.</p>
+    <p>But questions arose: Who had access to this data? Was it stored permanently or deleted? Could governments use it for other purposes? These tensions between <strong>public health benefit and individual privacy</strong> were debated globally — and remain unresolved today.</p>
+  </div>
+
+  <div class="callout callout-case">
+    <div class="callout-label">💳 Case Study — AI Loan Rejection</div>
+    <p>An AI system at a major financial institution was rejecting loan applications from people in specific zip codes — regardless of their individual credit scores. Investigation revealed the model had been trained on historical data that reflected decades of lending discrimination. The AI learned: "this neighborhood = high risk" — not because of individuals' actual creditworthiness, but because of historical patterns.</p>
+    <p>This is called <strong>redlining by algorithm</strong>. Real people were denied housing loans unfairly. The bank faced lawsuits and regulatory action.</p>
+  </div>
+
+  <div class="activity-box">
+    <div class="activity-label">🎯 Big Group Discussion</div>
+    <div class="activity-title">Smart Campus Ethics Debate</div>
+    <div class="activity-body">Your college proposes: Face recognition attendance, CCTV with behavior analytics, a student tracking app that monitors phone activity on campus, and an AI that predicts which students are "likely to be troublemakers."<br><br>
+    <strong>Team A</strong>: Argue FOR — what are the benefits?<br>
+    <strong>Team B</strong>: Argue AGAINST — what are the ethical concerns?<br>
+    <strong>Team C</strong>: Design ethical safeguards that would make these acceptable.<br><br>
+    <em>There's no single "correct" answer — the debate itself is the learning.</em></div>
+  </div>
+</div>
+
+<!-- ══ SECTION 10 — QUICK REVISION ══ -->
+<div class="revision-section" id="revision">
+  <div class="revision-title">⚡ Quick Revision</div>
+  <div class="revision-grid">
+    <div class="rev-item"><div class="rev-topic">Data Ownership</div><div class="rev-key">Who controls data — individual, org, or public</div></div>
+    <div class="rev-item"><div class="rev-topic">Consent</div><div class="rev-key">Permission before collecting data</div></div>
+    <div class="rev-item"><div class="rev-topic">Clarity</div><div class="rev-key">Tell users exactly what &amp; why</div></div>
+    <div class="rev-item"><div class="rev-topic">Consistency</div><div class="rev-key">Same fair rules for all users</div></div>
+    <div class="rev-item"><div class="rev-topic">Control</div><div class="rev-key">Users can edit, delete, download data</div></div>
+    <div class="rev-item"><div class="rev-topic">Confidentiality</div><div class="rev-key">Encrypt, restrict, protect data</div></div>
+    <div class="rev-item"><div class="rev-topic">Security Training</div><div class="rev-key">People are the biggest vulnerability</div></div>
+    <div class="rev-item"><div class="rev-topic">Guiding Principles</div><div class="rev-key">Formal documented ethics rules</div></div>
+    <div class="rev-item"><div class="rev-topic">Data-Driven Culture</div><div class="rev-key">Decisions based on evidence, not guesswork</div></div>
+    <div class="rev-item"><div class="rev-topic">GDPR / DPDP</div><div class="rev-key">Legal frameworks for data rights</div></div>
+    <div class="rev-item"><div class="rev-topic">Algorithmic Bias</div><div class="rev-key">AI inheriting human prejudices from data</div></div>
+    <div class="rev-item"><div class="rev-topic">Phishing</div><div class="rev-key">Social engineering to steal credentials</div></div>
+  </div>
+</div>
+
+<!-- QUIZ CTA -->
+<div class="quiz-cta">
+  <h2>Test Your Understanding</h2>
+  <p>30 MCQ questions · 6 sections · 30 minutes · Auto PDF download of your results</p>
+  <a href="/datascience_sem2/unit5/quiz/" class="btn-primary">Take the Unit 5 Quiz →</a>
+</div>
+
+</div><!-- /content-wrap -->
+
+<footer class="page-footer">
+  K.P. Singh · Introduction to Data Science · BCA Sem 2 · SRHU Dehradun<br>
+  <span style="margin-top:4px;display:block">kpsingh.in/datascience_sem2/unit5</span>
+</footer>
+
+<script>
+/* SCROLL PROGRESS */
+window.addEventListener('scroll',()=>{
+  const el=document.getElementById('scroll-progress');
+  const p=window.scrollY/(document.body.scrollHeight-window.innerHeight)*100;
+  el.style.width=Math.min(p,100)+'%';
+});
+
+/* THINK BOXES */
+function toggleThink(btn){
+  const answer=btn.nextElementSibling;
+  const arrow=btn.querySelector('.think-arrow');
+  const isOpen=answer.style.display==='block';
+  answer.style.display=isOpen?'none':'block';
+  arrow.classList.toggle('open',!isOpen);
+}
+
+/* SCENARIO REVEAL */
+function revealScenario(btn,type){
+  const result=btn.nextElementSibling;
+  const allBtns=btn.closest('.scenario-group').querySelectorAll('.scenario-btn');
+  const allResults=btn.closest('.scenario-group').querySelectorAll('.scenario-result');
+  allResults.forEach(r=>r.classList.remove('show'));
+  allBtns.forEach(b=>{b.classList.remove('ethical','unethical');});
+  result.classList.add('show');
+  btn.classList.add(type==='good'?'ethical':'unethical');
+}
+
+/* SMOOTH SCROLL for TOC */
+document.querySelectorAll('a[href^="#"]').forEach(a=>{
+  a.addEventListener('click',e=>{
+    const el=document.querySelector(a.getAttribute('href'));
+    if(el){e.preventDefault();el.scrollIntoView({behavior:'smooth',block:'start'});}
+  });
+});
+</script>
+</body>
+</html>
