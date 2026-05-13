@@ -336,7 +336,7 @@ const TOTAL=allQuestions.length;
 let studentInfo={};
 let answers=new Array(TOTAL).fill(null);
 let timerInterval=null;
-let secondsLeft=30*60;
+let secondsLeft=15*60;
 let quizSubmitted=false;
 let inReviewMode=false;
 
@@ -492,7 +492,7 @@ function backToResults(){
 function switchScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');}
 
 function retake(){
-  answers=new Array(TOTAL).fill(null);quizSubmitted=false;inReviewMode=false;secondsLeft=30*60;
+  answers=new Array(TOTAL).fill(null);quizSubmitted=false;inReviewMode=false;secondsLeft=15*60;
   document.getElementById('submit-section').style.display='block';
   document.getElementById('qh-progress-wrap').style.display='block';
   document.getElementById('timer-box').style.display='flex';
