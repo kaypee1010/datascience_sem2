@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EDA Quiz — Unit III Lecture-10 | K.P. Singh · SRHU</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<style>
+:root{
+  --bg:#f2f6fd;--surface:#ffffff;--surface2:#f4f8fe;
+  --blue:#1a56c4;--blue-bright:#2f72e8;--blue-pale:#e8f0fd;
+  --blue-dim:rgba(26,86,196,.10);--blue-border:rgba(26,86,196,.28);
+  --teal:#0d7377;--teal-dim:rgba(13,115,119,.10);--teal-bright:#14a7ac;
+  --violet:#6c3fc5;--violet-dim:rgba(108,63,197,.10);
+  --border:rgba(26,86,196,.22);--border-soft:rgba(0,0,0,.07);
+  --text:#0d1b2a;--muted:rgba(13,27,42,.50);--mint:#0e7c4a;--red:#c0392b;
+  --shadow:rgba(26,86,196,.12);--gold:#c8860a;--gold-pale:#fff8e1;
+  --silver:#7a8fa6;--silver-pale:#eef2f7;--bronze:#9c5a1d;--bronze-pale:#fdf0e4;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(ellipse 55% 40% at 92% 8%,rgba(26,86,196,.07),transparent),
+  radial-gradient(ellipse 40% 50% at 8% 92%,rgba(108,63,197,.06),transparent);}
+body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:repeating-linear-gradient(45deg,rgba(26,86,196,.02) 0,rgba(26,86,196,.02) 1px,transparent 0,transparent 50%);
+  background-size:28px 28px;}
+
+/* NAV */
+.kps-nav{position:fixed;top:0;left:0;right:0;z-index:9999;display:flex;align-items:center;justify-content:space-between;padding:11px 24px;background:rgba(242,246,253,.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);box-shadow:0 2px 20px var(--shadow);}
+.kps-nav-brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+.kps-nav-logo{width:33px;height:33px;border-radius:50%;object-fit:cover;border:2px solid var(--blue);box-shadow:0 0 10px rgba(26,86,196,.3);}
+.brand-name{font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:700;color:var(--blue);line-height:1;}
+.brand-sub{font-family:'Fira Code',monospace;font-size:9px;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase;margin-top:2px;}
+.kps-nav-links{display:flex;align-items:center;gap:6px}
+.kps-nav-links a{color:var(--muted);text-decoration:none;font-family:'Fira Code',monospace;font-size:10px;letter-spacing:.6px;padding:5px 12px;border-radius:8px;border:1px solid transparent;transition:all .2s;white-space:nowrap;}
+.kps-nav-links a:hover{color:var(--blue);border-color:var(--border);background:var(--blue-dim)}
+.kps-nav-links a.ext{background:linear-gradient(135deg,var(--blue),var(--blue-bright));color:#fff;font-weight:600;border:none;box-shadow:0 2px 12px rgba(26,86,196,.3);}
+
+.screen{display:none;position:relative;z-index:1}
+.screen.active{display:block}
+
+/* ── REGISTRATION ── */
+#reg-screen{min-height:100vh;display:none;align-items:flex-start;justify-content:center;padding:86px 16px 48px;flex-direction:column;}
+#reg-screen.active{display:flex}
+
+.reg-layout{width:100%;max-width:920px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start;}
+@media(max-width:720px){.reg-layout{grid-template-columns:1fr;}}
+
+/* Form card (left) */
+.reg-card{background:var(--surface);border:1px solid var(--border);border-radius:24px;padding:34px 30px;position:relative;overflow:hidden;box-shadow:0 20px 70px var(--shadow),0 0 0 1px rgba(26,86,196,.05) inset;}
+.reg-card::before{content:'';position:absolute;top:-60px;right:-60px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(26,86,196,.07),transparent 70%);}
+.reg-card::after{content:'';position:absolute;bottom:-50px;left:-50px;width:160px;height:160px;border-radius:50%;background:radial-gradient(circle,rgba(108,63,197,.06),transparent 70%);}
+
+.reg-badge{font-family:'Fira Code',monospace;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--teal);background:var(--teal-dim);border:1px solid rgba(13,115,119,.25);padding:4px 14px;border-radius:20px;display:inline-block;margin-bottom:16px;}
+.reg-title{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:700;color:var(--text);line-height:1.1;margin-bottom:5px;}
+.reg-title span{color:var(--blue);font-style:italic}
+.reg-sub{font-size:12.5px;color:var(--muted);margin-bottom:20px;line-height:1.65}
+
+.topics-box{background:var(--blue-pale);border:1px solid rgba(26,86,196,.2);border-radius:12px;padding:12px 14px;margin-bottom:20px;}
+.topics-title{font-family:'Fira Code',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--blue);margin-bottom:8px;}
+.topics-box ul{padding-left:16px}
+.topics-box li{font-size:11.5px;color:var(--muted);line-height:1.9}
+
+.form-group{margin-bottom:13px}
+.form-label{font-family:'Fira Code',monospace;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--blue);display:block;margin-bottom:5px;}
+.form-input,.form-select{width:100%;padding:10px 13px;background:var(--surface2);border:1.5px solid var(--border-soft);border-radius:10px;color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;font-size:14.5px;outline:none;transition:border-color .2s,background .2s,box-shadow .2s;appearance:none;-webkit-appearance:none;}
+.form-input:focus,.form-select:focus{border-color:var(--blue);background:#f0f5ff;box-shadow:0 0 0 3px rgba(26,86,196,.1);}
+.form-input::placeholder{color:var(--muted)}
+.form-select option{background:#fff;color:var(--text)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.form-fixed{display:flex;align-items:center;gap:8px;padding:10px 13px;background:rgba(0,0,0,.03);border:1.5px solid rgba(0,0,0,.05);border-radius:10px;color:var(--muted);font-size:13.5px;}
+.form-fixed .lock{font-size:11px;color:var(--blue);opacity:.7}
+
+.start-btn{width:100%;margin-top:22px;padding:14px;border:none;cursor:pointer;background:linear-gradient(135deg,var(--blue) 0%,var(--blue-bright) 50%,#5b9af0 100%);background-size:200% 100%;color:#fff;border-radius:12px;font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:700;letter-spacing:.5px;transition:all .4s;box-shadow:0 4px 24px rgba(26,86,196,.35);text-shadow:0 1px 2px rgba(0,0,0,.2);}
+.start-btn:hover{background-position:right center;transform:translateY(-2px);box-shadow:0 8px 36px rgba(26,86,196,.5);}
+.form-error{color:var(--red);font-size:12px;margin-top:12px;text-align:center;display:none;font-family:'Fira Code',monospace;}
+
+/* ─────────────────────────────────────────────────────
+   LEADERBOARD WIDGET  (right column on reg screen)
+───────────────────────────────────────────────────── */
+.lb-widget{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:24px;overflow:hidden;
+  box-shadow:0 8px 32px rgba(26,86,196,.09);
+  position:relative;
+}
+
+.lb-widget-header{
+  background:linear-gradient(135deg,var(--blue) 0%,#1e4d9e 100%);
+  padding:18px 20px 14px;position:relative;overflow:hidden;
+}
+.lb-widget-header::before{
+  content:'';position:absolute;top:-20px;right:-20px;
+  width:100px;height:100px;border-radius:50%;
+  background:rgba(255,255,255,.07);
+}
+.lb-widget-header::after{
+  content:'';position:absolute;bottom:-30px;left:10px;
+  width:80px;height:80px;border-radius:50%;
+  background:rgba(255,255,255,.05);
+}
+.lb-wh-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:2px;}
+.lb-widget-title{
+  font-family:'Cormorant Garamond',serif;font-size:18px;
+  font-weight:700;color:#fff;
+}
+.lb-live-badge{
+  display:flex;align-items:center;gap:5px;
+  font-family:'Fira Code',monospace;font-size:9px;
+  color:rgba(255,255,255,.8);letter-spacing:1px;
+}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+.lb-live-dot{width:6px;height:6px;border-radius:50%;background:#5af578;animation:blink 1.5s ease infinite;}
+.lb-widget-sub{font-family:'Fira Code',monospace;font-size:9px;letter-spacing:.5px;color:rgba(255,255,255,.55);}
+
+/* Podium inside widget */
+.lb-podium{padding:16px 14px 8px;display:flex;flex-direction:column;gap:8px;}
+
+.lb-row{
+  display:flex;align-items:center;gap:12px;
+  padding:10px 12px;border-radius:12px;
+  border:1px solid var(--border-soft);background:var(--surface2);
+  transition:border-color .2s,background .2s;cursor:default;
+}
+.lb-row:hover{border-color:var(--border);background:var(--blue-pale);}
+
+.lb-row-1{background:var(--gold-pale);border-color:rgba(200,134,10,.3);}
+.lb-row-1:hover{background:#fff3c0;}
+.lb-row-2{background:var(--silver-pale);border-color:rgba(122,143,166,.25);}
+.lb-row-3{background:var(--bronze-pale);border-color:rgba(156,90,29,.2);}
+
+.lb-medal{font-size:18px;line-height:1;flex-shrink:0;}
+.lb-rank-num{
+  font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:700;
+  min-width:22px;flex-shrink:0;text-align:center;
+}
+.lb-row-1 .lb-rank-num{color:var(--gold);}
+.lb-row-2 .lb-rank-num{color:var(--silver);}
+.lb-row-3 .lb-rank-num{color:var(--bronze);}
+
+.lb-info{flex:1;min-width:0;}
+.lb-name{
+  font-size:13px;font-weight:600;color:var(--text);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  line-height:1.2;
+}
+.lb-roll{font-family:'Fira Code',monospace;font-size:9px;color:var(--muted);margin-top:1px;}
+
+.lb-score-col{text-align:right;flex-shrink:0;}
+.lb-pct{
+  font-family:'Cormorant Garamond',serif;font-size:17px;
+  font-weight:700;color:var(--blue);line-height:1;
+}
+.lb-grade{
+  font-family:'Fira Code',monospace;font-size:9px;
+  padding:1px 7px;border-radius:8px;margin-top:2px;display:inline-block;
+}
+.lb-grade-A{background:rgba(14,124,74,.12);color:var(--mint);}
+.lb-grade-B{background:rgba(26,86,196,.1);color:var(--blue);}
+.lb-grade-C,.lb-grade-D{background:rgba(200,134,10,.1);color:var(--gold);}
+.lb-grade-F{background:rgba(192,57,43,.1);color:var(--red);}
+
+/* Mini score bar */
+.lb-bar-row{display:flex;align-items:center;gap:6px;margin-top:3px;}
+.lb-bar{height:3px;width:52px;background:rgba(0,0,0,.07);border-radius:4px;overflow:hidden;}
+.lb-bar-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--blue),var(--teal-bright));}
+.lb-score-txt{font-family:'Fira Code',monospace;font-size:9px;color:var(--muted);}
+
+/* Widget footer */
+.lb-widget-footer{
+  padding:10px 16px 14px;display:flex;align-items:center;
+  justify-content:space-between;border-top:1px solid var(--border-soft);
+}
+.lb-footer-updated{font-family:'Fira Code',monospace;font-size:9px;color:var(--muted);letter-spacing:.3px;}
+.lb-view-all{
+  font-family:'Fira Code',monospace;font-size:9px;letter-spacing:.5px;
+  color:var(--blue);text-decoration:none;
+  background:var(--blue-pale);border:1px solid var(--border);
+  padding:4px 12px;border-radius:10px;transition:all .2s;
+}
+.lb-view-all:hover{background:var(--blue);color:#fff;}
+
+/* Loading / empty states inside widget */
+.lb-widget-state{padding:28px 16px;text-align:center;}
+.lb-mini-spinner{width:22px;height:22px;border:2px solid var(--blue-pale);border-top-color:var(--blue);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 10px;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.lb-state-icon{font-size:24px;margin-bottom:6px;}
+.lb-state-text{font-family:'Fira Code',monospace;font-size:10px;color:var(--muted);}
+
+/* ── QUIZ ── */
+#quiz-screen{padding-top:130px;padding-bottom:60px}
+.quiz-header{position:fixed;top:58px;left:0;right:0;z-index:900;background:rgba(242,246,253,.97);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:10px 20px;box-shadow:0 2px 16px var(--shadow);}
+.quiz-header-inner{max-width:900px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px;}
+.qh-student{font-family:'Fira Code',monospace;font-size:11px;color:var(--blue);letter-spacing:.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:160px;}
+.qh-progress-wrap{flex:1}
+.qh-progress-label{display:flex;justify-content:space-between;font-family:'Fira Code',monospace;font-size:9px;color:var(--muted);margin-bottom:5px;letter-spacing:.5px;}
+.qh-progress-bar{height:4px;background:rgba(0,0,0,.08);border-radius:4px;overflow:hidden;}
+.qh-progress-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--blue),var(--teal-bright));border-radius:4px;transition:width .4s ease;}
+.timer-box{display:flex;align-items:center;gap:6px;background:var(--blue-pale);border:1px solid var(--border);border-radius:8px;padding:5px 12px;font-family:'Fira Code',monospace;font-size:13px;font-weight:600;color:var(--blue);white-space:nowrap;}
+.timer-box.warning{background:rgba(192,57,43,.1);border-color:rgba(192,57,43,.4);color:var(--red);}
+.review-mode-label{display:none;font-family:'Fira Code',monospace;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--teal);}
+.review-back-btn{display:none;align-items:center;gap:6px;padding:6px 14px;border:1px solid var(--teal);background:var(--teal-dim);color:var(--teal);border-radius:20px;font-family:'Plus Jakarta Sans',sans-serif;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap;transition:all .2s;}
+.review-back-btn:hover{background:rgba(13,115,119,.18)}
+
+.quiz-content{max-width:900px;margin:0 auto;padding:0 16px}
+
+.section-divider{margin:32px 0 18px;display:flex;align-items:center;gap:14px}
+.sec-line{flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--border))}
+.sec-line.right{background:linear-gradient(270deg,transparent,var(--border))}
+.sec-badge{font-family:'Cormorant Garamond',serif;font-size:12px;font-weight:700;letter-spacing:.5px;color:var(--blue);background:var(--blue-pale);border:1px solid var(--border);padding:7px 18px;border-radius:20px;white-space:nowrap;text-align:center;box-shadow:0 2px 8px var(--shadow);}
+.sec-badge small{display:block;font-family:'Fira Code',monospace;font-size:8px;letter-spacing:1px;color:var(--muted);margin-top:2px;text-transform:uppercase;font-weight:400;}
+
+.sec-1 .sec-badge,.sec-1 .q-tag{--tag-color:#1a56c4;--tag-bg:rgba(26,86,196,.08);--tag-border:rgba(26,86,196,.2)}
+.sec-2 .sec-badge,.sec-2 .q-tag{--tag-color:#6c3fc5;--tag-bg:rgba(108,63,197,.08);--tag-border:rgba(108,63,197,.2)}
+.sec-3 .sec-badge,.sec-3 .q-tag{--tag-color:#0d7377;--tag-bg:rgba(13,115,119,.08);--tag-border:rgba(13,115,119,.2)}
+.sec-4 .sec-badge,.sec-4 .q-tag{--tag-color:#c0392b;--tag-bg:rgba(192,57,43,.08);--tag-border:rgba(192,57,43,.2)}
+
+.q-card{background:var(--surface);border:1.5px solid var(--border-soft);border-radius:14px;padding:22px 20px;margin-bottom:12px;transition:border-color .25s,box-shadow .25s;box-shadow:0 2px 10px rgba(0,0,0,.04);}
+.q-card:hover{border-color:var(--border);box-shadow:0 4px 20px var(--shadow)}
+.q-card.answered{border-color:rgba(26,86,196,.4);box-shadow:0 2px 14px rgba(26,86,196,.1);}
+.q-top{display:flex;align-items:flex-start;gap:14px;margin-bottom:12px}
+.q-num{min-width:32px;height:32px;border-radius:50%;background:var(--bg);border:1.5px solid var(--border-soft);display:flex;align-items:center;justify-content:center;font-family:'Fira Code',monospace;font-size:11px;font-weight:600;color:var(--muted);flex-shrink:0;margin-top:2px;transition:all .2s;}
+.q-num.done{background:var(--blue-pale);border-color:var(--blue);color:var(--blue);}
+.q-stem{font-size:14.5px;line-height:1.72;color:var(--text);font-weight:400}
+.q-tag{font-family:'Fira Code',monospace;font-size:9px;letter-spacing:.8px;color:var(--tag-color,var(--blue));background:var(--tag-bg,var(--blue-dim));border:1px solid var(--tag-border,rgba(26,86,196,.2));padding:2px 10px;border-radius:10px;white-space:nowrap;margin-bottom:12px;display:inline-block;}
+.options-grid{display:flex;flex-direction:column;gap:7px}
+.opt-btn{width:100%;text-align:left;display:flex;align-items:flex-start;gap:12px;background:var(--surface2);border:1.5px solid var(--border-soft);border-radius:10px;padding:11px 14px;cursor:pointer;color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;font-size:13.5px;line-height:1.55;transition:all .18s;-webkit-tap-highlight-color:transparent;}
+.opt-btn:hover:not(:disabled){background:var(--blue-pale);border-color:rgba(26,86,196,.35);transform:translateX(2px);}
+.opt-btn:disabled{cursor:default}
+.opt-btn.selected{background:var(--blue-pale);border-color:var(--blue);box-shadow:0 2px 10px rgba(26,86,196,.12);}
+.opt-letter{min-width:25px;height:25px;border-radius:50%;background:rgba(0,0,0,.04);border:1px solid rgba(0,0,0,.1);display:flex;align-items:center;justify-content:center;font-family:'Fira Code',monospace;font-size:11px;font-weight:600;color:var(--muted);flex-shrink:0;margin-top:1px;transition:all .18s;}
+.opt-btn.selected .opt-letter{background:var(--blue);border-color:var(--blue);color:#fff;box-shadow:0 2px 8px rgba(26,86,196,.4);}
+
+.submit-section{max-width:900px;margin:28px auto 0;padding:0 16px 40px;text-align:center;}
+.unanswered-warn{background:rgba(192,57,43,.08);border:1px solid rgba(192,57,43,.3);border-radius:10px;padding:12px 16px;margin-bottom:16px;font-size:12px;color:var(--red);font-family:'Fira Code',monospace;display:none;}
+.submit-btn{padding:15px 52px;border:none;cursor:pointer;background:linear-gradient(135deg,var(--blue),var(--blue-bright),#5b9af0);background-size:200% 100%;color:#fff;border-radius:50px;font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:700;letter-spacing:.5px;transition:all .4s;box-shadow:0 4px 24px rgba(26,86,196,.35);text-shadow:0 1px 2px rgba(0,0,0,.2);}
+.submit-btn:hover{background-position:right center;transform:translateY(-2px);box-shadow:0 8px 36px rgba(26,86,196,.5);}
+
+/* RESULTS */
+#result-screen{min-height:100vh;display:none;align-items:center;justify-content:center;padding:100px 16px 60px;flex-direction:column;}
+#result-screen.active{display:flex}
+
+.result-card{background:var(--surface);border:1px solid var(--border);border-radius:24px;padding:34px 28px;width:100%;max-width:600px;position:relative;overflow:hidden;box-shadow:0 20px 70px var(--shadow),0 0 0 1px rgba(26,86,196,.05) inset;}
+.result-card::before{content:'';position:absolute;top:-80px;right:-80px;width:240px;height:240px;border-radius:50%;background:radial-gradient(circle,rgba(26,86,196,.07),transparent 70%);}
+.result-header{text-align:center;margin-bottom:24px}
+.result-emoji{font-size:50px;display:block;margin-bottom:10px}
+.result-grade{font-family:'Cormorant Garamond',serif;font-size:68px;font-weight:700;color:var(--blue);line-height:1;margin-bottom:4px;}
+.result-score-label{font-family:'Fira Code',monospace;font-size:13px;color:var(--muted);letter-spacing:1px;}
+.result-verdict{font-family:'Cormorant Garamond',serif;font-size:15px;margin-top:8px;letter-spacing:.5px;font-style:italic;}
+.verdict-pass{color:var(--mint)}.verdict-fail{color:var(--red)}
+
+.result-info-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:20px 0}
+.result-info-item{background:var(--surface2);border:1px solid var(--border-soft);border-radius:12px;padding:11px 13px;}
+.ri-label{font-family:'Fira Code',monospace;font-size:8px;letter-spacing:1.5px;text-transform:uppercase;color:var(--blue);margin-bottom:4px;}
+.ri-val{font-size:13px;color:var(--text);font-weight:600;word-break:break-word;}
+
+.section-breakdown{margin-top:20px}
+.sb-title{font-family:'Fira Code',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--teal);margin-bottom:12px;}
+.sb-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.sb-name{flex:1;color:var(--muted);font-size:11px}
+.sb-score{font-family:'Fira Code',monospace;color:var(--blue);min-width:36px;text-align:right;font-size:12px;}
+.sb-bar-wrap{width:70px;height:4px;background:rgba(0,0,0,.07);border-radius:5px;overflow:hidden}
+.sb-bar-fill{height:100%;border-radius:5px;background:linear-gradient(90deg,var(--blue),var(--teal-bright));}
+
+.result-actions{display:flex;gap:10px;margin-top:22px;flex-wrap:wrap}
+.action-btn{flex:1;min-width:110px;padding:12px 8px;border:none;cursor:pointer;border-radius:11px;font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;font-weight:600;letter-spacing:.3px;transition:all .25s;}
+.action-primary{background:linear-gradient(135deg,var(--blue),var(--blue-bright));color:#fff;box-shadow:0 4px 16px rgba(26,86,196,.3);text-shadow:0 1px 2px rgba(0,0,0,.15);}
+.action-primary:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(26,86,196,.45)}
+.action-secondary{background:var(--blue-pale);border:1px solid var(--border);color:var(--blue);}
+.action-secondary:hover{background:#d6e4fb}
+
+.sub-id-box{margin-top:20px;padding:16px;background:var(--surface2);border:1px dashed rgba(26,86,196,.35);border-radius:12px;text-align:center;}
+.sub-id-label{font-family:'Fira Code',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:7px;}
+.sub-id-value{font-family:'Fira Code',monospace;font-size:13px;font-weight:600;color:var(--blue);letter-spacing:1.5px;word-break:break-all;}
+.sub-id-hint{font-size:11px;color:var(--muted);margin-top:6px;font-style:italic}
+
+.status-badge{display:inline-flex;align-items:center;gap:6px;background:var(--blue-pale);border:1px solid var(--border);border-radius:20px;padding:4px 14px;font-family:'Fira Code',monospace;font-size:10px;color:var(--blue);margin-top:10px;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.pulse-dot{width:6px;height:6px;border-radius:50%;background:var(--blue-bright);animation:pulse 1.2s ease infinite;}
+.pdf-notice{display:inline-flex;align-items:center;gap:6px;margin-top:10px;font-family:'Fira Code',monospace;font-size:10px;color:var(--teal);background:rgba(13,115,119,.07);border:1px solid rgba(13,115,119,.2);border-radius:20px;padding:4px 12px;}
+
+@media print{.kps-nav,.quiz-header,.result-actions,.timer-box,.sub-id-hint,.status-badge{display:none!important}body{background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}.result-card{border:2px solid #1a56c4;box-shadow:none;page-break-inside:avoid}#result-screen{padding:20px!important;align-items:flex-start!important}}
+@media(max-width:520px){.kps-nav-links a.hide-mobile{display:none}.qh-student{max-width:80px}.timer-box{font-size:11px;padding:4px 8px}.result-info-grid{grid-template-columns:1fr 1fr}.form-row{grid-template-columns:1fr}.q-stem{font-size:13.5px}.opt-btn{font-size:13px;padding:10px 12px}.reg-card{padding:24px 16px}}
+</style>
+</head>
+<body>
+
+<nav class="kps-nav">
+  <a href="#" class="kps-nav-brand">
+    <img src="../../KP_Singh.png" onerror="this.style.display='none'" alt="KP" class="kps-nav-logo">
+    <div>
+      <div class="brand-name">K.P. Singh</div>
+      <div class="brand-sub">SRHU · BCA Data Science</div>
+    </div>
+  </a>
+  <div class="kps-nav-links">
+    <a href="#" class="hide-mobile">← Notes</a>
+    <a href="https://kpsingh.in" target="_blank" rel="noopener" class="ext">kpsingh.in ↗</a>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════════════════════════
+     REGISTRATION — two-column layout with leaderboard
+════════════════════════════════════════════════════ -->
+<div id="reg-screen" class="screen active">
+  <div class="reg-layout">
+
+    <!-- LEFT: Quiz form -->
+    <div class="reg-card">
+      <div class="reg-badge">Unit III · Lecture-10 · BCA 2nd Sem</div>
+      <h1 class="reg-title">EDA &amp; <span>Statistics</span> Quiz</h1>
+      <p class="reg-sub">50 MCQ questions · 18 minutes · Exploratory Data Analysis<br>Result PDF downloads automatically on submission.</p>
+      <div class="topics-box">
+        <div class="topics-title">Topics Covered</div>
+        <ul>
+          <li>Descriptive Statistics — Mean, Median, Mode</li>
+          <li>Variance &amp; Standard Deviation</li>
+          <li>Data Visualisation — Charts, Graphs &amp; Plots</li>
+          <li>Using Excel for EDA — PivotTables &amp; Histograms</li>
+          <li>Scatter Plots — Patterns &amp; Correlation</li>
+          <li>Identifying Patterns &amp; Insights from Data</li>
+        </ul>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="inp-name">Full Name</label>
+        <input class="form-input" id="inp-name" type="text" placeholder="e.g. Riya Verma" autocomplete="name">
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="inp-roll">Roll Number</label>
+        <input class="form-input" id="inp-roll" type="text" placeholder="e.g. DD221BCA001" autocomplete="off" style="text-transform:uppercase">
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="inp-section">Section</label>
+          <select class="form-select" id="inp-section">
+            <option value="">Select…</option>
+            <option value="C1">C1</option>
+            <option value="C2">C2</option>
+            <option value="B1">B1</option>
+            <option value="B2">B2</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Branch</label>
+          <div class="form-fixed"><span class="lock">🔒</span> BCA</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Semester</label>
+        <div class="form-fixed"><span class="lock">🔒</span> 2nd Semester</div>
+      </div>
+      <div class="form-error" id="form-error">Please fill in all required fields.</div>
+      <button class="start-btn" onclick="startQuiz()">Start Quiz →</button>
+    </div>
+
+    <!-- RIGHT: Live Leaderboard Widget -->
+    <div class="lb-widget">
+      <div class="lb-widget-header">
+        <div class="lb-wh-top">
+          <div class="lb-widget-title">🏆 Top Students</div>
+          <div class="lb-live-badge"><span class="lb-live-dot"></span> LIVE</div>
+        </div>
+        <div class="lb-widget-sub">EDA Quiz · Best attempt per student</div>
+      </div>
+
+      <!-- Podium rows injected here -->
+      <div id="lb-widget-body" class="lb-podium">
+        <div class="lb-widget-state">
+          <div class="lb-mini-spinner"></div>
+          <div class="lb-state-text">Loading top performers…</div>
+        </div>
+      </div>
+
+      <div class="lb-widget-footer">
+        <span class="lb-footer-updated" id="lb-footer-updated">—</span>
+        <a class="lb-view-all" href="leaderboard.html">View full board →</a>
+      </div>
+    </div>
+
+  </div><!-- /reg-layout -->
+</div>
+
+<!-- ══════════════════════════════════════════════════
+     QUIZ SCREEN
+════════════════════════════════════════════════════ -->
+<div id="quiz-screen" class="screen">
+  <div class="quiz-header">
+    <div class="quiz-header-inner">
+      <div class="qh-student" id="qh-name">—</div>
+      <div class="qh-progress-wrap" id="qh-progress-wrap">
+        <div class="qh-progress-label"><span id="prog-answered">0 answered</span><span>50 questions</span></div>
+        <div class="qh-progress-bar"><div class="qh-progress-fill" id="prog-fill"></div></div>
+      </div>
+      <div class="timer-box" id="timer-box">⏱ <span id="timer-display">18:00</span></div>
+      <span class="review-mode-label" id="review-mode-label">📋 REVIEW MODE</span>
+      <button class="review-back-btn" id="review-back-btn" onclick="backToResults()">← Back to Score</button>
+    </div>
+  </div>
+  <div class="quiz-content" id="quiz-content"></div>
+  <div class="submit-section" id="submit-section">
+    <div class="unanswered-warn" id="unanswered-warn"></div>
+    <button class="submit-btn" onclick="submitQuiz()">Submit Quiz ✓</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════
+     RESULTS SCREEN
+════════════════════════════════════════════════════ -->
+<div id="result-screen" class="screen">
+  <div class="result-card" id="result-card-el">
+    <div class="result-header">
+      <span class="result-emoji" id="res-emoji">🎓</span>
+      <div class="result-grade" id="res-grade">—</div>
+      <div class="result-score-label" id="res-score-label">— / 50</div>
+      <div class="result-verdict" id="res-verdict"></div>
+      <div id="res-sending" style="display:none"><span class="status-badge"><span class="pulse-dot"></span> Saving to records…</span></div>
+      <div id="pdf-saving" style="display:none"><span class="status-badge"><span class="pulse-dot"></span> Downloading PDF…</span></div>
+      <div id="pdf-done" style="display:none"><span class="pdf-notice">✓ PDF saved to your device</span></div>
+    </div>
+    <div class="result-info-grid" id="res-info-grid"></div>
+    <div class="section-breakdown">
+      <div class="sb-title">Score by Topic</div>
+      <div id="res-breakdown"></div>
+    </div>
+    <div class="result-actions">
+      <button class="action-btn action-primary" onclick="manualSavePDF()">⬇ Save PDF</button>
+      <button class="action-btn action-secondary" onclick="reviewQuiz()">Review Answers</button>
+    </div>
+    <div class="sub-id-box">
+      <div class="sub-id-label">Submission ID — Show to faculty</div>
+      <div class="sub-id-value" id="sub-id-value">—</div>
+      <div class="sub-id-hint">Show this screen or the PDF to K.P. Singh sir for attendance.</div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── CONFIG ────────────────────────────────────────────────────────
+const SHEET_URL = 'https://script.google.com/macros/s/AKfycbxMZvDmBevyU4Tjd80uDIz2yPxium7VTyEeLJ6qr6invGagEVteRZtIn6TJz-EweeXleQ/exec';
+// ─────────────────────────────────────────────────────────────────
+
+/* ═══════════════════════════════════════════════════
+   LEADERBOARD WIDGET  (registration screen)
+═══════════════════════════════════════════════════ */
+const MEDALS = ['🥇','🥈','🥉'];
+const GRADE_CLS = g => {
+  if(g==='A+'||g==='A') return 'lb-grade-A';
+  if(g==='B') return 'lb-grade-B';
+  if(g==='C'||g==='D') return 'lb-grade-C';
+  return 'lb-grade-F';
+};
+
+async function loadWidgetLeaderboard() {
+  try {
+    const res  = await fetch(`${SHEET_URL}?action=leaderboard&top=3&quiz=EDA`);
+    const json = await res.json();
+    if (json.status !== 'ok' || !json.data.length) {
+      renderWidgetEmpty();
+      return;
+    }
+    renderWidgetRows(json.data.slice(0, 3));
+    const now = new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
+    document.getElementById('lb-footer-updated').textContent = `Updated ${now}`;
+  } catch(e) {
+    renderWidgetEmpty('Network error — check Apps Script URL');
+  }
+}
+
+function renderWidgetRows(rows) {
+  document.getElementById('lb-widget-body').innerHTML = rows.map((r, i) => {
+    const rank = i + 1;
+    const gc   = GRADE_CLS(r.grade);
+    const pct  = r.pct || 0;
+    return `
+      <div class="lb-row lb-row-${rank}">
+        <span class="lb-medal">${MEDALS[i]}</span>
+        <span class="lb-rank-num">${rank}</span>
+        <div class="lb-info">
+          <div class="lb-name" title="${r.name}">${r.name}</div>
+          <div class="lb-roll">${r.roll} · ${r.section}</div>
+          <div class="lb-bar-row">
+            <div class="lb-bar"><div class="lb-bar-fill" style="width:${pct}%"></div></div>
+            <span class="lb-score-txt">${r.score}/${r.total}</span>
+          </div>
+        </div>
+        <div class="lb-score-col">
+          <div class="lb-pct">${pct}%</div>
+          <span class="lb-grade ${gc}">${r.grade}</span>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function renderWidgetEmpty(msg) {
+  document.getElementById('lb-widget-body').innerHTML = `
+    <div class="lb-widget-state">
+      <div class="lb-state-icon">📭</div>
+      <div class="lb-state-text">${msg || 'No submissions yet.<br>Be the first!'}</div>
+    </div>`;
+}
+
+// Load widget immediately; refresh every 90s
+loadWidgetLeaderboard();
+setInterval(loadWidgetLeaderboard, 90000);
+
+/* ═══════════════════════════════════════════════════
+   50 QUESTIONS  ·  Unit III Lecture-10  ·  EDA
+═══════════════════════════════════════════════════ */
+const sections=[
+{id:1,title:"Section A — Descriptive Statistics",subtitle:"Mean · Median · Mode · Variance · SD",secClass:"sec-1",questions:[
+  {stem:"The marks of 5 students are: 10, 20, 30, 40, 50. What is the arithmetic mean?",tag:"Calculation",opts:["25","30","35","40"],ans:1},
+  {stem:"A dataset is: 3, 7, 7, 9, 12. What is the MODE?",tag:"Calculation",opts:["7","9","3","12"],ans:0},
+  {stem:"For the dataset 4, 8, 15, 16, 23, 42 — what is the MEDIAN?",tag:"Calculation",opts:["15","15.5","16","17"],ans:1},
+  {stem:"Which measure of central tendency is MOST affected by an extreme outlier value?",tag:"Concept",opts:["Median","Mode","Mean","All are equally affected"],ans:2},
+  {stem:"A class of 30 students has a mean score of 70. One student's score was wrongly entered as 40 instead of 80. The corrected mean will be:",tag:"Scenario",opts:["Stay at 70","Increase — adding 40 to total then dividing increases the mean","Increase by 40/30 ≈ 1.33 marks","Decrease"],ans:2},
+  {stem:"Variance measures:",tag:"Definition",opts:["The middle value in a sorted dataset","The average of squared deviations from the mean, indicating how spread out values are","The most frequently occurring value","The difference between the maximum and minimum value"],ans:1},
+  {stem:"Standard Deviation is:",tag:"Definition",opts:["The square of Variance","The square root of Variance — expressed in the same units as the original data","The average of all values","The range divided by 2"],ans:1},
+  {stem:"Dataset A has SD = 2. Dataset B has SD = 10. Which dataset has values MORE spread out from the mean?",tag:"Interpretation",opts:["Dataset A","Dataset B","Both are equally spread","Cannot determine without knowing the means"],ans:1},
+  {stem:"For the dataset: 5, 5, 5, 5, 5 — what is the Standard Deviation?",tag:"Concept",opts:["5","1","0 — all values are identical, so there is no deviation","25"],ans:2},
+  {stem:"Which formula gives the POPULATION variance for values x₁…xₙ with mean μ?",tag:"Formula",opts:["Σ(xᵢ − μ) / n","Σ(xᵢ − μ)² / n","Σ(xᵢ − μ)² / (n−1)","√(Σ(xᵢ − μ)² / n)"],ans:1},
+  {stem:"A dataset has Mean = Median = Mode. This suggests the distribution is:",tag:"Interpretation",opts:["Skewed to the right","Skewed to the left","Symmetric (approximately normal)","Bimodal"],ans:2},
+  {stem:"Exploratory Data Analysis (EDA) is BEST described as:",tag:"Definition",opts:["A method of predicting future values using regression","An approach to analysing data using visual and statistical summaries to understand structure, patterns, and anomalies BEFORE formal modelling","A technique exclusively used for cleaning missing data","A machine learning algorithm for classification"],ans:1},
+  {stem:"Which Excel function calculates the Standard Deviation of a sample?",tag:"Excel",opts:["=STDEVP()","=VAR()","=STDEV() or =STDEV.S()","=MEAN()"],ans:2}
+]},
+{id:2,title:"Section B — Data Visualisation",subtitle:"Charts · Graphs · Plots",secClass:"sec-2",questions:[
+  {stem:"A histogram differs from a bar chart in that:",tag:"Concept",opts:["Histograms use colours; bar charts do not","Histograms display the frequency distribution of continuous data with no gaps between bars; bar charts compare discrete categories with gaps","Histograms can only show 10 bars maximum","Bar charts are only for time-series data"],ans:1},
+  {stem:"In a histogram, the X-axis typically represents:",tag:"Definition",opts:["Frequency (count)","Time periods","Bins (ranges of values) of the variable being measured","Category names"],ans:2},
+  {stem:"A box plot (box-and-whisker plot) displays which five summary statistics?",tag:"Definition",opts:["Mean, Median, Mode, Variance, SD","Minimum, Q1, Median (Q2), Q3, Maximum","Mean, Min, Max, SD, Count","Q1, Q2, Q3, Mean, Range"],ans:1},
+  {stem:"Which chart type is MOST appropriate for showing how total monthly expenses are distributed across different expense categories?",tag:"Application",opts:["Line chart","Scatter plot","Pie chart — shows proportional share of a whole","Histogram"],ans:2},
+  {stem:"A line chart is preferred over a bar chart when:",tag:"Concept",opts:["You have only 3 data points","You want to show trend and continuity over time — especially when the x-axis is time-based","You are comparing categories that have no natural order","You need to show parts of a whole"],ans:1},
+  {stem:"In a box plot, the Interquartile Range (IQR) is defined as:",tag:"Definition",opts:["Maximum − Minimum","Q3 − Q1","Median − Mean","SD × 2"],ans:1},
+  {stem:"Which of the following is an example of BIVARIATE data visualisation?",tag:"Concept",opts:["A histogram of exam scores","A pie chart of department budgets","A scatter plot showing study hours vs. exam marks","A bar chart of monthly sales"],ans:2},
+  {stem:"An outlier in a box plot is typically shown as:",tag:"Definition",opts:["A separate box beyond the whisker","A dot or asterisk plotted beyond 1.5 × IQR from Q1 or Q3","A red bar in the histogram","A gap in the line chart"],ans:1},
+  {stem:"Data visualisation in EDA is important because:",tag:"Concept",opts:["It replaces the need for any statistical calculations","Visuals allow the human eye to quickly detect patterns, trends, outliers, and distributions that raw numbers obscure","It is required by Excel before any analysis can be performed","Regulators require charts in all data science reports"],ans:1},
+  {stem:"A frequency polygon is created by:",tag:"Definition",opts:["Connecting the tops of histogram bars with straight lines","Drawing a pie chart with frequency labels","Creating a scatter plot with frequency on both axes","Sorting data and plotting cumulative frequency"],ans:0},
+  {stem:"Which visualisation is BEST for comparing the distribution of exam scores across three different sections (A, B, C)?",tag:"Application",opts:["Three separate pie charts","A grouped bar chart showing each section","Side-by-side box plots — one per section, enabling easy comparison of spread and median","A single line chart with three lines"],ans:2},
+  {stem:"The term 'bin width' in a histogram refers to:",tag:"Definition",opts:["The height of each bar","The gap between bars","The range of values each bar represents — a wider bin captures more data points per bar","The colour depth of each bar"],ans:2}
+]},
+{id:3,title:"Section C — Excel for EDA",subtitle:"PivotTables · Histograms · Analysis ToolPak",secClass:"sec-3",questions:[
+  {stem:"To create a Histogram in Excel using the Analysis ToolPak, you first need to:",tag:"Excel",opts:["Select the data and press Ctrl+H","Enable the Analysis ToolPak Add-in via File → Options → Add-ins → Manage Excel Add-ins","Insert → Charts → Histogram (this automatically enables the ToolPak)","Sort the data in ascending order before any analysis"],ans:1},
+  {stem:"In Excel's Data Analysis ToolPak, when creating a histogram, the 'Bin Range' refers to:",tag:"Excel",opts:["The selected cell range for output","A column of upper boundary values that define each bar's range","The chart title cell","The colour range for bar formatting"],ans:1},
+  {stem:"Which Excel function returns the MEDIAN of a set of numbers?",tag:"Excel",opts:["=MIDDLE()","=MED()","=MEDIAN()","=CENTRE()"],ans:2},
+  {stem:"A PivotTable is useful in EDA because it can:",tag:"Application",opts:["Generate machine learning predictions","Quickly summarise thousands of rows into grouped counts, sums, averages, and other statistics — revealing patterns in categorical data","Automatically clean missing values","Create scatter plots from raw data"],ans:1},
+  {stem:"Which Excel function calculates the VARIANCE of a population?",tag:"Excel",opts:["=VAR.S()","=STDEV()","=VAR.P()","=VARP2()"],ans:2},
+  {stem:"To find the frequency count of values in different ranges (bins) from raw data in Excel WITHOUT the ToolPak, you use:",tag:"Excel",opts:["=COUNT()","=FREQUENCY() — an array function that counts values falling in each bin","=COUNTIF() for every bin manually","=SUMIF()"],ans:1},
+  {stem:"After inserting a Histogram using 'Insert → Charts → Statistical → Histogram' in Excel 2016+, you can change the number of bins by:",tag:"Excel",opts:["Deleting and recreating the chart","Right-clicking the X-axis → Format Axis → set the number of bins or bin width","Using Data → Sort to organise bins","Pressing F9 to auto-calculate bins"],ans:1},
+  {stem:"Which Excel chart type can visually display the distribution (spread) of a dataset AND show the median and quartiles?",tag:"Excel",opts:["Column chart","Line chart","Box and Whisker chart (available under Insert → Statistical Charts in Excel 2016+)","Scatter chart"],ans:2},
+  {stem:"In Excel, the =AVERAGE() function calculates the:",tag:"Excel",opts:["Most frequently occurring value","Middle value of a sorted range","Arithmetic mean of selected cells","Sum of selected cells"],ans:2},
+  {stem:"A student uses a PivotTable to count how many students scored in each grade band (A, B, C, D, F). This is an example of:",tag:"Application",opts:["Inferential statistics — making predictions about populations","Descriptive EDA — summarising and understanding the frequency distribution of the dataset","Regression analysis","Data cleaning"],ans:1}
+]},
+{id:4,title:"Section D — Scatter Plots & Insights",subtitle:"Correlation · Patterns · EDA Insights",secClass:"sec-4",questions:[
+  {stem:"A scatter plot is used to:",tag:"Definition",opts:["Show proportions of a whole as slices","Display the frequency of values in bins","Show the relationship between two continuous numerical variables by plotting one on each axis","Display category totals as vertical bars"],ans:2},
+  {stem:"If a scatter plot shows points rising from bottom-left to top-right, this indicates:",tag:"Interpretation",opts:["No correlation between the variables","A negative correlation — as X increases, Y decreases","A positive correlation — as X increases, Y also tends to increase","A perfect correlation of exactly 1.0"],ans:2},
+  {stem:"A correlation coefficient (r) of −0.95 indicates:",tag:"Interpretation",opts:["A weak negative relationship","A strong positive relationship","A strong negative relationship — variables move in opposite directions closely","No linear relationship"],ans:2},
+  {stem:"Which value of the correlation coefficient (r) indicates NO linear relationship?",tag:"Concept",opts:["r = 1","r = −1","r = 0","r = 0.5"],ans:2},
+  {stem:"In a scatter plot, a data point that sits far away from the main cluster of points is called:",tag:"Definition",opts:["A bin","An outlier","A residual","A mode"],ans:1},
+  {stem:"Kiran plots study hours (X) vs exam marks (Y) for 40 students and observes a roughly linear upward trend. He adds a trendline. This trendline in EDA is useful for:",tag:"Application",opts:["Calculating the exact standard deviation","Visually summarising the direction and strength of the relationship and making rough predictions","Removing outliers from the chart","Converting the scatter plot into a bar chart"],ans:1},
+  {stem:"'Correlation does NOT imply causation' means:",tag:"Concept",opts:["Correlated variables can never be causally related","Just because two variables are statistically associated does not prove that one causes the other","Scatter plots cannot prove correlation","Causation is always stronger than correlation"],ans:1},
+  {stem:"Which pattern in a scatter plot suggests a NON-LINEAR relationship?",tag:"Interpretation",opts:["Points scattered randomly with no pattern","Points forming a clear curved (e.g., U-shaped or exponential) pattern rather than a straight line","Points perfectly along a diagonal line","Points clustered at one corner only"],ans:1},
+  {stem:"In EDA, identifying a 'pattern' in data means:",tag:"Definition",opts:["Finding a decorative design in the visualisation","Detecting a consistent, repeatable structure or trend (e.g., seasonal spikes, growth trend, cluster) that provides insight into how the data behaves","Calculating the mean and median of all columns","Sorting data alphabetically"],ans:1},
+  {stem:"A dataset shows sales peaks every December for 5 consecutive years. An EDA analyst would describe this as:",tag:"Interpretation",opts:["An outlier","Random noise","A seasonal pattern — a cyclical trend tied to a specific time period","A negative correlation"],ans:2},
+  {stem:"Which descriptive statistic would BEST help identify the presence of outliers in a dataset?",tag:"Application",opts:["The mean","The mode","The range and IQR — values far beyond Q1−1.5×IQR or Q3+1.5×IQR are considered outliers","The median"],ans:2},
+  {stem:"To add a trendline to a scatter chart in Excel, you:",tag:"Excel",opts:["Go to Insert → Trendline","Right-click a data point on the chart → Add Trendline → choose type (Linear, Exponential, etc.)","Go to Data → Analysis → Trendline","Select the chart title and type the equation manually"],ans:1},
+  {stem:"EDA is typically performed at which stage of a data science project?",tag:"Concept",opts:["After building the final machine learning model","As the very last step — once predictions are ready","Early in the project — after data collection and cleaning, before modelling — to understand the data","Only when the client requests a summary report"],ans:2},
+  {stem:"Which of the following is an INSIGHT derived from EDA rather than just a descriptive statistic?",tag:"Higher Order",opts:["The mean exam score is 72","There are 150 rows in the dataset","Students who attend more than 80% of classes consistently score above 75 — suggesting attendance is linked to performance","The data has 5 columns"],ans:2},
+  {stem:"A data scientist notices that the histogram of a variable is heavily skewed to the right. What does this tell her about the data?",tag:"Interpretation",opts:["Most values are clustered at the high end; a few very low values pull the tail left","Most values are clustered at the low end; a few very high values create a long tail to the right","The data is perfectly symmetric","The mode and mean are equal"],ans:1}
+]}
+];
+
+const allQuestions=[];
+sections.forEach(sec=>sec.questions.forEach(q=>allQuestions.push({...q,sectionId:sec.id,secClass:sec.secClass})));
+const TOTAL=allQuestions.length;
+
+let studentInfo={};
+let answers=new Array(TOTAL).fill(null);
+let timerInterval=null;
+let secondsLeft=18*60;
+let quizSubmitted=false;
+let inReviewMode=false;
+
+function startQuiz(){
+  const name=document.getElementById('inp-name').value.trim();
+  const roll=document.getElementById('inp-roll').value.trim().toUpperCase();
+  const section=document.getElementById('inp-section').value;
+  const err=document.getElementById('form-error');
+  if(!name||!roll||!section){err.style.display='block';return;}
+  err.style.display='none';
+  studentInfo={name,roll,section,branch:'BCA',semester:'2nd'};
+  document.getElementById('qh-name').textContent=name+' · '+section;
+  renderQuiz();
+  switchScreen('quiz-screen');
+  startTimer();
+  window.scrollTo(0,0);
+}
+
+function renderQuiz(){
+  const L=['A','B','C','D'];
+  let html='',qi=0;
+  sections.forEach(sec=>{
+    html+=`<div class="section-divider ${sec.secClass}"><div class="sec-line"></div><div class="sec-badge ${sec.secClass}">${sec.title}<small>${sec.subtitle}</small></div><div class="sec-line right"></div></div>`;
+    sec.questions.forEach(q=>{
+      const i=qi++;
+      html+=`<div class="q-card ${sec.secClass}" id="qcard-${i}">
+        <div class="q-top">
+          <div class="q-num" id="qnum-${i}">${i+1}</div>
+          <div class="q-stem">${q.stem}</div>
+        </div>
+        <div class="q-tag ${sec.secClass}">${q.tag}</div>
+        <div class="options-grid" id="opts-${i}">
+          ${q.opts.map((o,oi)=>`<button class="opt-btn" id="opt-${i}-${oi}" onclick="selectAnswer(${i},${oi})"><span class="opt-letter">${L[oi]}</span><span>${o}</span></button>`).join('')}
+        </div>
+      </div>`;
+    });
+  });
+  document.getElementById('quiz-content').innerHTML=html;
+}
+
+function selectAnswer(qi,oi){
+  if(quizSubmitted)return;
+  answers[qi]=oi;
+  document.querySelectorAll(`#opts-${qi} .opt-btn`).forEach((b,i)=>b.classList.toggle('selected',i===oi));
+  document.getElementById(`qcard-${qi}`).classList.add('answered');
+  document.getElementById(`qnum-${qi}`).classList.add('done');
+  const done=answers.filter(a=>a!==null).length;
+  document.getElementById('prog-answered').textContent=done+' answered';
+  document.getElementById('prog-fill').style.width=(done/TOTAL*100)+'%';
+}
+
+function startTimer(){
+  timerInterval=setInterval(()=>{
+    secondsLeft--;
+    const m=String(Math.floor(secondsLeft/60)).padStart(2,'0');
+    const s=String(secondsLeft%60).padStart(2,'0');
+    document.getElementById('timer-display').textContent=`${m}:${s}`;
+    if(secondsLeft<=300)document.getElementById('timer-box').classList.add('warning');
+    if(secondsLeft<=0){clearInterval(timerInterval);finalize();}
+  },1000);
+}
+
+function submitQuiz(){
+  const u=answers.filter(a=>a===null).length;
+  const warn=document.getElementById('unanswered-warn');
+  if(u>0&&!warn.dataset.primed){
+    warn.textContent=`⚠ ${u} question${u>1?'s':''} unanswered. Tap here to submit anyway.`;
+    warn.style.display='block';warn.style.cursor='pointer';
+    warn.dataset.primed='1';
+    warn.onclick=()=>{warn.style.display='none';finalize();};
+    return;
+  }
+  finalize();
+}
+
+function finalize(){
+  clearInterval(timerInterval);
+  quizSubmitted=true;
+  let total=0;
+  const secScores=sections.map(()=>0);
+  allQuestions.forEach((q,i)=>{if(answers[i]===q.ans){total++;secScores[q.sectionId-1]++;}});
+  const pct=Math.round(total/TOTAL*100);
+  const pass=pct>=40;
+  let grade='F';
+  if(pct>=90)grade='A+';else if(pct>=80)grade='A';else if(pct>=70)grade='B';
+  else if(pct>=60)grade='C';else if(pct>=50)grade='D';else if(pct>=40)grade='E';
+  const elapsed=18*60-secondsLeft;
+  const timeTaken=`${String(Math.floor(elapsed/60)).padStart(2,'0')}m ${String(elapsed%60).padStart(2,'0')}s`;
+  const submissionId=`${studentInfo.roll}-EDA-${grade}-${Date.now().toString(36).toUpperCase()}`;
+  const submittedAt=new Date().toLocaleString('en-IN',{timeZone:'Asia/Kolkata',day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit',hour12:true});
+
+  const payload={
+    name:studentInfo.name,roll:studentInfo.roll,section:studentInfo.section,
+    branch:studentInfo.branch,semester:studentInfo.semester,
+    score:total,total:TOTAL,percentage:pct,grade,
+    timeTaken,passed:pass,submissionId,submittedAt,
+    quizType:'EDA Unit-III Lec-10',
+    secA:secScores[0],secB:secScores[1],secC:secScores[2],secD:secScores[3]
+  };
+
+  document.getElementById('res-sending').style.display='block';
+  fetch(SHEET_URL,{method:'POST',mode:'no-cors',body:JSON.stringify(payload)}).catch(()=>{}).finally(()=>document.getElementById('res-sending').style.display='none');
+
+  const emojis={'A+':'🏆','A':'🌟','B':'🎯','C':'📚','D':'💪','E':'🤞','F':'📖'};
+  document.getElementById('res-emoji').textContent=emojis[grade];
+  document.getElementById('res-grade').textContent=`${total}/${TOTAL}`;
+  document.getElementById('res-score-label').textContent=`${pct}% · Grade ${grade}`;
+  document.getElementById('res-verdict').innerHTML=pass?`<span class="verdict-pass">✓ PASSED</span>`:`<span class="verdict-fail">✗ Needs Improvement</span>`;
+
+  document.getElementById('res-info-grid').innerHTML=`
+    <div class="result-info-item"><div class="ri-label">Name</div><div class="ri-val">${studentInfo.name}</div></div>
+    <div class="result-info-item"><div class="ri-label">Roll No.</div><div class="ri-val">${studentInfo.roll}</div></div>
+    <div class="result-info-item"><div class="ri-label">Section</div><div class="ri-val">${studentInfo.section}</div></div>
+    <div class="result-info-item"><div class="ri-label">Branch / Sem</div><div class="ri-val">BCA · 2nd</div></div>
+    <div class="result-info-item"><div class="ri-label">Time Taken</div><div class="ri-val">${timeTaken}</div></div>
+    <div class="result-info-item"><div class="ri-label">Submitted At</div><div class="ri-val">${submittedAt}</div></div>`;
+
+  const secNames=['A: Descriptive Stats','B: Visualisation','C: Excel EDA','D: Scatter & Insights'];
+  const secTotals=[13,12,10,15];
+  document.getElementById('res-breakdown').innerHTML=sections.map((sec,i)=>{
+    const got=secScores[i];
+    return`<div class="sb-row"><div class="sb-name">${secNames[i]}</div><div class="sb-bar-wrap"><div class="sb-bar-fill" style="width:${got/secTotals[i]*100}%"></div></div><div class="sb-score">${got}/${secTotals[i]}</div></div>`;
+  }).join('');
+
+  document.getElementById('sub-id-value').textContent=submissionId;
+  switchScreen('result-screen');
+  window.scrollTo(0,0);
+  setTimeout(()=>autoSavePDF(submissionId),1200);
+}
+
+function autoSavePDF(sid){
+  if(typeof html2pdf==='undefined'){window.print();return;}
+  const el=document.getElementById('result-card-el');
+  const filename=`${studentInfo.roll||'student'}-EDA-${sid||'result'}.pdf`;
+  document.getElementById('pdf-saving').style.display='block';
+  document.getElementById('pdf-done').style.display='none';
+  html2pdf().set({
+    margin:[12,10,12,10],filename,
+    image:{type:'jpeg',quality:.97},
+    html2canvas:{scale:2,useCORS:true,backgroundColor:'#ffffff',logging:false},
+    jsPDF:{unit:'mm',format:'a4',orientation:'portrait'}
+  }).from(el).save().then(()=>{
+    document.getElementById('pdf-saving').style.display='none';
+    document.getElementById('pdf-done').style.display='block';
+  }).catch(()=>{document.getElementById('pdf-saving').style.display='none';});
+}
+
+function manualSavePDF(){const sid=document.getElementById('sub-id-value').textContent||'result';autoSavePDF(sid);}
+
+function reviewQuiz(){
+  inReviewMode=true;
+  switchScreen('quiz-screen');
+  document.getElementById('submit-section').style.display='none';
+  document.getElementById('qh-name').textContent='📋 Review Mode';
+  document.getElementById('qh-progress-wrap').style.display='none';
+  document.getElementById('timer-box').style.display='none';
+  document.getElementById('review-mode-label').style.display='block';
+  document.getElementById('review-back-btn').style.display='flex';
+  allQuestions.forEach((q,i)=>{
+    document.querySelectorAll(`#opts-${i} .opt-btn`).forEach((btn,oi)=>{
+      btn.disabled=true;
+      if(oi===q.ans){
+        btn.style.background='rgba(14,124,74,.12)';btn.style.borderColor='#0e7c4a';
+        btn.querySelector('.opt-letter').style.background='#0e7c4a';
+        btn.querySelector('.opt-letter').style.color='#fff';
+        btn.querySelector('.opt-letter').style.borderColor='#0e7c4a';
+      }
+      if(answers[i]!==null&&oi===answers[i]&&oi!==q.ans){
+        btn.style.background='rgba(192,57,43,.12)';btn.style.borderColor='#c0392b';
+        btn.querySelector('.opt-letter').style.background='#c0392b';
+        btn.querySelector('.opt-letter').style.color='#fff';
+        btn.querySelector('.opt-letter').style.borderColor='#c0392b';
+      }
+    });
+  });
+  window.scrollTo(0,0);
+}
+
+function backToResults(){
+  inReviewMode=false;
+  document.getElementById('qh-name').textContent=studentInfo.name+' · '+studentInfo.section;
+  document.getElementById('qh-progress-wrap').style.display='block';
+  document.getElementById('timer-box').style.display='flex';
+  document.getElementById('review-mode-label').style.display='none';
+  document.getElementById('review-back-btn').style.display='none';
+  switchScreen('result-screen');
+  window.scrollTo(0,0);
+}
+
+function switchScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+</script>
+</body>
+</html>
