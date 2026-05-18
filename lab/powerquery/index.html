@@ -1,0 +1,1178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Practical 7 – Power Query: Data Import, Cleaning & Transformation | K.P. Singh</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=JetBrains+Mono:wght@400;500;600&family=DM+Sans:wght@300;400;500;600;700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+
+<style>
+/* ══════════════════════════════════════════
+   NAVBAR (matches Unit 1 style)
+══════════════════════════════════════════ */
+:root {
+  --navy-nav:    #0d1528;
+  --gold:        #c8952a;
+  --gold-bright: #e8b84b;
+  --gold-dim:    rgba(200,149,42,0.15);
+  --border-gold: rgba(200,149,42,0.3);
+  --text-muted-nav: rgba(232,224,208,0.55);
+
+  /* Lab palette */
+  --navy:    #0a0e1a;
+  --navy2:   #111827;
+  --panel:   #161d2e;
+  --border:  #1e2d45;
+  --accent:  #e8b84b;
+  --accent2: #06b6d4;
+  --success: #10b981;
+  --danger:  #ef4444;
+  --yellow:  #fbbf24;
+  --purple:  #a78bfa;
+  --text:    #e2e8f0;
+  --muted:   #64748b;
+  --glass:   rgba(255,255,255,0.04);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+/* ── NAV ── */
+.kps-nav {
+  position: fixed; top:0; left:0; right:0; z-index:9999;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:10px 24px;
+  background:rgba(13,21,40,0.95);
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border-gold);
+  box-sizing:border-box;
+}
+.kps-nav-brand { display:flex; align-items:center; gap:10px; text-decoration:none; }
+.kps-nav-logo {
+  width:36px; height:36px;
+  border-radius:50%; object-fit:cover;
+  border:1.5px solid var(--gold);
+  background:linear-gradient(135deg,#c8952a,#e8b84b);
+  display:flex; align-items:center; justify-content:center;
+  font-family:'Cinzel',serif; font-size:13px; color:#0d1528; font-weight:700;
+  flex-shrink:0;
+}
+.kps-nav-name { font-family:'Cinzel',serif; font-size:14px; font-weight:600; color:var(--gold-bright); letter-spacing:0.5px; line-height:1; }
+.kps-nav-sub  { font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:1.5px; color:var(--text-muted-nav); text-transform:uppercase; margin-top:2px; }
+.kps-nav-links { display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
+.kps-nav-links a {
+  color:var(--text-muted-nav); text-decoration:none;
+  font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:1px;
+  padding:6px 12px; border-radius:6px; border:1px solid transparent; transition:all 0.2s; white-space:nowrap;
+}
+.kps-nav-links a:hover { color:var(--gold-bright); border-color:var(--border-gold); }
+.kps-nav-links a.active { color:var(--gold-bright); background:var(--gold-dim); border-color:var(--border-gold); }
+.kps-nav-links a.ext { background:var(--gold); color:#0d1528; font-weight:700; border:none; }
+.kps-nav-links a.ext:hover { background:var(--gold-bright); }
+
+/* ══════════════════════════════════════════
+   BODY
+══════════════════════════════════════════ */
+body {
+  font-family:'DM Sans',sans-serif;
+  background:var(--navy);
+  color:var(--text);
+  min-height:100vh;
+  padding-top:58px; /* nav offset */
+}
+
+/* ── HERO ── */
+.hero {
+  padding:56px 60px 40px;
+  background:radial-gradient(ellipse at 60% 40%,#192344 0%,#0a0e1a 65%);
+  border-bottom:1px solid var(--border);
+  position:relative; overflow:hidden;
+}
+.hero::before {
+  content:'';
+  position:absolute; top:-40px; right:-60px;
+  width:340px; height:340px;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(200,149,42,0.08),transparent 70%);
+  pointer-events:none;
+}
+.hero-kicker {
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.72rem; color:var(--accent2); letter-spacing:0.18em;
+  text-transform:uppercase; margin-bottom:12px;
+}
+.hero-title {
+  font-family:'Playfair Display',serif;
+  font-size:clamp(1.9rem,4vw,3rem); line-height:1.1;
+  background:linear-gradient(135deg,#fff 30%,var(--accent));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  background-clip:text; margin-bottom:14px;
+}
+.hero-sub { font-size:1rem; color:var(--muted); max-width:580px; line-height:1.7; margin-bottom:22px; }
+.badges { display:flex; gap:10px; flex-wrap:wrap; }
+.badge {
+  background:rgba(255,255,255,0.05); border:1px solid var(--border);
+  border-radius:8px; padding:7px 16px; font-size:0.83rem; color:var(--text);
+}
+.badge span { color:var(--accent); font-weight:700; }
+.badge.teal span { color:var(--accent2); }
+
+/* ── HEADER BAR ── */
+.hbar {
+  height:52px; background:var(--panel); border-bottom:1px solid var(--border);
+  display:flex; align-items:center; padding:0 36px; justify-content:space-between;
+}
+.hbar-title { font-family:'JetBrains Mono',monospace; font-size:0.7rem; color:var(--muted); letter-spacing:0.12em; text-transform:uppercase; }
+.hbar-chip { background:var(--accent); color:#0d1528; font-family:'JetBrains Mono',monospace; font-size:0.68rem; padding:4px 12px; border-radius:20px; font-weight:700; }
+
+/* ── TABS ── */
+.tab-bar {
+  background:var(--panel); border-bottom:1px solid var(--border);
+  display:flex; padding:0 60px; overflow-x:auto;
+  position:sticky; top:58px; z-index:99;
+}
+.tab-btn {
+  padding:15px 18px;
+  font-family:'JetBrains Mono',monospace; font-size:0.7rem;
+  letter-spacing:0.08em; text-transform:uppercase;
+  background:none; border:none; color:var(--muted);
+  cursor:pointer; border-bottom:2px solid transparent; transition:0.2s; white-space:nowrap;
+}
+.tab-btn.active { color:var(--accent); border-bottom-color:var(--accent); }
+.tab-btn:hover { color:var(--text); }
+
+/* ── PANELS ── */
+.panels { padding:44px 60px 80px; max-width:1020px; margin:0 auto; }
+.panel { display:none; }
+.panel.active { display:block; animation:fadeUp 0.3s ease both; }
+@keyframes fadeUp { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:none} }
+
+/* ── TYPOGRAPHY ── */
+.slide-heading {
+  font-family:'Playfair Display',serif; font-size:1.85rem; color:#fff;
+  margin-bottom:24px; display:flex; align-items:center; gap:12px;
+}
+.slide-heading::after { content:''; flex:1; height:1px; background:linear-gradient(to right,var(--border),transparent); }
+.hl  { color:var(--accent); }
+.hl2 { color:var(--accent2); }
+h3 { font-size:1rem; font-weight:700; color:#fff; margin:28px 0 12px; }
+
+/* ── CARDS ── */
+.card {
+  background:var(--panel); border:1px solid var(--border);
+  border-radius:14px; padding:22px 24px; margin-bottom:16px;
+  position:relative; overflow:hidden;
+}
+.card::before { content:''; position:absolute; top:0;left:0;right:0; height:3px; background:linear-gradient(to right,var(--accent),var(--accent2)); }
+.card.accent2::before { background:linear-gradient(to right,var(--accent2),var(--purple)); }
+.card.success-card::before { background:linear-gradient(to right,var(--success),var(--accent2)); }
+.card.danger-card::before  { background:linear-gradient(to right,var(--danger),var(--purple)); }
+.card.gold-card::before    { background:linear-gradient(to right,var(--yellow),var(--accent)); }
+.card-title { font-weight:700; font-size:1rem; color:#fff; margin-bottom:8px; }
+.card-body  { color:var(--muted); font-size:0.92rem; line-height:1.65; }
+
+/* ── STRIPS ── */
+.info-strip    { border-left:3px solid var(--accent2); background:rgba(6,182,212,0.07); border-radius:0 10px 10px 0; padding:14px 18px; margin-bottom:18px; }
+.warn-strip    { border-left:3px solid var(--yellow);  background:rgba(251,191,36,0.07); border-radius:0 10px 10px 0; padding:14px 18px; margin-bottom:18px; }
+.success-strip { border-left:3px solid var(--success); background:rgba(16,185,129,0.07); border-radius:0 10px 10px 0; padding:14px 18px; margin-bottom:18px; }
+.gold-strip    { border-left:3px solid var(--accent);  background:rgba(232,184,75,0.07); border-radius:0 10px 10px 0; padding:14px 18px; margin-bottom:18px; }
+.strip-label { font-size:0.7rem; font-family:'JetBrains Mono',monospace; letter-spacing:0.1em; text-transform:uppercase; margin-bottom:6px; color:var(--accent2); font-weight:700; }
+.warn-strip    .strip-label { color:var(--yellow); }
+.success-strip .strip-label { color:var(--success); }
+.gold-strip    .strip-label { color:var(--accent); }
+
+/* ── TABLES ── */
+.table-wrap { overflow-x:auto; margin:14px 0; }
+table { width:100%; border-collapse:collapse; }
+th { background:var(--border); color:var(--accent2); font-family:'JetBrains Mono',monospace; font-size:0.7rem; padding:10px 14px; text-align:left; letter-spacing:0.06em; }
+td { padding:10px 14px; border-bottom:1px solid var(--border); font-size:0.9rem; color:var(--text); }
+tr:last-child td { border-bottom:none; }
+tr:hover td { background:rgba(255,255,255,0.02); }
+td.dirty { background:rgba(239,68,68,0.12); color:#f87171; font-weight:600; }
+td.clean { background:rgba(16,185,129,0.12); color:#34d399; font-weight:600; }
+td code { font-family:'JetBrains Mono',monospace; font-size:0.82rem; color:var(--accent2); background:rgba(6,182,212,0.1); padding:2px 6px; border-radius:4px; }
+
+/* ── PILLS ── */
+.pill { display:inline-block; padding:3px 12px; border-radius:20px; font-size:0.78rem; font-weight:700; }
+.pill-success { background:rgba(16,185,129,0.15); color:var(--success); }
+.pill-danger  { background:rgba(239,68,68,0.15);  color:var(--danger); }
+.pill-yellow  { background:rgba(251,191,36,0.15);  color:var(--yellow); }
+.pill-blue    { background:rgba(6,182,212,0.15);   color:var(--accent2); }
+.pill-gold    { background:rgba(232,184,75,0.15);  color:var(--accent); }
+
+/* ── FORMULA BOX ── */
+.formula-box {
+  background:linear-gradient(135deg,#0f2234,#0d1a2b);
+  border:1px solid var(--accent2); border-radius:10px;
+  padding:16px 22px;
+  font-family:'JetBrains Mono',monospace; font-size:0.95rem; color:var(--accent2);
+  text-align:center; margin:12px 0; letter-spacing:0.03em; line-height:1.6;
+}
+.formula-box.gold { border-color:var(--accent); color:var(--accent); }
+
+/* ── STEP LIST ── */
+.step-list { list-style:none; display:flex; flex-direction:column; gap:10px; }
+.step-list li {
+  display:flex; align-items:flex-start; gap:14px;
+  background:var(--glass); border:1px solid var(--border);
+  border-radius:10px; padding:12px 16px; transition:border-color 0.2s;
+}
+.step-list li:hover { border-color:var(--accent); }
+.step-num {
+  width:28px; height:28px; border-radius:50%;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  display:flex; align-items:center; justify-content:center;
+  font-family:'JetBrains Mono',monospace; font-size:0.72rem; font-weight:700; color:#0d1528; flex-shrink:0;
+}
+.step-text { font-size:0.9rem; line-height:1.6; color:var(--text); padding-top:4px; }
+
+/* ── SCREENSHOT BOX ── */
+.screen-box {
+  background:var(--navy2); border:1px solid var(--border); border-radius:12px;
+  padding:20px; margin:14px 0; position:relative;
+}
+.screen-label {
+  position:absolute; top:-11px; left:16px;
+  background:var(--accent); color:#0d1528;
+  font-family:'JetBrains Mono',monospace; font-size:0.62rem; font-weight:700; letter-spacing:0.08em;
+  padding:3px 12px; border-radius:20px;
+}
+.screen-label.blue { background:var(--accent2); }
+
+/* ── M-QUERY CODE BOX ── */
+.code-block {
+  background:#0a0f1e; border:1px solid rgba(6,182,212,0.25);
+  border-radius:10px; padding:16px 20px; margin:12px 0;
+  font-family:'JetBrains Mono',monospace; font-size:0.82rem;
+  color:#93c5fd; line-height:1.8; overflow-x:auto; white-space:pre;
+}
+.code-block .kw  { color:#c084fc; }
+.code-block .fn  { color:#34d399; }
+.code-block .str { color:#fbbf24; }
+.code-block .cm  { color:#475569; }
+
+/* ── INTERACTIVE ── */
+.interactive-box {
+  background:var(--panel); border:1px solid var(--accent); border-radius:14px;
+  padding:24px; position:relative; margin-bottom:16px;
+}
+.interactive-box.blue { border-color:var(--accent2); }
+.interactive-label {
+  position:absolute; top:-12px; left:18px;
+  background:var(--accent); color:#0d1528;
+  font-family:'JetBrains Mono',monospace; font-size:0.62rem;
+  padding:3px 12px; border-radius:20px; font-weight:700; letter-spacing:0.08em;
+}
+.interactive-box.blue .interactive-label { background:var(--accent2); }
+
+/* ── INPUTS / BUTTONS ── */
+label { font-size:0.75rem; color:var(--muted); margin-bottom:5px; display:block; font-family:'JetBrains Mono',monospace; }
+input[type=text], select {
+  width:100%; background:var(--navy); border:1px solid var(--border);
+  color:var(--text); border-radius:8px; padding:10px 14px;
+  font-family:'JetBrains Mono',monospace; font-size:0.9rem; outline:none;
+  transition:border-color 0.15s; margin-bottom:12px;
+}
+input[type=text]:focus, select:focus { border-color:var(--accent2); }
+.solve-btn {
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  color:#0d1528; border:none; border-radius:8px; padding:11px 26px;
+  font-family:'JetBrains Mono',monospace; font-size:0.8rem; font-weight:700;
+  cursor:pointer; transition:opacity 0.15s,transform 0.1s;
+}
+.solve-btn:hover { opacity:0.9; transform:scale(1.02); }
+.result-box {
+  min-height:50px; background:rgba(6,182,212,0.05);
+  border:1px solid var(--border); border-radius:10px;
+  padding:14px 16px; margin-top:12px;
+  font-family:'JetBrains Mono',monospace; font-size:0.88rem; color:var(--muted);
+}
+
+/* ── TOGGLE ── */
+.toggle-btn {
+  background:none; border:1px solid var(--border); color:var(--accent2);
+  border-radius:8px; padding:7px 16px;
+  font-family:'JetBrains Mono',monospace; font-size:0.7rem;
+  cursor:pointer; transition:0.2s; margin-top:10px;
+}
+.toggle-btn:hover { border-color:var(--accent2); background:rgba(6,182,212,0.05); }
+.answer-box {
+  display:none; margin-top:12px;
+  background:rgba(16,185,129,0.07); border:1px solid rgba(16,185,129,0.3);
+  border-radius:10px; padding:14px 18px;
+  font-size:0.9rem; line-height:1.65; color:var(--text);
+}
+
+/* ── METRICS ── */
+.metric-row { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin:16px 0; }
+.metric { background:rgba(255,255,255,0.03); border:1px solid var(--border); border-radius:12px; padding:16px; text-align:center; }
+.metric-val { font-family:'JetBrains Mono',monospace; font-size:1.5rem; font-weight:700; }
+.metric-lbl { font-size:0.75rem; color:var(--muted); margin-top:5px; }
+
+/* ── PIPELINE DIAGRAM ── */
+.pipeline { display:flex; flex-direction:column; align-items:center; gap:0; margin:18px auto; max-width:340px; }
+.pipe-step {
+  width:100%; background:var(--panel); border:1.5px solid var(--border);
+  border-radius:10px; padding:11px 18px; text-align:center;
+  font-size:0.88rem; font-weight:600; color:#fff; position:relative;
+}
+.pipe-step.highlight { background:linear-gradient(135deg,#0f2234,#162340); border-color:var(--accent2); color:var(--accent2); }
+.pipe-step.gold-hl   { background:linear-gradient(135deg,#1a1206,#1f1800); border-color:var(--accent); color:var(--accent); }
+.pipe-arrow { font-size:18px; color:var(--accent); line-height:1.4; }
+
+/* ── TWO COL ── */
+.two-col   { display:grid; grid-template-columns:1fr 1fr;   gap:20px; }
+.three-col { display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; }
+
+/* ── VIVA CARDS ── */
+.viva-card { background:var(--panel); border:1px solid var(--border); border-radius:12px; padding:18px 20px; margin-bottom:12px; transition:border-color 0.2s; }
+.viva-card:hover { border-color:var(--accent); }
+.viva-q { font-weight:700; font-size:0.93rem; color:#fff; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; }
+.q-num  { font-family:'JetBrains Mono',monospace; font-size:0.7rem; color:var(--accent); background:rgba(232,184,75,0.1); padding:2px 10px; border-radius:20px; }
+
+/* ── DEF TABLE ── */
+.def-row { display:grid; grid-template-columns:170px 1fr; gap:14px; align-items:start; margin-bottom:12px; padding-bottom:12px; border-bottom:1px solid var(--border); }
+.def-row:last-child { border-bottom:none; }
+.def-term { font-family:'JetBrains Mono',monospace; font-size:0.8rem; color:var(--accent); font-weight:700; }
+.def-body { font-size:0.9rem; color:var(--text); line-height:1.55; }
+
+/* ── NUMBERED LIST ── */
+ol.num-list { padding-left:22px; display:flex; flex-direction:column; gap:8px; }
+ol.num-list li { font-size:0.92rem; line-height:1.6; color:var(--text); padding-left:4px; }
+ol.num-list li strong { color:#fff; }
+ol.num-list li code { font-family:'JetBrains Mono',monospace; background:rgba(6,182,212,0.1); color:var(--accent2); padding:1px 6px; border-radius:4px; font-size:0.8rem; }
+
+/* ── TASK BOX ── */
+.task-box {
+  background:linear-gradient(135deg,#0d1a2b,#111827);
+  border:1px solid var(--accent); border-radius:14px;
+  padding:20px 24px; margin:18px 0;
+}
+.task-title { font-family:'JetBrains Mono',monospace; font-size:0.72rem; color:var(--accent); font-weight:700; letter-spacing:0.1em; text-transform:uppercase; margin-bottom:10px; }
+
+/* ── RESPONSIVE ── */
+@media(max-width:768px){
+  .hero { padding:36px 20px 28px; }
+  .tab-bar { padding:0 14px; }
+  .panels  { padding:28px 20px 60px; }
+  .two-col,.three-col { grid-template-columns:1fr; }
+  .metric-row { grid-template-columns:1fr 1fr; }
+  .def-row { grid-template-columns:1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════ NAVBAR ══════════════ -->
+<nav class="kps-nav">
+  <a href="https://kpsingh.in" class="kps-nav-brand">
+    <div class="kps-nav-logo">KPS</div>
+    <div>
+      <div class="kps-nav-name">K.P. Singh</div>
+      <div class="kps-nav-sub">SRHU · Data Science</div>
+    </div>
+  </a>
+  <div class="kps-nav-links">
+    <a href="#">Practicals</a>
+    <a href="#" class="active">Lab 7</a>
+    <a href="https://kpsingh.in" target="_blank" rel="noopener" class="ext">kpsingh.in ↗</a>
+  </div>
+</nav>
+
+<!-- ══════════════ SUB-HEADER BAR ══════════════ -->
+<div class="hbar">
+  <span class="hbar-title">Introduction to Data Science · BCA Sem I · Practical 7</span>
+  <span class="hbar-chip">LAB 7</span>
+</div>
+
+<!-- ══════════════ HERO ══════════════ -->
+<div class="hero">
+  <div class="hero-kicker">K.P. Singh · Introduction to Data Science</div>
+  <div class="hero-title">Power Query — Data Import,<br>Cleaning &amp; Transformation</div>
+  <div class="hero-sub">Import data from an external source using Power Query in Excel, then apply a complete transformation workflow — cleaning, shaping, and preparing data for analysis.</div>
+  <div class="badges">
+    <div class="badge">🔌 <span>Power Query</span></div>
+    <div class="badge teal">🧹 <span>Data Cleaning</span></div>
+    <div class="badge">🔄 <span>Transformation</span></div>
+    <div class="badge teal">🎓 BCA <span>Sem I</span></div>
+  </div>
+</div>
+
+<!-- ══════════════ TABS ══════════════ -->
+<div class="tab-bar">
+  <button class="tab-btn active" onclick="switchTab('overview',this)">📋 Overview</button>
+  <button class="tab-btn" onclick="switchTab('import',this)">🔌 Import</button>
+  <button class="tab-btn" onclick="switchTab('clean',this)">🧹 Cleaning</button>
+  <button class="tab-btn" onclick="switchTab('transform',this)">🔄 Transform</button>
+  <button class="tab-btn" onclick="switchTab('mquery',this)">⌨️ M Language</button>
+  <button class="tab-btn" onclick="switchTab('output',this)">📊 Output</button>
+  <button class="tab-btn" onclick="switchTab('viva',this)">🧠 Viva Prep</button>
+</div>
+
+<!-- ══════════════ PANELS ══════════════ -->
+<div class="panels">
+
+<!-- ═══ OVERVIEW ═══ -->
+<div class="panel active" id="panel-overview">
+  <div class="slide-heading">Practical <span class="hl">7 — Overview</span></div>
+
+  <div class="info-strip">
+    <div class="strip-label">Aim of this Practical</div>
+    Import data from an external CSV file into Excel using <strong>Power Query</strong>, and perform systematic data cleaning and transformation steps using the Power Query Editor, then load the clean data back into Excel for analysis.
+  </div>
+
+  <h3>What is Power Query?</h3>
+  <div class="two-col">
+    <div class="card">
+      <div class="card-title">🔍 The Tool</div>
+      <div class="card-body">
+        Power Query is a <strong>built-in Excel feature</strong> (available from Excel 2016 onward) that lets you <strong>connect to external data sources</strong> — CSV files, websites, databases, JSON, XML — and clean, transform, and shape data before loading it into Excel.<br><br>
+        It works without writing any formula. Every step you perform is recorded as a <strong>transformation step</strong> you can edit, reorder, or delete.
+      </div>
+    </div>
+    <div class="card accent2">
+      <div class="card-title">⚡ Why Use It?</div>
+      <div class="card-body">
+        Without Power Query, you'd manually find-replace, delete rows, and retype values — and redo it all next month.<br><br>
+        With Power Query, your cleaning steps are <strong>saved as a recipe</strong>. When new data arrives, click <em>Refresh</em> — Power Query re-applies all steps automatically in seconds.
+      </div>
+    </div>
+  </div>
+
+  <h3>The Dataset — Student Examination Records</h3>
+  <div class="gold-strip">
+    <div class="strip-label">Scenario</div>
+    You are a data analyst at a college. You receive a messy CSV file of student exam results from an external source (the examination department). The file contains 10 records with various data quality issues. Your job is to import and clean this data using Power Query.
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <tr><th>Reg No</th><th>Student Name</th><th>Department</th><th>Semester</th><th>Marks</th><th>Grade</th><th>Fee Paid</th></tr>
+      <tr><td>BCA001</td><td>Aman Sharma</td><td>BCA</td><td>1</td><td>78</td><td>B</td><td>Yes</td></tr>
+      <tr><td>BCA002</td><td>Riya Negi</td><td class="dirty">bca ← wrong case</td><td>1</td><td class="dirty">— missing</td><td class="dirty">— missing</td><td>Yes</td></tr>
+      <tr><td>BCA003</td><td>Kabir Singh</td><td>BCA</td><td class="dirty">One ← text, not number</td><td>65</td><td>C</td><td class="dirty">yes ← wrong case</td></tr>
+      <tr><td>BCA004</td><td>Ananya Rawat</td><td class="dirty">Bca ← wrong case</td><td>1</td><td>82</td><td>B</td><td>No</td></tr>
+      <tr><td>BCA005</td><td class="dirty">  Rahul Joshi  ← spaces</td><td>BCA</td><td>1</td><td class="dirty">500 ← impossible</td><td class="dirty">A ← inconsistent (others say A+)</td><td>Yes</td></tr>
+      <tr><td>BCA006</td><td>Sneha Bisht</td><td>BCA</td><td>2</td><td>76</td><td>B</td><td class="dirty">NO ← wrong case</td></tr>
+      <tr><td>BCA007</td><td>Arjun Verma</td><td>BCA</td><td>2</td><td>30</td><td>D</td><td>Yes</td></tr>
+      <tr><td>BCA008</td><td>Kavya Pant</td><td>BCA</td><td>2</td><td>89</td><td>A+</td><td>Yes</td></tr>
+      <tr><td class="dirty">BCA009</td><td class="dirty">— missing name</td><td>BCA</td><td>2</td><td>55</td><td>C</td><td>No</td></tr>
+      <tr><td>BCA010</td><td>Dev Lal</td><td>BCA</td><td>2</td><td>70</td><td>B</td><td>Yes</td></tr>
+    </table>
+  </div>
+
+  <h3>Problems Identified (Before Cleaning)</h3>
+  <div class="three-col" style="margin-top:4px">
+    <div class="card danger-card">
+      <div class="card-title">❌ Missing Values</div>
+      <div class="card-body">Riya's Marks &amp; Grade = blank.<br>BCA009's Student Name = blank.<br>Must be handled before analysis.</div>
+    </div>
+    <div class="card danger-card">
+      <div class="card-title">❌ Inconsistent Formats</div>
+      <div class="card-body">Department: BCA / bca / Bca.<br>Fee Paid: Yes / yes / NO.<br>Semester: 1 (number) vs "One" (text).</div>
+    </div>
+    <div class="card danger-card">
+      <div class="card-title">❌ Outliers &amp; Errors</div>
+      <div class="card-body">Rahul's Marks = 500 (max is 100).<br>Extra spaces in name "  Rahul Joshi  ".<br>Inconsistent Grade labels.</div>
+    </div>
+  </div>
+
+  <h3>Power Query Transformation Pipeline</h3>
+  <div class="pipeline">
+    <div class="pipe-step gold-hl">Step 1 — Connect to CSV Source</div>
+    <div class="pipe-arrow">↓</div>
+    <div class="pipe-step">Step 2 — Promote Headers</div>
+    <div class="pipe-arrow">↓</div>
+    <div class="pipe-step">Step 3 — Remove Missing Rows</div>
+    <div class="pipe-arrow">↓</div>
+    <div class="pipe-step">Step 4 — Fix Data Types</div>
+    <div class="pipe-arrow">↓</div>
+    <div class="pipe-step">Step 5 — Standardize Text (Proper Case)</div>
+    <div class="pipe-arrow">↓</div>
+    <div class="pipe-step">Step 6 — Trim Extra Spaces</div>
+    <div class="pipe-arrow">↓</div>
+    <div class="pipe-step">Step 7 — Replace Outlier Values</div>
+    <div class="pipe-arrow">↓</div>
+    <div class="pipe-step">Step 8 — Add Calculated Column</div>
+    <div class="pipe-arrow">↓</div>
+    <div class="pipe-step highlight">Step 9 — Load to Excel Sheet</div>
+  </div>
+</div>
+
+<!-- ═══ IMPORT ═══ -->
+<div class="panel" id="panel-import">
+  <div class="slide-heading">Part A — <span class="hl">Importing Data</span></div>
+
+  <div class="info-strip">
+    <div class="strip-label">Before You Begin</div>
+    First, create and save your dataset as a <strong>CSV file</strong> (studentmarks.csv) on your desktop, then follow the steps below to import it into Excel using Power Query.
+  </div>
+
+  <h3>Step 1 — Create the CSV File</h3>
+  <div class="screen-box">
+    <div class="screen-label">📄 Instructions</div>
+    <ol class="num-list" style="margin-top:8px">
+      <li>Open <strong>Notepad</strong> (Start → search "Notepad")</li>
+      <li>Copy-paste the data below exactly as shown (commas separate columns)</li>
+      <li>Save as <code>studentmarks.csv</code> on your Desktop (File → Save As → change type to "All Files" → name it studentmarks.csv)</li>
+    </ol>
+    <div class="code-block" style="margin-top:14px;white-space:pre;font-size:0.78rem">RegNo,StudentName,Department,Semester,Marks,Grade,FeePaid
+BCA001,Aman Sharma,BCA,1,78,B,Yes
+BCA002,Riya Negi,bca,1,,, Yes
+BCA003,Kabir Singh,BCA,One,65,C,yes
+BCA004,Ananya Rawat,Bca,1,82,B,No
+BCA005,  Rahul Joshi  ,BCA,1,500,A,Yes
+BCA006,Sneha Bisht,BCA,2,76,B,NO
+BCA007,Arjun Verma,BCA,2,30,D,Yes
+BCA008,Kavya Pant,BCA,2,89,A+,Yes
+BCA009,,BCA,2,55,C,No
+BCA010,Dev Lal,BCA,2,70,B,Yes</div>
+  </div>
+
+  <h3>Step 2 — Open Power Query in Excel</h3>
+  <ul class="step-list">
+    <li>
+      <div class="step-num">1</div>
+      <div class="step-text">Open <strong>Microsoft Excel</strong> (a blank workbook). Click the <strong>Data</strong> tab in the ribbon at the top.</div>
+    </li>
+    <li>
+      <div class="step-num">2</div>
+      <div class="step-text">In the <em>Get &amp; Transform Data</em> group, click <strong>"Get Data"</strong> → hover over <strong>"From File"</strong> → click <strong>"From Text/CSV"</strong>.</div>
+    </li>
+    <li>
+      <div class="step-num">3</div>
+      <div class="step-text">A file browser opens. Navigate to your <strong>Desktop</strong>, select <strong>studentmarks.csv</strong>, and click <strong>Import</strong>.</div>
+    </li>
+    <li>
+      <div class="step-num">4</div>
+      <div class="step-text">A <strong>preview window</strong> appears showing how Excel reads your file. Check that columns are separated correctly. Do <strong>NOT</strong> click "Load" — instead click <strong>"Transform Data"</strong> to open the Power Query Editor.</div>
+    </li>
+  </ul>
+
+  <div class="warn-strip">
+    <div class="strip-label">⚠️ Important</div>
+    Always click <strong>"Transform Data"</strong>, never "Load" directly. Clicking Load skips the cleaning steps and dumps dirty data into your sheet.
+  </div>
+
+  <h3>Step 3 — The Power Query Editor Interface</h3>
+  <div class="card">
+    <div class="card-title">Understanding the Editor Window</div>
+    <div class="card-body">
+      <div class="table-wrap" style="margin:0">
+        <table style="margin:0">
+          <tr><th>Area</th><th>Location</th><th>What it does</th></tr>
+          <tr><td><strong>Ribbon (top)</strong></td><td>Tabs: Home, Transform, Add Column, View</td><td>All transformation tools are here</td></tr>
+          <tr><td><strong>Query Pane (left)</strong></td><td>Left sidebar</td><td>Lists all your data queries</td></tr>
+          <tr><td><strong>Data Preview (centre)</strong></td><td>Main area</td><td>Shows your data as you transform it</td></tr>
+          <tr><td><strong>Applied Steps (right)</strong></td><td>Right sidebar</td><td>Every step you take is recorded here — you can click any step to go back</td></tr>
+          <tr><td><strong>Formula Bar</strong></td><td>Below ribbon</td><td>Shows the M Language code behind each step</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="success-strip">
+    <div class="strip-label">✅ You have now imported data into Power Query!</div>
+    You should see your studentmarks.csv data in the preview pane. The header row should be visible. Now move to the Cleaning tab to fix all problems.
+  </div>
+</div>
+
+<!-- ═══ CLEANING ═══ -->
+<div class="panel" id="panel-clean">
+  <div class="slide-heading">Part B — <span class="hl2">Data Cleaning</span></div>
+
+  <!-- STEP 1: HEADERS -->
+  <h3>Step 1 — Promote First Row as Headers</h3>
+  <div class="screen-box">
+    <div class="screen-label blue">📋 Action</div>
+    <ol class="num-list" style="margin-top:8px">
+      <li>In the Power Query Editor, click the <strong>Home</strong> tab.</li>
+      <li>Click <strong>"Use First Row as Headers"</strong> button (top-left area of ribbon).</li>
+      <li>The first row (RegNo, StudentName, Department…) becomes the column headers.</li>
+      <li>You'll see a new step appear in Applied Steps: <span class="pill pill-blue">PromotedHeaders</span></li>
+    </ol>
+  </div>
+  <div class="info-strip" style="margin-top:4px">
+    <div class="strip-label">Why?</div>
+    When CSV files are imported, Excel may treat the header row as data row 1. Promoting it tells Power Query these are column names, not data values.
+  </div>
+
+  <!-- STEP 2: DATA TYPES -->
+  <h3>Step 2 — Set Correct Data Types</h3>
+  <div class="two-col">
+    <div class="screen-box">
+      <div class="screen-label">🔢 Change Marks to Number</div>
+      <ol class="num-list" style="margin-top:8px">
+        <li>Click the <strong>Marks</strong> column header to select it.</li>
+        <li>On the <strong>Home</strong> tab → click <strong>"Data Type"</strong> dropdown → select <strong>Whole Number</strong>.</li>
+        <li>A step <span class="pill pill-blue">ChangedType</span> appears. Power Query will show errors for "500" — leave for now (we fix it in Outliers step).</li>
+      </ol>
+    </div>
+    <div class="screen-box">
+      <div class="screen-label">🔡 Change Semester to Number</div>
+      <ol class="num-list" style="margin-top:8px">
+        <li>Click the <strong>Semester</strong> column header.</li>
+        <li>Data Type → <strong>Whole Number</strong>.</li>
+        <li>Kabir's row shows <span class="pill pill-danger">Error</span> because his Semester = "One" (text). We'll handle this next.</li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- STEP 3: REPLACE ERRORS -->
+  <h3>Step 3 — Replace Errors in Semester Column</h3>
+  <ul class="step-list">
+    <li>
+      <div class="step-num">1</div>
+      <div class="step-text">Right-click the <strong>Semester</strong> column header → select <strong>"Replace Errors"</strong>.</div>
+    </li>
+    <li>
+      <div class="step-num">2</div>
+      <div class="step-text">In the dialog box that appears, type <strong>1</strong> (since we know Kabir is in Semester 1). Click <strong>OK</strong>.</div>
+    </li>
+    <li>
+      <div class="step-num">3</div>
+      <div class="step-text">Kabir's Semester now shows <span class="pill pill-success">1</span> instead of Error.</div>
+    </li>
+  </ul>
+
+  <!-- STEP 4: REMOVE ROWS WITH MISSING VALUES -->
+  <h3>Step 4 — Remove Rows with Missing Names</h3>
+  <div class="warn-strip">
+    <div class="strip-label">Decision</div>
+    BCA009 has no Student Name. Since we cannot identify this student, we will <strong>remove this row</strong>. If the name were known, we'd fill it. For anonymous records, removal is the appropriate decision.
+  </div>
+  <ul class="step-list">
+    <li>
+      <div class="step-num">1</div>
+      <div class="step-text">Click the dropdown arrow (▼) on the <strong>StudentName</strong> column header.</div>
+    </li>
+    <li>
+      <div class="step-num">2</div>
+      <div class="step-text">Uncheck <strong>(null)</strong> from the list → click <strong>OK</strong>. Rows with null/blank names are removed.</div>
+    </li>
+    <li>
+      <div class="step-num">3</div>
+      <div class="step-text">A step <span class="pill pill-blue">FilteredRows</span> appears. You now have 9 rows (BCA009 is gone).</div>
+    </li>
+  </ul>
+
+  <!-- STEP 5: FILL MISSING MARKS -->
+  <h3>Step 5 — Fill Riya's Missing Marks with Average</h3>
+  <div class="interactive-box blue" style="margin-top:4px">
+    <div class="interactive-label">🧮 Calculate Average Marks First</div>
+    <div style="margin-top:14px;font-size:0.88rem;color:var(--muted)">Valid marks (excluding 500 and blank): 78, 65, 82, 30, 76, 89, 55, 70</div>
+    <div class="formula-box" style="font-size:0.85rem;margin:10px 0">Average = (78+65+82+30+76+89+55+70) ÷ 8 = 545 ÷ 8 = <strong>68.125 ≈ 68</strong></div>
+    <button class="toggle-btn" onclick="toggleAnswer('avg-marks')">▶ Show Cleaning Steps</button>
+    <div class="answer-box" id="avg-marks">
+      <strong>In Power Query:</strong><br><br>
+      1. Click the <strong>Marks</strong> column dropdown (▼)<br>
+      2. Uncheck <em>(null)</em> → this temporarily hides Riya's row for inspection<br>
+      3. Instead — right-click the Marks column → <strong>"Replace Values"</strong><br>
+      4. Find: <em>(leave blank / null)</em> → Replace with: <strong>68</strong> → OK<br>
+      5. Riya's marks are now filled with <span class="pill pill-success">68</span><br><br>
+      Similarly fill Riya's Grade: Replace Values in Grade column → null → <strong>B</strong>
+    </div>
+  </div>
+
+  <!-- STEP 6: TRIM SPACES -->
+  <h3>Step 6 — Trim Extra Spaces from StudentName</h3>
+  <ul class="step-list">
+    <li>
+      <div class="step-num">1</div>
+      <div class="step-text">Click the <strong>StudentName</strong> column header to select it.</div>
+    </li>
+    <li>
+      <div class="step-num">2</div>
+      <div class="step-text">Go to the <strong>Transform</strong> tab in the ribbon.</div>
+    </li>
+    <li>
+      <div class="step-num">3</div>
+      <div class="step-text">Click <strong>"Format"</strong> dropdown → select <strong>"Trim"</strong>. This removes leading and trailing spaces.</div>
+    </li>
+    <li>
+      <div class="step-num">4</div>
+      <div class="step-text"><em>"  Rahul Joshi  "</em> becomes <span class="pill pill-success">"Rahul Joshi"</span>. Step <span class="pill pill-blue">TrimmedText</span> added.</div>
+    </li>
+  </ul>
+
+  <!-- STEP 7: STANDARDIZE TEXT -->
+  <h3>Step 7 — Standardize Text Case (Department &amp; FeePaid)</h3>
+  <div class="two-col">
+    <div class="screen-box">
+      <div class="screen-label">📝 Department Column</div>
+      <ol class="num-list" style="margin-top:8px">
+        <li>Click <strong>Department</strong> column → Transform tab → <strong>Format → UPPERCASE</strong>.</li>
+        <li>Result: BCA / bca / Bca all become <span class="pill pill-success">BCA</span>.</li>
+      </ol>
+    </div>
+    <div class="screen-box">
+      <div class="screen-label">📝 FeePaid Column</div>
+      <ol class="num-list" style="margin-top:8px">
+        <li>Click <strong>FeePaid</strong> column → Transform tab → <strong>Format → Capitalize Each Word</strong>.</li>
+        <li>Yes / yes / YES / NO / No → all become <span class="pill pill-success">Yes</span> / <span class="pill pill-success">No</span>.</li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- STEP 8: REPLACE OUTLIER -->
+  <h3>Step 8 — Replace Outlier Value (Rahul's Marks = 500)</h3>
+  <div class="card danger-card">
+    <div class="card-title">Why 500 is Wrong</div>
+    <div class="card-body">Maximum possible marks = 100. A value of 500 is a <strong>data entry error</strong>. We replace it with the class average (68) — the same value used for missing marks — so both missing and erroneous values are treated consistently.</div>
+  </div>
+  <ul class="step-list">
+    <li>
+      <div class="step-num">1</div>
+      <div class="step-text">Click the <strong>Marks</strong> column → right-click → <strong>"Replace Values"</strong>.</div>
+    </li>
+    <li>
+      <div class="step-num">2</div>
+      <div class="step-text">Find: <strong>500</strong> → Replace with: <strong>68</strong> → click <strong>OK</strong>.</div>
+    </li>
+    <li>
+      <div class="step-num">3</div>
+      <div class="step-text">Rahul's marks change from <span class="pill pill-danger">500</span> to <span class="pill pill-success">68</span>.</div>
+    </li>
+  </ul>
+
+  <h3>Cleaned Dataset Preview ✅</h3>
+  <div class="table-wrap">
+    <table>
+      <tr><th>RegNo</th><th>StudentName</th><th>Department</th><th>Semester</th><th>Marks</th><th>Grade</th><th>FeePaid</th></tr>
+      <tr><td>BCA001</td><td>Aman Sharma</td><td class="clean">BCA</td><td>1</td><td>78</td><td>B</td><td class="clean">Yes</td></tr>
+      <tr><td>BCA002</td><td>Riya Negi</td><td class="clean">BCA</td><td>1</td><td class="clean">68 ← filled</td><td class="clean">B ← filled</td><td class="clean">Yes</td></tr>
+      <tr><td>BCA003</td><td>Kabir Singh</td><td class="clean">BCA</td><td class="clean">1 ← fixed</td><td>65</td><td>C</td><td class="clean">Yes</td></tr>
+      <tr><td>BCA004</td><td>Ananya Rawat</td><td class="clean">BCA</td><td>1</td><td>82</td><td>B</td><td class="clean">No</td></tr>
+      <tr><td>BCA005</td><td class="clean">Rahul Joshi ← trimmed</td><td class="clean">BCA</td><td>1</td><td class="clean">68 ← replaced</td><td>A</td><td class="clean">Yes</td></tr>
+      <tr><td>BCA006</td><td>Sneha Bisht</td><td class="clean">BCA</td><td>2</td><td>76</td><td>B</td><td class="clean">No</td></tr>
+      <tr><td>BCA007</td><td>Arjun Verma</td><td class="clean">BCA</td><td>2</td><td>30</td><td>D</td><td class="clean">Yes</td></tr>
+      <tr><td>BCA008</td><td>Kavya Pant</td><td class="clean">BCA</td><td>2</td><td>89</td><td>A+</td><td class="clean">Yes</td></tr>
+      <tr><td>BCA010</td><td>Dev Lal</td><td class="clean">BCA</td><td>2</td><td>70</td><td>B</td><td class="clean">Yes</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ═══ TRANSFORM ═══ -->
+<div class="panel" id="panel-transform">
+  <div class="slide-heading">Part C — <span class="hl">Transformation</span></div>
+
+  <div class="info-strip">
+    <div class="strip-label">Cleaning vs Transformation</div>
+    <strong>Cleaning</strong> = fix existing data problems (remove nulls, fix formats, replace errors).<br>
+    <strong>Transformation</strong> = reshape or add new information to the data (new columns, split columns, merge, filter, sort, group).
+  </div>
+
+  <!-- ADD CALCULATED COLUMN -->
+  <h3>Transformation 1 — Add a "Result" Column</h3>
+  <div class="gold-strip">
+    <div class="strip-label">Goal</div>
+    Add a new column called <strong>Result</strong> that shows "Pass" if Marks ≥ 40 and "Fail" if Marks &lt; 40. This is a conditional calculated column.
+  </div>
+  <ul class="step-list">
+    <li>
+      <div class="step-num">1</div>
+      <div class="step-text">In Power Query Editor, click the <strong>Add Column</strong> tab in the ribbon.</div>
+    </li>
+    <li>
+      <div class="step-num">2</div>
+      <div class="step-text">Click <strong>"Conditional Column"</strong>. A dialog box opens.</div>
+    </li>
+    <li>
+      <div class="step-num">3</div>
+      <div class="step-text">
+        Fill in:<br>
+        • Column Name: <code>Result</code><br>
+        • If column: <strong>Marks</strong> → is greater than or equal to → Value: <strong>40</strong> → Output: <strong>Pass</strong><br>
+        • Otherwise: <strong>Fail</strong>
+      </div>
+    </li>
+    <li>
+      <div class="step-num">4</div>
+      <div class="step-text">Click <strong>OK</strong>. A new "Result" column appears. Arjun (30 marks) gets <span class="pill pill-danger">Fail</span>, all others get <span class="pill pill-success">Pass</span>.</div>
+    </li>
+  </ul>
+
+  <!-- ADD PERCENTAGE BAND -->
+  <h3>Transformation 2 — Add a "Performance Band" Column</h3>
+  <ul class="step-list">
+    <li>
+      <div class="step-num">1</div>
+      <div class="step-text">Add Column → <strong>Conditional Column</strong> again. Name it: <code>PerformanceBand</code>.</div>
+    </li>
+    <li>
+      <div class="step-num">2</div>
+      <div class="step-text">
+        Rules (add each as a condition row using the "+ Add Clause" button):<br>
+        • If Marks ≥ 75 → <strong>High</strong><br>
+        • If Marks ≥ 50 → <strong>Medium</strong><br>
+        • Otherwise → <strong>Low</strong>
+      </div>
+    </li>
+    <li>
+      <div class="step-num">3</div>
+      <div class="step-text">Click <strong>OK</strong>. Each student is now categorized.</div>
+    </li>
+  </ul>
+
+  <!-- FILTER ROWS -->
+  <h3>Transformation 3 — Filter to View Only Semester 1 Students</h3>
+  <div class="screen-box">
+    <div class="screen-label blue">🔍 Filter Operation</div>
+    <ol class="num-list" style="margin-top:8px">
+      <li>Click the dropdown (▼) on the <strong>Semester</strong> column.</li>
+      <li>Uncheck <strong>2</strong> — only Semester 1 students remain.</li>
+      <li>Note: This is for <em>demonstration</em>. In your final output, remove this filter (click the step in Applied Steps → delete it) so all students are included.</li>
+    </ol>
+  </div>
+
+  <!-- SORT -->
+  <h3>Transformation 4 — Sort by Marks (Descending)</h3>
+  <ul class="step-list">
+    <li>
+      <div class="step-num">1</div>
+      <div class="step-text">Click the <strong>Marks</strong> column dropdown (▼) → select <strong>"Sort Descending"</strong>.</div>
+    </li>
+    <li>
+      <div class="step-num">2</div>
+      <div class="step-text">Students are now ordered from highest to lowest marks. Kavya (89) appears first, Arjun (30) last.</div>
+    </li>
+  </ul>
+
+  <!-- SPLIT COLUMN -->
+  <h3>Transformation 5 — Split "RegNo" into Prefix and Number</h3>
+  <div class="card accent2">
+    <div class="card-title">Column Splitting</div>
+    <div class="card-body">
+      BCA001 can be split into "BCA" (Department prefix) and "001" (Student number). This is useful when you need to group by department from a mixed ID column.
+      <br><br>
+      <strong>Steps:</strong><br>
+      1. Click <strong>RegNo</strong> column → <strong>Transform</strong> tab → <strong>"Split Column"</strong> → <strong>"By Number of Characters"</strong>.<br>
+      2. Number of characters: <strong>3</strong> → Split from: Left → OK.<br>
+      3. Two new columns appear: <code>RegNo.1</code> (= BCA) and <code>RegNo.2</code> (= 001).<br>
+      4. Rename them: double-click header → type <strong>Dept_Code</strong> and <strong>StudentNum</strong>.
+    </div>
+  </div>
+
+  <h3>Transformation 6 — Group By Semester</h3>
+  <div class="screen-box">
+    <div class="screen-label">📊 Group By Operation</div>
+    <ol class="num-list" style="margin-top:8px">
+      <li>Home tab → click <strong>"Group By"</strong> button.</li>
+      <li>Group by: <strong>Semester</strong>.</li>
+      <li>Add aggregation: New column name = <strong>AverageMarks</strong> → Operation = <strong>Average</strong> → Column = <strong>Marks</strong>.</li>
+      <li>Click <strong>OK</strong>. You get a summary: Semester 1 average vs Semester 2 average.</li>
+      <li><em>Note: After viewing, undo this step (delete it from Applied Steps) to keep full data for loading.</em></li>
+    </ol>
+  </div>
+
+  <div class="metric-row">
+    <div class="metric">
+      <div class="metric-val" style="color:var(--accent2)">9</div>
+      <div class="metric-lbl">Rows after<br>cleaning</div>
+    </div>
+    <div class="metric">
+      <div class="metric-val" style="color:var(--success)">9</div>
+      <div class="metric-lbl">Applied Steps<br>recorded</div>
+    </div>
+    <div class="metric">
+      <div class="metric-val" style="color:var(--accent)">2</div>
+      <div class="metric-lbl">New columns<br>added</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ M LANGUAGE ═══ -->
+<div class="panel" id="panel-mquery">
+  <div class="slide-heading">Part D — <span class="hl2">M Language</span></div>
+
+  <div class="info-strip">
+    <div class="strip-label">What is M Language?</div>
+    Every action you take in Power Query (clicking buttons, selecting options) is automatically written in a language called <strong>M (Power Query Formula Language)</strong>. You can view and even edit this code directly.
+  </div>
+
+  <h3>How to View the M Code</h3>
+  <ul class="step-list">
+    <li>
+      <div class="step-num">1</div>
+      <div class="step-text">In Power Query Editor → click <strong>View</strong> tab → tick <strong>"Advanced Editor"</strong>.</div>
+    </li>
+    <li>
+      <div class="step-num">2</div>
+      <div class="step-text">A black window opens showing all your steps as M code. Each step = one line of code.</div>
+    </li>
+    <li>
+      <div class="step-num">3</div>
+      <div class="step-text">You can close this without changes, or edit the code directly for advanced transformations.</div>
+    </li>
+  </ul>
+
+  <h3>Understanding the M Code Structure</h3>
+  <div class="code-block"><span class="kw">let</span>
+    <span class="cm">// Step 1: Connect to source file</span>
+    Source = <span class="fn">Csv.Document</span>(<span class="fn">File.Contents</span>(<span class="str">"C:\Users\YourName\Desktop\studentmarks.csv"</span>),
+             [Delimiter=<span class="str">","</span>, Encoding=<span class="fn">TextEncoding</span>.Utf8]),
+
+    <span class="cm">// Step 2: First row becomes headers</span>
+    PromotedHeaders = <span class="fn">Table.PromoteHeaders</span>(Source, [PromoteAllScalars=<span class="kw">true</span>]),
+
+    <span class="cm">// Step 3: Set data types for each column</span>
+    ChangedType = <span class="fn">Table.TransformColumnTypes</span>(PromotedHeaders,{
+        {<span class="str">"Marks"</span>, <span class="fn">Int64.Type</span>}, {<span class="str">"Semester"</span>, <span class="fn">Int64.Type</span>}}),
+
+    <span class="cm">// Step 4: Replace errors in Semester (fixes "One" → 1)</span>
+    ReplacedErrors = <span class="fn">Table.ReplaceErrorValues</span>(ChangedType, {{<span class="str">"Semester"</span>, 1}}),
+
+    <span class="cm">// Step 5: Remove rows where StudentName is null</span>
+    FilteredRows = <span class="fn">Table.SelectRows</span>(ReplacedErrors,
+        <span class="kw">each</span> [StudentName] &lt;&gt; <span class="kw">null</span> <span class="kw">and</span> [StudentName] &lt;&gt; <span class="str">""</span>),
+
+    <span class="cm">// Step 6: Replace missing Marks with 68 (average)</span>
+    ReplacedNullMarks = <span class="fn">Table.ReplaceValue</span>(FilteredRows,
+        <span class="kw">null</span>, 68, <span class="fn">Replacer.ReplaceValue</span>, {<span class="str">"Marks"</span>}),
+
+    <span class="cm">// Step 7: Trim leading/trailing spaces from StudentName</span>
+    TrimmedNames = <span class="fn">Table.TransformColumns</span>(ReplacedNullMarks,
+        {{<span class="str">"StudentName"</span>, <span class="fn">Text.Trim</span>, type text}}),
+
+    <span class="cm">// Step 8: Uppercase the Department column</span>
+    UpperDept = <span class="fn">Table.TransformColumns</span>(TrimmedNames,
+        {{<span class="str">"Department"</span>, <span class="fn">Text.Upper</span>, type text}}),
+
+    <span class="cm">// Step 9: Replace outlier Marks value 500 → 68</span>
+    ReplacedOutlier = <span class="fn">Table.ReplaceValue</span>(UpperDept,
+        500, 68, <span class="fn">Replacer.ReplaceValue</span>, {<span class="str">"Marks"</span>}),
+
+    <span class="cm">// Step 10: Add conditional Result column (Pass/Fail)</span>
+    AddedResult = <span class="fn">Table.AddColumn</span>(ReplacedOutlier, <span class="str">"Result"</span>,
+        <span class="kw">each if</span> [Marks] >= 40 <span class="kw">then</span> <span class="str">"Pass"</span> <span class="kw">else</span> <span class="str">"Fail"</span>)
+
+<span class="kw">in</span>
+    AddedResult</div>
+
+  <h3>Key M Language Syntax Rules</h3>
+  <div class="table-wrap">
+    <table>
+      <tr><th>Concept</th><th>Example</th><th>Meaning</th></tr>
+      <tr><td><code>let … in</code></td><td><code>let Step1=… in Step1</code></td><td>Every M query starts with <code>let</code> and ends with <code>in</code></td></tr>
+      <tr><td>Step names</td><td><code>FilteredRows = …</code></td><td>Each step has a name. The last name after <code>in</code> is the final output</td></tr>
+      <tr><td>Comments</td><td><code>// This is a comment</code></td><td>Double slash adds explanatory comments</td></tr>
+      <tr><td>each</td><td><code>each [Marks] >= 40</code></td><td>Applies a check to every row</td></tr>
+      <tr><td>Text functions</td><td><code>Text.Trim, Text.Upper</code></td><td>Built-in text operations</td></tr>
+      <tr><td>Table functions</td><td><code>Table.AddColumn, Table.SelectRows</code></td><td>Built-in table operations</td></tr>
+    </table>
+  </div>
+
+  <div class="interactive-box blue">
+    <div class="interactive-label">🧪 Try It — Identify the M Function</div>
+    <div style="margin-top:14px">
+      <label>Which M function removes rows based on a condition?</label>
+      <select id="mq-select">
+        <option value="">— Select an answer —</option>
+        <option value="wrong1">Table.AddColumn</option>
+        <option value="right">Table.SelectRows</option>
+        <option value="wrong2">Text.Trim</option>
+        <option value="wrong3">Table.PromoteHeaders</option>
+      </select>
+      <button class="solve-btn" onclick="checkMQ()">Check Answer</button>
+      <div class="result-box" id="mq-result"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ OUTPUT ═══ -->
+<div class="panel" id="panel-output">
+  <div class="slide-heading">Part E — <span class="hl">Load &amp; Output</span></div>
+
+  <h3>Step 1 — Load Clean Data to Excel Sheet</h3>
+  <ul class="step-list">
+    <li>
+      <div class="step-num">1</div>
+      <div class="step-text">In Power Query Editor, click <strong>Home</strong> → <strong>"Close &amp; Load"</strong> (top-left button). Choose <strong>"Close &amp; Load To…"</strong> for more control.</div>
+    </li>
+    <li>
+      <div class="step-num">2</div>
+      <div class="step-text">In the dialog: select <strong>"Table"</strong> and <strong>"Existing worksheet"</strong> → select cell A1 → click <strong>Load</strong>.</div>
+    </li>
+    <li>
+      <div class="step-num">3</div>
+      <div class="step-text">Your clean, transformed data appears in the Excel sheet as a <strong>formatted table</strong>. A "Queries &amp; Connections" pane opens on the right showing your query is connected.</div>
+    </li>
+  </ul>
+
+  <h3>Step 2 — The Final Clean &amp; Transformed Table</h3>
+  <div class="table-wrap">
+    <table>
+      <tr><th>RegNo</th><th>StudentName</th><th>Department</th><th>Semester</th><th>Marks</th><th>Grade</th><th>FeePaid</th><th class="clean">Result</th><th class="clean">PerformanceBand</th></tr>
+      <tr><td>BCA001</td><td>Aman Sharma</td><td class="clean">BCA</td><td>1</td><td>78</td><td>B</td><td class="clean">Yes</td><td class="clean">Pass</td><td class="clean">High</td></tr>
+      <tr><td>BCA002</td><td>Riya Negi</td><td class="clean">BCA</td><td>1</td><td class="clean">68</td><td class="clean">B</td><td class="clean">Yes</td><td class="clean">Pass</td><td class="clean">Medium</td></tr>
+      <tr><td>BCA003</td><td>Kabir Singh</td><td class="clean">BCA</td><td class="clean">1</td><td>65</td><td>C</td><td class="clean">Yes</td><td class="clean">Pass</td><td class="clean">Medium</td></tr>
+      <tr><td>BCA004</td><td>Ananya Rawat</td><td class="clean">BCA</td><td>1</td><td>82</td><td>B</td><td class="clean">No</td><td class="clean">Pass</td><td class="clean">High</td></tr>
+      <tr><td>BCA005</td><td class="clean">Rahul Joshi</td><td class="clean">BCA</td><td>1</td><td class="clean">68</td><td>A</td><td class="clean">Yes</td><td class="clean">Pass</td><td class="clean">Medium</td></tr>
+      <tr><td>BCA006</td><td>Sneha Bisht</td><td class="clean">BCA</td><td>2</td><td>76</td><td>B</td><td class="clean">No</td><td class="clean">Pass</td><td class="clean">High</td></tr>
+      <tr><td>BCA007</td><td>Arjun Verma</td><td class="clean">BCA</td><td>2</td><td>30</td><td>D</td><td class="clean">Yes</td><td class="danger" style="background:rgba(239,68,68,0.12);color:#f87171;font-weight:600">Fail</td><td class="dirty">Low</td></tr>
+      <tr><td>BCA008</td><td>Kavya Pant</td><td class="clean">BCA</td><td>2</td><td>89</td><td>A+</td><td class="clean">Yes</td><td class="clean">Pass</td><td class="clean">High</td></tr>
+      <tr><td>BCA010</td><td>Dev Lal</td><td class="clean">BCA</td><td>2</td><td>70</td><td>B</td><td class="clean">Yes</td><td class="clean">Pass</td><td class="clean">Medium</td></tr>
+    </table>
+  </div>
+
+  <h3>Step 3 — Refreshing Data (The Power of Power Query)</h3>
+  <div class="success-strip">
+    <div class="strip-label">🔄 Auto-Refresh Feature</div>
+    <strong>This is the most powerful feature of Power Query:</strong><br>
+    When the examination department sends you next semester's CSV file (same format), simply:<br>
+    1. Replace the old CSV file on your Desktop with the new one (keep the same filename)<br>
+    2. In Excel → click any cell in the table → <strong>Data tab → "Refresh All"</strong><br>
+    3. Power Query re-runs ALL 9 cleaning and transformation steps automatically on the new data!<br><br>
+    You never have to redo the work manually — the recipe is saved permanently.
+  </div>
+
+  <h3>Step 4 — Summary Analysis</h3>
+  <div class="task-box">
+    <div class="task-title">📋 After Loading — Add These Excel Formulas Below Your Table</div>
+    <div class="table-wrap" style="margin:10px 0 0">
+      <table>
+        <tr><th>Metric</th><th>Formula</th><th>Expected Result</th></tr>
+        <tr><td>Total Students</td><td><code>=COUNTA(B2:B10)</code></td><td>9</td></tr>
+        <tr><td>Average Marks</td><td><code>=AVERAGE(E2:E10)</code></td><td>~69.6</td></tr>
+        <tr><td>Pass Count</td><td><code>=COUNTIF(H2:H10,"Pass")</code></td><td>8</td></tr>
+        <tr><td>Fail Count</td><td><code>=COUNTIF(H2:H10,"Fail")</code></td><td>1</td></tr>
+        <tr><td>High Performers</td><td><code>=COUNTIF(I2:I10,"High")</code></td><td>4</td></tr>
+        <tr><td>Fee Defaulters</td><td><code>=COUNTIF(G2:G10,"No")</code></td><td>2</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ VIVA ═══ -->
+<div class="panel" id="panel-viva">
+  <div class="slide-heading">🧠 Viva <span class="hl">Preparation</span></div>
+
+  <p style="color:var(--muted);margin-bottom:24px">Attempt each answer before revealing. These questions commonly appear in lab vivas for Power Query practicals.</p>
+
+  <div class="viva-card">
+    <div class="viva-q">What is Power Query and where is it found? <span class="q-num">Q1</span></div>
+    <button class="toggle-btn" onclick="toggleAnswer('v1')">▶ Show Answer</button>
+    <div class="answer-box" id="v1">Power Query is a <strong>built-in data connection and transformation tool in Microsoft Excel</strong> (and Power BI). It is found under the <strong>Data tab → Get &amp; Transform Data</strong> group. It allows users to import data from external sources (CSV, database, web) and clean/transform it before loading into Excel — without writing formulas.</div>
+  </div>
+
+  <div class="viva-card">
+    <div class="viva-q">What is the difference between "Load" and "Transform Data" in Power Query? <span class="q-num">Q2</span></div>
+    <button class="toggle-btn" onclick="toggleAnswer('v2')">▶ Show Answer</button>
+    <div class="answer-box" id="v2"><strong>Load</strong> directly imports the raw data into Excel without any changes — the dirty data goes straight in. <br><strong>Transform Data</strong> opens the Power Query Editor, where you can clean, fix, reshape and add columns before loading. Always choose Transform Data when the data has quality issues.</div>
+  </div>
+
+  <div class="viva-card">
+    <div class="viva-q">What are Applied Steps and why are they important? <span class="q-num">Q3</span></div>
+    <button class="toggle-btn" onclick="toggleAnswer('v3')">▶ Show Answer</button>
+    <div class="answer-box" id="v3">Applied Steps is the list in the right panel of Power Query Editor that records every transformation you perform. Each step is stored as a line of M code. They are important because: (1) you can click any step to see the data at that point, (2) you can delete or reorder steps, and (3) when you refresh the query on new data, all steps re-execute automatically — making the cleaning process <strong>repeatable and automated</strong>.</div>
+  </div>
+
+  <div class="viva-card">
+    <div class="viva-q">What is M Language in Power Query? <span class="q-num">Q4</span></div>
+    <button class="toggle-btn" onclick="toggleAnswer('v4')">▶ Show Answer</button>
+    <div class="answer-box" id="v4">M (Power Query Formula Language) is the programming language that Power Query uses internally. Every button click in the editor generates M code automatically. The code follows a <code>let … in</code> structure where each transformation is a named step. Advanced users can write or edit M code directly in the Advanced Editor for custom transformations not available through the UI.</div>
+  </div>
+
+  <div class="viva-card">
+    <div class="viva-q">How would you handle a missing value in Power Query? <span class="q-num">Q5</span></div>
+    <button class="toggle-btn" onclick="toggleAnswer('v5')">▶ Show Answer</button>
+    <div class="answer-box" id="v5">There are three approaches depending on the situation:<br><br>
+    1. <strong>Remove the row</strong> — if the record is unusable without that value (e.g., missing ID or name): use column dropdown → uncheck null.<br>
+    2. <strong>Replace with average/median</strong> — for numerical columns: right-click column → Replace Values → null → calculated average value.<br>
+    3. <strong>Fill Down/Up</strong> — if values should be carried from the row above: Transform tab → Fill → Down.<br><br>
+    The correct choice depends on the business context and how much data you can afford to lose.</div>
+  </div>
+
+  <div class="viva-card">
+    <div class="viva-q">What is the advantage of using Power Query over manual Excel cleaning? <span class="q-num">Q6</span></div>
+    <button class="toggle-btn" onclick="toggleAnswer('v6')">▶ Show Answer</button>
+    <div class="answer-box" id="v6">
+      Key advantages:<br>
+      1. <strong>Automation / Refresh</strong> — steps are saved; click Refresh to reapply them on new data automatically.<br>
+      2. <strong>No formula clutter</strong> — transformations are done before loading; the Excel sheet stays clean.<br>
+      3. <strong>Repeatable &amp; Auditable</strong> — Applied Steps document every transformation, making the process transparent.<br>
+      4. <strong>Multiple data sources</strong> — can connect to CSV, web, SQL, JSON simultaneously.<br>
+      5. <strong>Non-destructive</strong> — original source file is never modified.
+    </div>
+  </div>
+
+  <div class="viva-card">
+    <div class="viva-q">What happens if you click "Refresh All" in Excel after using Power Query? <span class="q-num">Q7</span></div>
+    <button class="toggle-btn" onclick="toggleAnswer('v7')">▶ Show Answer</button>
+    <div class="answer-box" id="v7">Excel reconnects to the original data source (the CSV file or database), re-reads all the data, and re-applies every step in the Applied Steps list from beginning to end. The resulting clean, transformed data is then reloaded into the Excel table. This means if you update the source file with new records, clicking Refresh automatically processes the new data with the same cleaning rules.</div>
+  </div>
+
+  <!-- ONE LINE DEFS -->
+  <h3 style="margin-top:36px">One-Line Definitions — Memorize These</h3>
+  <div class="card" style="margin-top:0">
+    <div class="def-row">
+      <div class="def-term">Power Query</div>
+      <div class="def-body">Excel's built-in ETL tool to import, clean, and transform data from external sources before loading into a sheet.</div>
+    </div>
+    <div class="def-row">
+      <div class="def-term">Applied Steps</div>
+      <div class="def-body">The recorded list of every transformation action taken in Power Query, stored as M code and re-executable on refresh.</div>
+    </div>
+    <div class="def-row">
+      <div class="def-term">M Language</div>
+      <div class="def-body">The formula language Power Query uses internally; follows a let…in structure with named transformation steps.</div>
+    </div>
+    <div class="def-row">
+      <div class="def-term">ETL</div>
+      <div class="def-body">Extract, Transform, Load — the three-stage process Power Query performs: get data, clean it, put it in Excel.</div>
+    </div>
+    <div class="def-row">
+      <div class="def-term">Conditional Column</div>
+      <div class="def-body">A new column added in Power Query based on if-then-else logic applied to existing column values.</div>
+    </div>
+    <div class="def-row">
+      <div class="def-term">Promote Headers</div>
+      <div class="def-body">A step that converts the first data row of an imported file into column headers for the table.</div>
+    </div>
+    <div class="def-row">
+      <div class="def-term">Replace Errors</div>
+      <div class="def-body">A Power Query feature that substitutes type-mismatch or parse errors in a column with a specified default value.</div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /panels -->
+
+<!-- ══════════════ FOOTER ══════════════ -->
+<div style="background:var(--panel);border-top:1px solid var(--border);padding:24px 60px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
+  <div style="font-size:0.83rem;color:var(--muted)">K.P. Singh · Introduction to Data Science · BCA Semester I</div>
+  <div style="font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--muted)">Practical 7 · Power Query — Data Import, Cleaning &amp; Transformation</div>
+  <a href="https://kpsingh.in" style="font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--accent);text-decoration:none">← Back to kpsingh.in</a>
+</div>
+
+<!-- ══════════════ SCRIPTS ══════════════ -->
+<script>
+function switchTab(id, btn) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  btn.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function toggleAnswer(id) {
+  const el = document.getElementById(id);
+  const isOpen = el.style.display === 'block';
+  el.style.display = isOpen ? 'none' : 'block';
+  const btn = el.previousElementSibling;
+  btn.textContent = isOpen ? '▶ Show Answer' : '▼ Hide Answer';
+}
+
+function checkMQ() {
+  const sel = document.getElementById('mq-select').value;
+  const res = document.getElementById('mq-result');
+  if (!sel) { res.innerHTML = '<span style="color:var(--yellow)">Please select an answer first.</span>'; return; }
+  if (sel === 'right') {
+    res.innerHTML = '<span style="color:var(--success);font-size:1rem;font-weight:700">✅ Correct!</span><br><span style="color:var(--muted)">Table.SelectRows filters rows based on a condition — used to remove nulls, blank values, or apply any row-level filter.</span>';
+  } else {
+    res.innerHTML = '<span style="color:var(--danger);font-size:1rem;font-weight:700">❌ Incorrect.</span><br><span style="color:var(--muted)">The correct answer is <strong style="color:var(--accent2)">Table.SelectRows</strong>. It keeps only rows that satisfy a given condition (each [Column] &lt;&gt; null).</span>';
+  }
+}
+</script>
+</body>
+</html>
