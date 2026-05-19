@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Data Science Quiz — Unit I & II | K.P. Singh · SRHU</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<style>
+:root{
+  --bg:#f0f4f8;--surface:#ffffff;--surface2:#f5f8fc;
+  --indigo:#3730a3;--indigo-bright:#4f46e5;--indigo-pale:#eef0ff;
+  --indigo-dim:rgba(55,48,163,.09);--border:rgba(55,48,163,.20);--border-soft:rgba(0,0,0,.07);
+  --teal:#0d7377;--teal-dim:rgba(13,115,119,.10);--teal-bright:#14a7ac;
+  --emerald:#065f46;--emerald-dim:rgba(6,95,70,.10);
+  --amber:#92400e;--amber-dim:rgba(146,64,14,.09);
+  --text:#0f172a;--muted:rgba(15,23,42,.48);--mint:#0e7c4a;--red:#c0392b;
+  --shadow:rgba(55,48,163,.11);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(ellipse 60% 45% at 90% 5%,rgba(79,70,229,.07),transparent),
+  radial-gradient(ellipse 45% 55% at 5% 95%,rgba(13,115,119,.05),transparent);}
+body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:repeating-linear-gradient(45deg,rgba(55,48,163,.018) 0,rgba(55,48,163,.018) 1px,transparent 0,transparent 50%);
+  background-size:26px 26px;}
+
+/* NAV */
+.kps-nav{position:fixed;top:0;left:0;right:0;z-index:9999;display:flex;align-items:center;justify-content:space-between;padding:11px 24px;background:rgba(240,244,248,.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);box-shadow:0 2px 20px var(--shadow);}
+.kps-nav-brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+.kps-nav-logo{width:33px;height:33px;border-radius:50%;object-fit:cover;border:2px solid var(--indigo);box-shadow:0 0 10px rgba(55,48,163,.28);}
+.brand-name{font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:700;color:var(--indigo);line-height:1;}
+.brand-sub{font-family:'Fira Code',monospace;font-size:9px;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase;margin-top:2px;}
+.kps-nav-links{display:flex;align-items:center;gap:6px}
+.kps-nav-links a{color:var(--muted);text-decoration:none;font-family:'Fira Code',monospace;font-size:10px;letter-spacing:.6px;padding:5px 12px;border-radius:8px;border:1px solid transparent;transition:all .2s;white-space:nowrap;}
+.kps-nav-links a:hover{color:var(--indigo);border-color:var(--border);background:var(--indigo-dim)}
+.kps-nav-links a.ext{background:linear-gradient(135deg,var(--indigo),var(--indigo-bright));color:#fff;font-weight:600;border:none;box-shadow:0 2px 12px rgba(55,48,163,.3);}
+
+.screen{display:none;position:relative;z-index:1}
+.screen.active{display:block}
+
+/* REGISTRATION */
+#reg-screen{min-height:100vh;display:none;align-items:center;justify-content:center;padding:90px 20px 40px;flex-direction:column;}
+#reg-screen.active{display:flex}
+.reg-card{background:var(--surface);border:1px solid var(--border);border-radius:24px;padding:38px 34px;width:100%;max-width:500px;position:relative;overflow:hidden;box-shadow:0 20px 70px var(--shadow),0 0 0 1px rgba(55,48,163,.04) inset;}
+.reg-card::before{content:'';position:absolute;top:-60px;right:-60px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(55,48,163,.07),transparent 70%);}
+.reg-card::after{content:'';position:absolute;bottom:-50px;left:-50px;width:160px;height:160px;border-radius:50%;background:radial-gradient(circle,rgba(13,115,119,.06),transparent 70%);}
+.reg-badge{font-family:'Fira Code',monospace;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--teal);background:var(--teal-dim);border:1px solid rgba(13,115,119,.25);padding:4px 14px;border-radius:20px;display:inline-block;margin-bottom:16px;}
+.reg-title{font-family:'Cormorant Garamond',serif;font-size:34px;font-weight:700;color:var(--text);line-height:1.1;margin-bottom:5px;}
+.reg-title span{color:var(--indigo);font-style:italic}
+.reg-sub{font-size:13px;color:var(--muted);margin-bottom:24px;line-height:1.65}
+.topics-box{background:var(--indigo-pale);border:1px solid rgba(55,48,163,.18);border-radius:12px;padding:14px 16px;margin-bottom:24px;}
+.topics-title{font-family:'Fira Code',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--indigo);margin-bottom:10px;}
+.topics-box ul{padding-left:18px}
+.topics-box li{font-size:12px;color:var(--muted);line-height:1.9}
+.form-group{margin-bottom:15px}
+.form-label{font-family:'Fira Code',monospace;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--indigo);display:block;margin-bottom:6px;}
+.form-input,.form-select{width:100%;padding:11px 14px;background:var(--surface2);border:1.5px solid var(--border-soft);border-radius:10px;color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;font-size:15px;outline:none;transition:all .2s;appearance:none;-webkit-appearance:none;}
+.form-input:focus,.form-select:focus{border-color:var(--indigo);background:#f0f1ff;box-shadow:0 0 0 3px rgba(55,48,163,.1);}
+.form-input::placeholder{color:var(--muted)}
+.form-select option{background:#fff;color:var(--text)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.form-fixed{display:flex;align-items:center;gap:8px;padding:11px 14px;background:rgba(0,0,0,.03);border:1.5px solid rgba(0,0,0,.05);border-radius:10px;color:var(--muted);font-size:14px;}
+.form-fixed .lock{font-size:12px;color:var(--indigo);opacity:.7}
+.start-btn{width:100%;margin-top:26px;padding:15px;border:none;cursor:pointer;background:linear-gradient(135deg,var(--indigo) 0%,var(--indigo-bright) 50%,#818cf8 100%);background-size:200% 100%;color:#fff;border-radius:12px;font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:700;letter-spacing:.5px;transition:all .4s;box-shadow:0 4px 24px rgba(55,48,163,.35);text-shadow:0 1px 2px rgba(0,0,0,.2);}
+.start-btn:hover{background-position:right center;transform:translateY(-2px);box-shadow:0 8px 36px rgba(55,48,163,.5);}
+.form-error{color:var(--red);font-size:12px;margin-top:14px;text-align:center;display:none;font-family:'Fira Code',monospace;}
+
+/* QUIZ */
+#quiz-screen{padding-top:130px;padding-bottom:60px}
+.quiz-header{position:fixed;top:58px;left:0;right:0;z-index:900;background:rgba(240,244,248,.97);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:10px 20px;box-shadow:0 2px 16px var(--shadow);}
+.quiz-header-inner{max-width:900px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px;}
+.qh-student{font-family:'Fira Code',monospace;font-size:11px;color:var(--indigo);letter-spacing:.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:160px;}
+.qh-progress-wrap{flex:1}
+.qh-progress-label{display:flex;justify-content:space-between;font-family:'Fira Code',monospace;font-size:9px;color:var(--muted);margin-bottom:5px;letter-spacing:.5px;}
+.qh-progress-bar{height:4px;background:rgba(0,0,0,.08);border-radius:4px;overflow:hidden;}
+.qh-progress-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--indigo),var(--teal-bright));border-radius:4px;transition:width .4s ease;}
+.timer-box{display:flex;align-items:center;gap:6px;background:var(--indigo-pale);border:1px solid var(--border);border-radius:8px;padding:5px 12px;font-family:'Fira Code',monospace;font-size:13px;font-weight:600;color:var(--indigo);white-space:nowrap;}
+.timer-box.warning{background:rgba(192,57,43,.1);border-color:rgba(192,57,43,.4);color:var(--red);}
+.review-mode-label{display:none;font-family:'Fira Code',monospace;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--teal);}
+.review-back-btn{display:none;align-items:center;gap:6px;padding:6px 14px;border:1px solid var(--teal);background:var(--teal-dim);color:var(--teal);border-radius:20px;font-family:'Plus Jakarta Sans',sans-serif;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap;transition:all .2s;}
+.review-back-btn:hover{background:rgba(13,115,119,.18)}
+
+.quiz-content{max-width:900px;margin:0 auto;padding:0 16px}
+
+/* SECTION DIVIDERS */
+.section-divider{margin:32px 0 18px;display:flex;align-items:center;gap:14px}
+.sec-line{flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--border))}
+.sec-line.right{background:linear-gradient(270deg,transparent,var(--border))}
+.sec-badge{font-family:'Cormorant Garamond',serif;font-size:12px;font-weight:700;letter-spacing:.5px;padding:7px 18px;border-radius:20px;white-space:nowrap;text-align:center;box-shadow:0 2px 8px var(--shadow);}
+.sec-badge small{display:block;font-family:'Fira Code',monospace;font-size:8px;letter-spacing:1px;margin-top:2px;text-transform:uppercase;font-weight:400;opacity:.7;}
+
+/* Per-section colour tokens */
+.u1a .sec-badge{color:var(--indigo);background:var(--indigo-pale);border:1px solid var(--border);}
+.u1b .sec-badge{color:#065f46;background:#ecfdf5;border:1px solid rgba(6,95,70,.2);}
+.u2a .sec-badge{color:#92400e;background:#fffbeb;border:1px solid rgba(146,64,14,.2);}
+.u2b .sec-badge{color:#7c3d8f;background:rgba(124,61,143,.07);border:1px solid rgba(124,61,143,.2);}
+
+.u1a .q-tag{--tag-color:var(--indigo);--tag-bg:var(--indigo-dim);--tag-border:rgba(55,48,163,.2)}
+.u1b .q-tag{--tag-color:#065f46;--tag-bg:rgba(6,95,70,.08);--tag-border:rgba(6,95,70,.2)}
+.u2a .q-tag{--tag-color:#92400e;--tag-bg:rgba(146,64,14,.08);--tag-border:rgba(146,64,14,.2)}
+.u2b .q-tag{--tag-color:#7c3d8f;--tag-bg:rgba(124,61,143,.08);--tag-border:rgba(124,61,143,.2)}
+
+/* CARDS */
+.q-card{background:var(--surface);border:1.5px solid var(--border-soft);border-radius:14px;padding:22px 20px;margin-bottom:12px;transition:border-color .25s,box-shadow .25s;box-shadow:0 2px 10px rgba(0,0,0,.04);}
+.q-card:hover{border-color:var(--border);box-shadow:0 4px 20px var(--shadow)}
+.q-card.answered{border-color:rgba(55,48,163,.38);box-shadow:0 2px 14px rgba(55,48,163,.09);}
+.q-top{display:flex;align-items:flex-start;gap:14px;margin-bottom:12px}
+.q-num{min-width:32px;height:32px;border-radius:50%;background:var(--bg);border:1.5px solid var(--border-soft);display:flex;align-items:center;justify-content:center;font-family:'Fira Code',monospace;font-size:11px;font-weight:600;color:var(--muted);flex-shrink:0;margin-top:2px;transition:all .2s;}
+.q-num.done{background:var(--indigo-pale);border-color:var(--indigo);color:var(--indigo);}
+.q-stem{font-size:14.5px;line-height:1.72;color:var(--text);font-weight:400}
+.q-tag{font-family:'Fira Code',monospace;font-size:9px;letter-spacing:.8px;color:var(--tag-color,var(--indigo));background:var(--tag-bg,var(--indigo-dim));border:1px solid var(--tag-border,rgba(55,48,163,.2));padding:2px 10px;border-radius:10px;white-space:nowrap;margin-bottom:12px;display:inline-block;}
+.options-grid{display:flex;flex-direction:column;gap:7px}
+.opt-btn{width:100%;text-align:left;display:flex;align-items:flex-start;gap:12px;background:var(--surface2);border:1.5px solid var(--border-soft);border-radius:10px;padding:11px 14px;cursor:pointer;color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;font-size:13.5px;line-height:1.55;transition:all .18s;-webkit-tap-highlight-color:transparent;}
+.opt-btn:hover:not(:disabled){background:var(--indigo-pale);border-color:rgba(55,48,163,.32);transform:translateX(2px);}
+.opt-btn:disabled{cursor:default}
+.opt-btn.selected{background:var(--indigo-pale);border-color:var(--indigo);box-shadow:0 2px 10px rgba(55,48,163,.12);}
+.opt-letter{min-width:25px;height:25px;border-radius:50%;background:rgba(0,0,0,.04);border:1px solid rgba(0,0,0,.1);display:flex;align-items:center;justify-content:center;font-family:'Fira Code',monospace;font-size:11px;font-weight:600;color:var(--muted);flex-shrink:0;margin-top:1px;transition:all .18s;}
+.opt-btn.selected .opt-letter{background:var(--indigo);border-color:var(--indigo);color:#fff;box-shadow:0 2px 8px rgba(55,48,163,.4);}
+
+/* SUBMIT */
+.submit-section{max-width:900px;margin:28px auto 0;padding:0 16px 40px;text-align:center;}
+.unanswered-warn{background:rgba(192,57,43,.08);border:1px solid rgba(192,57,43,.3);border-radius:10px;padding:12px 16px;margin-bottom:16px;font-size:12px;color:var(--red);font-family:'Fira Code',monospace;display:none;}
+.submit-btn{padding:15px 52px;border:none;cursor:pointer;background:linear-gradient(135deg,var(--indigo),var(--indigo-bright),#818cf8);background-size:200% 100%;color:#fff;border-radius:50px;font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:700;letter-spacing:.5px;transition:all .4s;box-shadow:0 4px 24px rgba(55,48,163,.35);text-shadow:0 1px 2px rgba(0,0,0,.2);}
+.submit-btn:hover{background-position:right center;transform:translateY(-2px);box-shadow:0 8px 36px rgba(55,48,163,.5);}
+
+/* RESULT */
+#result-screen{min-height:100vh;display:none;align-items:center;justify-content:center;padding:100px 16px 60px;flex-direction:column;}
+#result-screen.active{display:flex}
+.result-card{background:var(--surface);border:1px solid var(--border);border-radius:24px;padding:34px 28px;width:100%;max-width:600px;position:relative;overflow:hidden;box-shadow:0 20px 70px var(--shadow),0 0 0 1px rgba(55,48,163,.04) inset;}
+.result-card::before{content:'';position:absolute;top:-80px;right:-80px;width:240px;height:240px;border-radius:50%;background:radial-gradient(circle,rgba(55,48,163,.07),transparent 70%);}
+.result-header{text-align:center;margin-bottom:24px}
+.result-emoji{font-size:50px;display:block;margin-bottom:10px}
+.result-grade{font-family:'Cormorant Garamond',serif;font-size:68px;font-weight:700;color:var(--indigo);line-height:1;margin-bottom:4px;}
+.result-score-label{font-family:'Fira Code',monospace;font-size:13px;color:var(--muted);letter-spacing:1px;}
+.result-verdict{font-family:'Cormorant Garamond',serif;font-size:15px;margin-top:8px;letter-spacing:.5px;font-style:italic;}
+.verdict-pass{color:var(--mint)}.verdict-fail{color:var(--red)}
+.result-info-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:20px 0}
+.result-info-item{background:var(--surface2);border:1px solid var(--border-soft);border-radius:12px;padding:11px 13px;}
+.ri-label{font-family:'Fira Code',monospace;font-size:8px;letter-spacing:1.5px;text-transform:uppercase;color:var(--indigo);margin-bottom:4px;}
+.ri-val{font-size:13px;color:var(--text);font-weight:600;word-break:break-word;}
+.section-breakdown{margin-top:20px}
+.sb-title{font-family:'Fira Code',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--teal);margin-bottom:12px;}
+.sb-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.sb-name{flex:1;color:var(--muted);font-size:11px}
+.sb-score{font-family:'Fira Code',monospace;color:var(--indigo);min-width:36px;text-align:right;font-size:12px;}
+.sb-bar-wrap{width:70px;height:4px;background:rgba(0,0,0,.07);border-radius:5px;overflow:hidden}
+.sb-bar-fill{height:100%;border-radius:5px;background:linear-gradient(90deg,var(--indigo),var(--teal-bright));}
+.result-actions{display:flex;gap:10px;margin-top:22px;flex-wrap:wrap}
+.action-btn{flex:1;min-width:110px;padding:12px 8px;border:none;cursor:pointer;border-radius:11px;font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;font-weight:600;letter-spacing:.3px;transition:all .25s;}
+.action-primary{background:linear-gradient(135deg,var(--indigo),var(--indigo-bright));color:#fff;box-shadow:0 4px 16px rgba(55,48,163,.3);text-shadow:0 1px 2px rgba(0,0,0,.15);}
+.action-primary:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(55,48,163,.45)}
+.action-secondary{background:var(--indigo-pale);border:1px solid var(--border);color:var(--indigo);}
+.action-secondary:hover{background:#dde0ff}
+.sub-id-box{margin-top:20px;padding:16px;background:var(--surface2);border:1px dashed rgba(55,48,163,.3);border-radius:12px;text-align:center;}
+.sub-id-label{font-family:'Fira Code',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:7px;}
+.sub-id-value{font-family:'Fira Code',monospace;font-size:13px;font-weight:600;color:var(--indigo);letter-spacing:1.5px;word-break:break-all;}
+.sub-id-hint{font-size:11px;color:var(--muted);margin-top:6px;font-style:italic}
+.status-badge{display:inline-flex;align-items:center;gap:6px;background:var(--indigo-pale);border:1px solid var(--border);border-radius:20px;padding:4px 14px;font-family:'Fira Code',monospace;font-size:10px;color:var(--indigo);margin-top:10px;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.pulse-dot{width:6px;height:6px;border-radius:50%;background:var(--indigo-bright);animation:pulse 1.2s ease infinite;}
+.pdf-notice{display:inline-flex;align-items:center;gap:6px;margin-top:10px;font-family:'Fira Code',monospace;font-size:10px;color:var(--teal);background:rgba(13,115,119,.07);border:1px solid rgba(13,115,119,.2);border-radius:20px;padding:4px 12px;}
+
+@media print{.kps-nav,.quiz-header,.result-actions,.timer-box,.sub-id-hint,.status-badge{display:none!important}body{background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}.result-card{border:2px solid #3730a3;box-shadow:none;page-break-inside:avoid}#result-screen{padding:20px!important;align-items:flex-start!important}}
+@media(max-width:520px){.kps-nav-links a.hide-mobile{display:none}.qh-student{max-width:80px}.timer-box{font-size:11px;padding:4px 8px}.result-info-grid{grid-template-columns:1fr 1fr}.form-row{grid-template-columns:1fr}.q-stem{font-size:13.5px}.opt-btn{font-size:13px;padding:10px 12px}.reg-card{padding:26px 18px}}
+</style>
+</head>
+<body>
+
+<nav class="kps-nav">
+  <a href="#" class="kps-nav-brand">
+    <img src="../../KP_Singh.png" onerror="this.style.display='none'" alt="KP" class="kps-nav-logo">
+    <div>
+      <div class="brand-name">K.P. Singh</div>
+      <div class="brand-sub">SRHU · BCT121</div>
+    </div>
+  </a>
+  <div class="kps-nav-links">
+    <a href="#" class="hide-mobile">← Notes</a>
+    <a href="https://kpsingh.in" target="_blank" rel="noopener" class="ext">kpsingh.in ↗</a>
+  </div>
+</nav>
+
+<!-- REGISTRATION -->
+<div id="reg-screen" class="screen active">
+  <div class="reg-card">
+    <div class="reg-badge">BCT121 · Unit I &amp; II · BCA 2nd Sem</div>
+    <h1 class="reg-title">Data <span>Science</span> Quiz</h1>
+    <p class="reg-sub">45 MCQ questions · 15 minutes · Introduction to Data Science<br>Result PDF downloads automatically on submission.</p>
+    <div class="topics-box">
+      <div class="topics-title">Topics Covered</div>
+      <ul>
+        <li><strong>Unit I —</strong> Overview, Definitions &amp; Importance of Data Science</li>
+        <li>Data Science Process: Steps &amp; Workflow</li>
+        <li>Roles: Data Scientist, Analyst, Engineer</li>
+        <li>Types, Sources &amp; Collection Methods of Data</li>
+        <li><strong>Unit II —</strong> Data Cleaning: Missing Values, Outliers, Inconsistencies</li>
+        <li>Data Transformation: Normalisation, Standardisation, Encoding</li>
+        <li>Data Integration: Combining Multiple Sources</li>
+        <li>Excel for Data Handling: Basic Functions &amp; Formulas</li>
+      </ul>
+    </div>
+    <div class="form-group">
+      <label class="form-label" for="inp-name">Full Name</label>
+      <input class="form-input" id="inp-name" type="text" placeholder="e.g. Riya Verma" autocomplete="name">
+    </div>
+    <div class="form-group">
+      <label class="form-label" for="inp-roll">Roll Number</label>
+      <input class="form-input" id="inp-roll" type="text" placeholder="e.g. DD221BCA001" autocomplete="off" style="text-transform:uppercase">
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label" for="inp-section">Section</label>
+        <select class="form-select" id="inp-section">
+          <option value="">Select…</option>
+          <option value="C1">C1</option>
+          <option value="C2">C2</option>
+          <option value="B1">B1</option>
+          <option value="B2">B2</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Branch</label>
+        <div class="form-fixed"><span class="lock">🔒</span> BCA</div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Semester</label>
+      <div class="form-fixed"><span class="lock">🔒</span> 2nd Semester</div>
+    </div>
+    <div class="form-error" id="form-error">Please fill in all required fields.</div>
+    <button class="start-btn" onclick="startQuiz()">Start Quiz →</button>
+  </div>
+</div>
+
+<!-- QUIZ -->
+<div id="quiz-screen" class="screen">
+  <div class="quiz-header">
+    <div class="quiz-header-inner">
+      <div class="qh-student" id="qh-name">—</div>
+      <div class="qh-progress-wrap" id="qh-progress-wrap">
+        <div class="qh-progress-label"><span id="prog-answered">0 answered</span><span id="prog-total">45 questions</span></div>
+        <div class="qh-progress-bar"><div class="qh-progress-fill" id="prog-fill"></div></div>
+      </div>
+      <div class="timer-box" id="timer-box">⏱ <span id="timer-display">15:00</span></div>
+      <span class="review-mode-label" id="review-mode-label">📋 REVIEW MODE</span>
+      <button class="review-back-btn" id="review-back-btn" onclick="backToResults()">← Back to Score</button>
+    </div>
+  </div>
+  <div class="quiz-content" id="quiz-content"></div>
+  <div class="submit-section" id="submit-section">
+    <div class="unanswered-warn" id="unanswered-warn"></div>
+    <button class="submit-btn" onclick="submitQuiz()">Submit Quiz ✓</button>
+  </div>
+</div>
+
+<!-- RESULTS -->
+<div id="result-screen" class="screen">
+  <div class="result-card" id="result-card-el">
+    <div class="result-header">
+      <span class="result-emoji" id="res-emoji">🎓</span>
+      <div class="result-grade" id="res-grade">—</div>
+      <div class="result-score-label" id="res-score-label">— / 45</div>
+      <div class="result-verdict" id="res-verdict"></div>
+      <div id="res-sending" style="display:none"><span class="status-badge"><span class="pulse-dot"></span> Saving to records…</span></div>
+      <div id="pdf-saving" style="display:none"><span class="status-badge"><span class="pulse-dot"></span> Downloading PDF…</span></div>
+      <div id="pdf-done" style="display:none"><span class="pdf-notice">✓ PDF saved to your device</span></div>
+    </div>
+    <div class="result-info-grid" id="res-info-grid"></div>
+    <div class="section-breakdown">
+      <div class="sb-title">Score by Section</div>
+      <div id="res-breakdown"></div>
+    </div>
+    <div class="result-actions">
+      <button class="action-btn action-primary" onclick="manualSavePDF()">⬇ Save PDF</button>
+      <button class="action-btn action-secondary" onclick="reviewQuiz()">Review Answers</button>
+    </div>
+    <div class="sub-id-box">
+      <div class="sub-id-label">Submission ID — Show to faculty</div>
+      <div class="sub-id-value" id="sub-id-value">—</div>
+      <div class="sub-id-hint">Show this screen or the PDF to K.P. Singh sir for attendance.</div>
+    </div>
+  </div>
+</div>
+
+<script>
+const SHEET_URL = 'YOUR_APPS_SCRIPT_URL_HERE';
+
+/* ════════════════════════════════════════════════════
+   45 QUESTIONS  ·  BCT121  ·  Unit I & II
+   U1-A: Overview & Process (11)
+   U1-B: Roles & Data Types (11)
+   U2-A: Cleaning & Transformation (12)
+   U2-B: Excel for Data Handling (11)
+═══════════════════════════════════════════════════ */
+const sections = [
+
+/* ── Unit I · Part A: Overview, Importance & DS Process ── 11 Q */
+{id:1,title:"Unit I — Overview & Process",subtitle:"Definitions · Importance · Workflow",secClass:"u1a",questions:[
+  {stem:"Data Science is BEST described as:",tag:"Definition",opts:["A tool used exclusively for building websites","An interdisciplinary field that uses statistics, programming, and domain knowledge to extract insights and value from data","A type of database management system","A Microsoft Office application for data entry"],ans:1},
+  {stem:"Which of the following is the MOST accurate statement about why Data Science is important today?",tag:"Concept",opts:["It replaces the need for human decision-making entirely","Organisations generate massive amounts of data that, when properly analysed, can drive better decisions, improve products, and discover new opportunities","It is only useful for technology companies","It is primarily used to design user interfaces"],ans:1},
+  {stem:"Arrange the typical Data Science Process in the correct order:",tag:"Sequence",opts:["Model → Clean → Collect → Analyse → Deploy","Collect data → Clean & preprocess → Explore (EDA) → Build model → Evaluate → Deploy","Deploy → Collect → Model → Clean","Analyse → Collect → Clean → Visualise → Done"],ans:1},
+  {stem:"In the Data Science workflow, which step comes IMMEDIATELY after data collection?",tag:"Sequence",opts:["Model building","Deployment to production","Data cleaning and preprocessing","Writing the final report"],ans:2},
+  {stem:"A retail company uses past purchase records to predict which products a customer is likely to buy next. This is an example of Data Science being applied in:",tag:"Application",opts:["Government regulation","Business / E-commerce — personalised recommendations","Network hardware design","Physical infrastructure planning"],ans:1},
+  {stem:"Which of the following BEST describes the goal of the 'Data Understanding' step in the DS process?",tag:"Concept",opts:["To write code for the final machine learning model","To explore the dataset, check distributions, spot anomalies, and understand relationships before modelling","To deploy the model to end users","To present final results to stakeholders"],ans:1},
+  {stem:"'Structured data' refers to:",tag:"Definition",opts:["Data stored in images and videos","Data organised in rows and columns with a defined schema — e.g., a database table or Excel spreadsheet","Data that has been cleaned and normalised","Any data collected from the internet"],ans:1},
+  {stem:"Which of the following is an example of UNSTRUCTURED data?",tag:"Definition",opts:["A CSV file of student marks","A relational database of employee salaries","A collection of customer review text, audio recordings, and social media images","An Excel sheet with product inventory"],ans:2},
+  {stem:"Semi-structured data is:",tag:"Definition",opts:["Data that is partially deleted","Data that does not fit neatly into a table but has some organisational properties — e.g., JSON, XML, emails with headers","Only audio and video data","Data stored in two separate Excel files"],ans:1},
+  {stem:"Primary data sources are:",tag:"Definition",opts:["Data collected by someone else and shared publicly","Data collected directly by the researcher or organisation for their specific purpose — e.g., surveys, experiments","Historical records from government archives","Open datasets downloaded from Kaggle"],ans:1},
+  {stem:"Which of the following is a secondary data source?",tag:"Application",opts:["A survey you designed and distributed to 200 students","Sensor readings from your own IoT devices","A publicly available government census dataset","Lab measurements collected in your experiment"],ans:2}
+]},
+
+/* ── Unit I · Part B: Roles & Data Types/Sources ── 11 Q */
+{id:2,title:"Unit I — Roles & Data",subtitle:"Data Scientist · Analyst · Engineer · Sources",secClass:"u1b",questions:[
+  {stem:"A Data Scientist's PRIMARY role is to:",tag:"Definition",opts:["Manage network servers and database infrastructure","Design UI/UX for data dashboards","Apply statistical and machine learning techniques to build predictive models and extract insights from data","Write SQL queries to pull reports for managers"],ans:2},
+  {stem:"How does a Data Analyst differ from a Data Scientist?",tag:"Concept",opts:["A Data Analyst uses Python; a Data Scientist uses Excel","A Data Analyst focuses on describing and interpreting existing data to answer business questions; a Data Scientist also builds predictive models for future outcomes","They are identical roles with different titles","A Data Scientist reports to a Data Analyst"],ans:1},
+  {stem:"A Data Engineer is responsible for:",tag:"Definition",opts:["Building and maintaining the data pipelines, databases, and infrastructure that allow data to flow reliably from sources to analysts and scientists","Presenting charts and reports to the CEO","Running A/B tests on websites","Writing press releases about company data"],ans:0},
+  {stem:"Which role would you assign to a person building an automated pipeline that pulls data from 10 APIs, cleans it, and loads it into a data warehouse every hour?",tag:"Application",opts:["Data Analyst","Business Intelligence Developer","Data Engineer","Machine Learning Researcher"],ans:2},
+  {stem:"Which role would interpret a sales dashboard and write a report explaining why revenue dropped by 15% last quarter?",tag:"Application",opts:["Data Engineer","Data Scientist","Data Analyst","Database Administrator"],ans:2},
+  {stem:"Quantitative data is:",tag:"Definition",opts:["Data expressed in categories or labels (e.g., colours, gender)","Numerical data that can be measured and calculated — e.g., height, temperature, sales revenue","Only data collected through surveys","Data stored as images"],ans:1},
+  {stem:"Which of the following is an example of CATEGORICAL (qualitative) data?",tag:"Application",opts:["The temperature recorded each hour","The number of products sold per day","A customer's preferred payment method (Cash / Card / UPI)","The weight of packages in kg"],ans:2},
+  {stem:"'Big Data' is characterised by the 3 Vs. Which combination is correct?",tag:"Definition",opts:["Value, Vision, Velocity","Volume, Variety, Velocity","Variance, Volume, Validity","Value, Volume, Verification"],ans:1},
+  {stem:"Web scraping is a method of data collection that:",tag:"Definition",opts:["Physically cleans dust from servers","Automatically extracts data from websites using programs/scripts","Encrypts data before storage","Synchronises data across multiple databases"],ans:1},
+  {stem:"Which of the following is an example of real-time data collection?",tag:"Application",opts:["Reading a 10-year-old government report","Downloading last year's census data","A sensor on a factory machine streaming temperature readings every second","Filling out a paper survey"],ans:2},
+  {stem:"An API (Application Programming Interface) as a data source means:",tag:"Definition",opts:["A physical memory card used to transfer data","A standardised way for software systems to communicate — allowing you to request and receive data from another application (e.g., Twitter API for tweets)","A type of Excel formula","A method of data encryption"],ans:1}
+]},
+
+/* ── Unit II · Part A: Data Cleaning & Transformation ── 12 Q */
+{id:3,title:"Unit II — Cleaning & Transformation",subtitle:"Missing Values · Outliers · Normalisation · Encoding",secClass:"u2a",questions:[
+  {stem:"Data cleaning is necessary because:",tag:"Concept",opts:["Clean data always arrives from external sources automatically","Raw data often contains errors, missing values, duplicates, and inconsistencies that would produce incorrect or misleading analysis results","Data cleaning makes files smaller","It is required by Excel before opening any file"],ans:1},
+  {stem:"A dataset has a column 'Age' where some rows are blank. This is an example of:",tag:"Definition",opts:["An outlier","A duplicate record","A missing value","A data type mismatch"],ans:2},
+  {stem:"Which is the BEST strategy for handling missing values in a numerical column when only 3% of rows are missing?",tag:"Application",opts:["Delete the entire column","Replace missing values with the column mean or median — a small percentage won't significantly distort the data","Leave them blank — analysis tools handle blanks automatically","Replace with zero in all cases"],ans:1},
+  {stem:"An outlier in a dataset is:",tag:"Definition",opts:["A value that appears most frequently","A missing or blank cell","A data point that differs significantly from the majority of other values in the dataset","A duplicate row"],ans:2},
+  {stem:"In Excel, which function helps identify if a cell is empty (missing)?",tag:"Excel",opts:["=ISBLANK()","=EMPTY()","=MISSING()","=ISNULL()"],ans:0},
+  {stem:"Data normalisation scales numerical values to:",tag:"Definition",opts:["Whole numbers only (integers)","A common range — typically 0 to 1 — so no single variable dominates due to its larger scale","The same number of decimal places","Alphabetical order"],ans:1},
+  {stem:"Standardisation (Z-score normalisation) transforms data so that:",tag:"Definition",opts:["All values become positive","The mean becomes 0 and the standard deviation becomes 1 for each feature","Values are capped at 100","All columns have the same number of rows"],ans:1},
+  {stem:"Label encoding is used to:",tag:"Definition",opts:["Add labels to charts in Excel","Convert categorical text values into numerical codes — e.g., Red=0, Green=1, Blue=2","Rename column headers","Sort data alphabetically"],ans:1},
+  {stem:"One-Hot Encoding converts a categorical column with k unique values into:",tag:"Definition",opts:["One column with numbers 1 to k","k separate binary (0/1) columns — one per category — avoiding false ordinal relationships","A single column of fractions","k rows of text labels"],ans:1},
+  {stem:"A dataset contains student names entered as 'riya verma', 'RIYA VERMA', and 'Riya Verma' — all representing the same person. This is an example of:",tag:"Definition",opts:["An outlier","Missing data","Data inconsistency — same entity represented in different formats","Duplicate data"],ans:2},
+  {stem:"Which Excel function removes extra spaces from text data during cleaning?",tag:"Excel",opts:["=CLEAN()","=TRIM()","=REMOVE()","=STRIP()"],ans:1},
+  {stem:"When should you DROP a row with a missing value rather than imputing it?",tag:"Application",opts:["Always — dropping is always safer than imputing","When missing values are random and the proportion is very small, OR when the missing values are in critical columns where imputation would be meaningless (e.g., the target/outcome variable)","Never — all rows must be preserved","Only when the dataset has more than 10,000 rows"],ans:1}
+]},
+
+/* ── Unit II · Part B: Data Integration & Excel ── 11 Q */
+{id:4,title:"Unit II — Integration & Excel",subtitle:"Combining Sources · Functions · Formulas",secClass:"u2b",questions:[
+  {stem:"Data integration is the process of:",tag:"Definition",opts:["Deleting duplicate tables from a database","Combining data from multiple different sources into a unified, consistent dataset for analysis","Encrypting data before sharing","Converting data from Excel to PDF"],ans:1},
+  {stem:"A company has customer data in three separate systems: a CRM, a billing database, and a survey platform. Merging all three into one analysis-ready table is an example of:",tag:"Application",opts:["Data cleaning","Data normalisation","Data integration","Data encoding"],ans:2},
+  {stem:"Which Excel function is used to look up a value in one table and return a matching value from another column — useful for integrating two data tables?",tag:"Excel",opts:["=MATCH()","=INDEX()","=VLOOKUP()","=CONCATENATE()"],ans:2},
+  {stem:"The Excel function =COUNTIF(A1:A100, 'Delhi') returns:",tag:"Excel",opts:["The sum of all values in A1:A100","The number of cells in A1:A100 that contain the text 'Delhi'","The position of the first 'Delhi' in the range","TRUE if 'Delhi' exists in the range"],ans:1},
+  {stem:"Which Excel function adds values only when a condition is met?",tag:"Excel",opts:["=SUM()","=SUMIF()","=AVERAGEIF()","=COUNTIF()"],ans:1},
+  {stem:"=IFERROR(VLOOKUP(A2,B:C,2,0), 'Not Found') — what does the IFERROR part do?",tag:"Excel",opts:["It forces VLOOKUP to search from the bottom","It returns 'Not Found' instead of displaying an error if VLOOKUP fails to find a match","It makes VLOOKUP case-sensitive","It searches in column C instead of B"],ans:1},
+  {stem:"In Excel, =LEFT(A1, 3) returns:",tag:"Excel",opts:["The rightmost 3 characters of cell A1","The 3rd character only","The first 3 characters from the left of cell A1","The length of the text in A1"],ans:2},
+  {stem:"The =CONCATENATE() or & operator in Excel is used for:",tag:"Excel",opts:["Multiplying two cell values","Joining (merging) text from multiple cells into one — e.g., combining First Name and Last Name","Sorting data alphabetically","Counting the number of characters"],ans:1},
+  {stem:"Which Excel function converts text like 'delhi' to 'Delhi' (first letter capitalised)?",tag:"Excel",opts:["=UPPER()","=LOWER()","=PROPER()","=TITLE()"],ans:2},
+  {stem:"A data scientist uses =REMOVE_DUPLICATES in Excel but cannot find this function. The correct way to remove duplicate rows in Excel is:",tag:"Excel",opts:["Home → Find & Select → Remove All","There is no built-in feature — you must do it manually","Data tab → Remove Duplicates — select the columns to check for duplicates","Format → Clean → Deduplicate"],ans:2},
+  {stem:"The Excel =IF(B2>=40, 'Pass', 'Fail') formula returns:",tag:"Excel",opts:["The value 40","'Pass' if the value in B2 is 40 or more; otherwise 'Fail'","Always 'Pass'","A number representing the pass rate"],ans:1}
+]}
+];
+
+const allQuestions=[];
+sections.forEach(sec=>sec.questions.forEach(q=>allQuestions.push({...q,sectionId:sec.id,secClass:sec.secClass})));
+const TOTAL=allQuestions.length;
+
+let studentInfo={};
+let answers=new Array(TOTAL).fill(null);
+let timerInterval=null;
+let secondsLeft=15*60;
+let quizSubmitted=false;
+let inReviewMode=false;
+
+function startQuiz(){
+  const name=document.getElementById('inp-name').value.trim();
+  const roll=document.getElementById('inp-roll').value.trim().toUpperCase();
+  const section=document.getElementById('inp-section').value;
+  const err=document.getElementById('form-error');
+  if(!name||!roll||!section){err.style.display='block';return;}
+  err.style.display='none';
+  studentInfo={name,roll,section,branch:'BCA',semester:'2nd'};
+  document.getElementById('qh-name').textContent=name+' · '+section;
+  document.getElementById('prog-total').textContent=TOTAL+' questions';
+  renderQuiz();
+  switchScreen('quiz-screen');
+  startTimer();
+  window.scrollTo(0,0);
+}
+
+function renderQuiz(){
+  const L=['A','B','C','D'];
+  let html='',qi=0;
+  sections.forEach(sec=>{
+    html+=`<div class="section-divider ${sec.secClass}">
+      <div class="sec-line"></div>
+      <div class="sec-badge ${sec.secClass}">${sec.title}<small>${sec.subtitle}</small></div>
+      <div class="sec-line right"></div>
+    </div>`;
+    sec.questions.forEach(q=>{
+      const i=qi++;
+      html+=`<div class="q-card ${sec.secClass}" id="qcard-${i}">
+        <div class="q-top">
+          <div class="q-num" id="qnum-${i}">${i+1}</div>
+          <div class="q-stem">${q.stem}</div>
+        </div>
+        <div class="q-tag ${sec.secClass}">${q.tag}</div>
+        <div class="options-grid" id="opts-${i}">
+          ${q.opts.map((o,oi)=>`<button class="opt-btn" id="opt-${i}-${oi}" onclick="selectAnswer(${i},${oi})">
+            <span class="opt-letter">${L[oi]}</span><span>${o}</span>
+          </button>`).join('')}
+        </div>
+      </div>`;
+    });
+  });
+  document.getElementById('quiz-content').innerHTML=html;
+}
+
+function selectAnswer(qi,oi){
+  if(quizSubmitted)return;
+  answers[qi]=oi;
+  document.querySelectorAll(`#opts-${qi} .opt-btn`).forEach((b,i)=>b.classList.toggle('selected',i===oi));
+  document.getElementById(`qcard-${qi}`).classList.add('answered');
+  document.getElementById(`qnum-${qi}`).classList.add('done');
+  const done=answers.filter(a=>a!==null).length;
+  document.getElementById('prog-answered').textContent=done+' answered';
+  document.getElementById('prog-fill').style.width=(done/TOTAL*100)+'%';
+}
+
+function startTimer(){
+  timerInterval=setInterval(()=>{
+    secondsLeft--;
+    const m=String(Math.floor(secondsLeft/60)).padStart(2,'0');
+    const s=String(secondsLeft%60).padStart(2,'0');
+    document.getElementById('timer-display').textContent=`${m}:${s}`;
+    if(secondsLeft<=300)document.getElementById('timer-box').classList.add('warning');
+    if(secondsLeft<=0){clearInterval(timerInterval);finalize();}
+  },1000);
+}
+
+function submitQuiz(){
+  const u=answers.filter(a=>a===null).length;
+  const warn=document.getElementById('unanswered-warn');
+  if(u>0&&!warn.dataset.primed){
+    warn.textContent=`⚠ ${u} question${u>1?'s':''} unanswered. Tap here to submit anyway.`;
+    warn.style.display='block';warn.style.cursor='pointer';
+    warn.dataset.primed='1';
+    warn.onclick=()=>{warn.style.display='none';finalize();};
+    return;
+  }
+  finalize();
+}
+
+function finalize(){
+  clearInterval(timerInterval);
+  quizSubmitted=true;
+  let total=0;
+  const secScores=sections.map(()=>0);
+  allQuestions.forEach((q,i)=>{if(answers[i]===q.ans){total++;secScores[q.sectionId-1]++;}});
+  const pct=Math.round(total/TOTAL*100);
+  const pass=pct>=40;
+  let grade='F';
+  if(pct>=90)grade='A+';else if(pct>=80)grade='A';else if(pct>=70)grade='B';
+  else if(pct>=60)grade='C';else if(pct>=50)grade='D';else if(pct>=40)grade='E';
+  const elapsed=15*60-secondsLeft;
+  const timeTaken=`${String(Math.floor(elapsed/60)).padStart(2,'0')}m ${String(elapsed%60).padStart(2,'0')}s`;
+  const submissionId=`${studentInfo.roll}-DS12-${grade}-${Date.now().toString(36).toUpperCase()}`;
+  const submittedAt=new Date().toLocaleString('en-IN',{timeZone:'Asia/Kolkata',day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit',hour12:true});
+
+  const payload={
+    name:studentInfo.name,roll:studentInfo.roll,section:studentInfo.section,
+    branch:studentInfo.branch,semester:studentInfo.semester,
+    score:total,total:TOTAL,percentage:pct,grade,
+    timeTaken,passed:pass,submissionId,submittedAt,
+    quizType:'DS BCT121 Unit-I & II',
+    u1a:secScores[0],u1b:secScores[1],u2a:secScores[2],u2b:secScores[3]
+  };
+
+  document.getElementById('res-sending').style.display='block';
+  fetch(SHEET_URL,{method:'POST',mode:'no-cors',body:JSON.stringify(payload)}).catch(()=>{}).finally(()=>document.getElementById('res-sending').style.display='none');
+
+  const emojis={'A+':'🏆','A':'🌟','B':'🎯','C':'📚','D':'💪','E':'🤞','F':'📖'};
+  document.getElementById('res-emoji').textContent=emojis[grade];
+  document.getElementById('res-grade').textContent=`${total}/${TOTAL}`;
+  document.getElementById('res-score-label').textContent=`${pct}% · Grade ${grade}`;
+  document.getElementById('res-verdict').innerHTML=pass
+    ?`<span class="verdict-pass">✓ PASSED</span>`
+    :`<span class="verdict-fail">✗ Needs Improvement</span>`;
+
+  document.getElementById('res-info-grid').innerHTML=`
+    <div class="result-info-item"><div class="ri-label">Name</div><div class="ri-val">${studentInfo.name}</div></div>
+    <div class="result-info-item"><div class="ri-label">Roll No.</div><div class="ri-val">${studentInfo.roll}</div></div>
+    <div class="result-info-item"><div class="ri-label">Section</div><div class="ri-val">${studentInfo.section}</div></div>
+    <div class="result-info-item"><div class="ri-label">Branch / Sem</div><div class="ri-val">BCA · 2nd</div></div>
+    <div class="result-info-item"><div class="ri-label">Time Taken</div><div class="ri-val">${timeTaken}</div></div>
+    <div class="result-info-item"><div class="ri-label">Submitted At</div><div class="ri-val">${submittedAt}</div></div>`;
+
+  const secMeta=[
+    {name:'U-I A: Overview & Process',total:11},
+    {name:'U-I B: Roles & Data',total:11},
+    {name:'U-II A: Cleaning & Transform',total:12},
+    {name:'U-II B: Integration & Excel',total:11}
+  ];
+  document.getElementById('res-breakdown').innerHTML=secMeta.map((s,i)=>{
+    const got=secScores[i];
+    return`<div class="sb-row">
+      <div class="sb-name">${s.name}</div>
+      <div class="sb-bar-wrap"><div class="sb-bar-fill" style="width:${got/s.total*100}%"></div></div>
+      <div class="sb-score">${got}/${s.total}</div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('sub-id-value').textContent=submissionId;
+  switchScreen('result-screen');
+  window.scrollTo(0,0);
+  setTimeout(()=>autoSavePDF(submissionId),1200);
+}
+
+function autoSavePDF(sid){
+  if(typeof html2pdf==='undefined'){window.print();return;}
+  const el=document.getElementById('result-card-el');
+  const filename=`${studentInfo.roll||'student'}-DS-Unit1-2-${sid||'result'}.pdf`;
+  document.getElementById('pdf-saving').style.display='block';
+  document.getElementById('pdf-done').style.display='none';
+  html2pdf().set({
+    margin:[12,10,12,10],filename,
+    image:{type:'jpeg',quality:.97},
+    html2canvas:{scale:2,useCORS:true,backgroundColor:'#ffffff',logging:false},
+    jsPDF:{unit:'mm',format:'a4',orientation:'portrait'}
+  }).from(el).save().then(()=>{
+    document.getElementById('pdf-saving').style.display='none';
+    document.getElementById('pdf-done').style.display='block';
+  }).catch(()=>{document.getElementById('pdf-saving').style.display='none';});
+}
+
+function manualSavePDF(){const sid=document.getElementById('sub-id-value').textContent||'result';autoSavePDF(sid);}
+
+function reviewQuiz(){
+  inReviewMode=true;
+  switchScreen('quiz-screen');
+  document.getElementById('submit-section').style.display='none';
+  document.getElementById('qh-name').textContent='📋 Review Mode';
+  document.getElementById('qh-progress-wrap').style.display='none';
+  document.getElementById('timer-box').style.display='none';
+  document.getElementById('review-mode-label').style.display='block';
+  document.getElementById('review-back-btn').style.display='flex';
+  allQuestions.forEach((q,i)=>{
+    document.querySelectorAll(`#opts-${i} .opt-btn`).forEach((btn,oi)=>{
+      btn.disabled=true;
+      if(oi===q.ans){
+        btn.style.background='rgba(14,124,74,.12)';btn.style.borderColor='#0e7c4a';
+        btn.querySelector('.opt-letter').style.cssText='background:#0e7c4a;color:#fff;border-color:#0e7c4a';
+      }
+      if(answers[i]!==null&&oi===answers[i]&&oi!==q.ans){
+        btn.style.background='rgba(192,57,43,.12)';btn.style.borderColor='#c0392b';
+        btn.querySelector('.opt-letter').style.cssText='background:#c0392b;color:#fff;border-color:#c0392b';
+      }
+    });
+  });
+  window.scrollTo(0,0);
+}
+
+function backToResults(){
+  inReviewMode=false;
+  document.getElementById('qh-name').textContent=studentInfo.name+' · '+studentInfo.section;
+  document.getElementById('qh-progress-wrap').style.display='block';
+  document.getElementById('timer-box').style.display='flex';
+  document.getElementById('review-mode-label').style.display='none';
+  document.getElementById('review-back-btn').style.display='none';
+  switchScreen('result-screen');
+  window.scrollTo(0,0);
+}
+
+function switchScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+</script>
+</body>
+</html>
