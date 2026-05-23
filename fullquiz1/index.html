@@ -1,0 +1,1488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Data Science Quiz · BCA 2nd Sem · K.P. Singh · SRHU</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=Inconsolata:wght@400;600;700&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<style>
+:root {
+  --accent: #1a6b4a;
+  --accent-pale: #e8f4ef;
+  --accent-mid: rgba(26,107,74,0.12);
+  --accent-dark: #134d36;
+  --accent-light: #2e8f63;
+  --ink: #1a1c1e;
+  --paper: #faf9f6;
+  --cream: #f5f2ec;
+  --slate: #5a6272;
+  --slate-light: #8a94a6;
+  --border: #e2ddd5;
+  --border-strong: #c8c0b4;
+  --rose: #c0392b;
+  --rose-pale: #fdf2f2;
+  --rose-mid: rgba(192,57,43,0.12);
+  --teal: #1a7a5e;
+  --shadow-sm: 0 1px 4px rgba(0,0,0,0.06), 0 2px 8px rgba(0,0,0,0.04);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.08), 0 2px 6px rgba(0,0,0,0.05);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.10), 0 4px 12px rgba(0,0,0,0.06);
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --s1: #1a6b4a; --s1p: #e8f4ef;
+  --s2: #6b4a1a; --s2p: #f4ede8;
+  --s3: #1a3f6b; --s3p: #e8eef4;
+  --s4: #6b1a4a; --s4p: #f4e8ef;
+  --s5: #4a6b1a; --s5p: #eff4e8;
+  --s6: #1a4a6b; --s6p: #e8f0f4;
+  --s7: #6b1a1a; --s7p: #f4e8e8;
+  --s8: #3d1a6b; --s8p: #ede8f4;
+  --s9: #1a6b6b; --s9p: #e8f4f4;
+  --s10: #6b5a1a; --s10p: #f4f0e8;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:'DM Sans',sans-serif;
+  background-color:var(--paper);
+  color:var(--ink);
+  min-height:100vh;
+  position:relative;
+  overflow-x:hidden;
+}
+body::before{
+  content:'';
+  position:fixed;
+  inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  opacity:0.025;
+  pointer-events:none;
+  z-index:0;
+}
+body::after{
+  content:'';
+  position:fixed;
+  top:0;right:0;
+  width:300px;height:300px;
+  background:repeating-linear-gradient(45deg,var(--accent) 0,var(--accent) 1px,transparent 0,transparent 50%);
+  background-size:20px 20px;
+  opacity:0.03;
+  pointer-events:none;
+  z-index:0;
+}
+
+/* NAV */
+.nav{
+  position:fixed;top:0;left:0;right:0;
+  height:60px;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 24px;
+  background:rgba(250,249,246,0.88);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);
+  z-index:1000;
+}
+.nav-brand{display:flex;align-items:center;gap:10px;}
+.nav-logo{
+  width:36px;height:36px;border-radius:50%;
+  background:var(--accent);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'DM Serif Display',serif;
+  color:#fff;font-size:14px;font-weight:700;letter-spacing:-0.5px;
+  flex-shrink:0;
+}
+.nav-name{font-family:'DM Serif Display',serif;font-size:17px;color:var(--ink);line-height:1.1;}
+.nav-sub{font-family:'Inconsolata',monospace;font-size:10px;color:var(--slate);letter-spacing:0.3px;}
+.nav-right{display:flex;align-items:center;gap:12px;}
+.nav-link{
+  font-family:'DM Sans',sans-serif;font-size:13px;color:var(--slate);
+  text-decoration:none;cursor:pointer;background:none;border:none;
+  transition:color 0.2s;
+}
+.nav-link:hover{color:var(--accent);}
+.nav-cta{
+  font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;
+  background:var(--accent);color:#fff;
+  padding:6px 14px;border-radius:20px;
+  text-decoration:none;border:none;cursor:pointer;
+  transition:background 0.2s;
+}
+.nav-cta:hover{background:var(--accent-dark);}
+.hide-m{display:flex;}
+
+/* SCREENS */
+.screen{display:none;padding-top:60px;min-height:100vh;}
+.screen.active{display:block;}
+
+/* ===== SCREEN 1: REGISTRATION ===== */
+#reg-screen{padding-top:76px;}
+.reg-layout{
+  max-width:1100px;margin:0 auto;padding:32px 24px;
+  display:grid;grid-template-columns:1fr 420px;gap:28px;
+  align-items:start;
+}
+.reg-card{
+  background:#fff;border-radius:var(--radius-lg);
+  box-shadow:var(--shadow-md);
+  overflow:hidden;
+  border:1px solid var(--border);
+}
+.reg-card-top{height:5px;background:linear-gradient(90deg,var(--accent),var(--accent-light));}
+.reg-card-body{padding:32px;}
+.reg-eyebrow{
+  font-family:'Inconsolata',monospace;font-size:11px;font-weight:600;
+  color:var(--accent);letter-spacing:1.2px;text-transform:uppercase;
+  margin-bottom:10px;
+}
+.reg-title{
+  font-family:'DM Serif Display',serif;font-size:30px;line-height:1.2;
+  color:var(--ink);margin-bottom:6px;
+}
+.reg-title em{font-style:italic;color:var(--accent);}
+.reg-subtitle{
+  font-family:'DM Sans',sans-serif;font-size:13px;color:var(--slate);
+  margin-bottom:24px;line-height:1.6;
+}
+.topics-box{
+  background:var(--accent-mid);border:1px solid rgba(26,107,74,0.2);
+  border-radius:var(--radius-md);padding:16px 18px;margin-bottom:24px;
+}
+.topics-title{
+  font-family:'DM Serif Display',serif;font-size:13px;color:var(--accent);
+  margin-bottom:10px;
+}
+.topics-list{
+  list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:4px 12px;
+}
+.topics-list li{
+  font-size:12px;color:var(--slate);
+  padding-left:14px;position:relative;line-height:1.5;
+}
+.topics-list li::before{content:'·';position:absolute;left:0;color:var(--accent);}
+.form-group{margin-bottom:16px;}
+.form-label{
+  display:block;font-size:12px;font-weight:600;color:var(--slate);
+  margin-bottom:6px;letter-spacing:0.3px;text-transform:uppercase;
+  font-family:'Inconsolata',monospace;
+}
+.form-input,.form-select{
+  width:100%;padding:10px 14px;
+  border:1.5px solid var(--border);border-radius:var(--radius-sm);
+  font-family:'DM Sans',sans-serif;font-size:14px;color:var(--ink);
+  background:#fff;transition:border-color 0.2s,box-shadow 0.2s;
+  outline:none;
+}
+.form-input:focus,.form-select:focus{
+  border-color:var(--accent);
+  box-shadow:0 0 0 3px var(--accent-mid);
+}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.form-locked{
+  width:100%;padding:10px 14px;
+  border:1.5px solid var(--border);border-radius:var(--radius-sm);
+  font-family:'DM Sans',sans-serif;font-size:14px;color:var(--slate);
+  background:var(--cream);display:flex;align-items:center;gap:6px;
+}
+.error-msg{
+  display:none;background:var(--rose-pale);border:1px solid var(--rose);
+  border-radius:var(--radius-sm);padding:10px 14px;
+  color:var(--rose);font-size:13px;margin-bottom:16px;
+}
+.btn-begin{
+  width:100%;padding:14px;
+  background:var(--accent);color:#fff;border:none;
+  border-radius:var(--radius-md);cursor:pointer;
+  font-family:'DM Serif Display',serif;font-size:18px;
+  letter-spacing:0.3px;transition:background 0.2s,transform 0.1s;
+}
+.btn-begin:hover{background:var(--accent-dark);}
+.btn-begin:active{transform:scale(0.99);}
+
+/* LEADERBOARD WIDGET */
+.lb-widget{
+  background:#fff;border-radius:var(--radius-lg);
+  box-shadow:var(--shadow-md);border:1px solid var(--border);
+  overflow:hidden;position:sticky;top:76px;
+}
+.lb-widget-head{
+  background:linear-gradient(135deg,var(--accent-dark),var(--accent));
+  padding:20px;color:#fff;
+}
+.lb-widget-title{
+  font-family:'DM Serif Display',serif;font-size:19px;
+  display:flex;align-items:center;gap:10px;
+}
+.live-dot{
+  width:8px;height:8px;border-radius:50%;background:#4ade80;
+  animation:blink 1.4s ease-in-out infinite;
+  display:inline-block;
+}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:0.2;}}
+.lb-widget-sub{font-family:'Inconsolata',monospace;font-size:11px;opacity:0.75;margin-top:4px;}
+.lb-widget-body{padding:16px;}
+.lb-row{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 12px;border-radius:var(--radius-sm);
+  margin-bottom:6px;background:var(--cream);
+  border:1px solid var(--border);
+}
+.lb-medal{font-size:18px;width:24px;text-align:center;}
+.lb-rank{font-family:'Inconsolata',monospace;font-size:11px;color:var(--slate);width:20px;}
+.lb-info{flex:1;min-width:0;}
+.lb-name{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.lb-roll{font-family:'Inconsolata',monospace;font-size:10px;color:var(--slate);}
+.lb-prog{height:3px;background:var(--border);border-radius:2px;margin-top:5px;}
+.lb-prog-fill{height:3px;background:var(--accent);border-radius:2px;transition:width 0.5s;}
+.lb-score{text-align:right;flex-shrink:0;}
+.lb-score-num{font-family:'DM Serif Display',serif;font-size:16px;color:var(--accent);}
+.lb-score-pct{font-family:'Inconsolata',monospace;font-size:10px;color:var(--slate);}
+.lb-grade{
+  font-family:'Inconsolata',monospace;font-size:10px;font-weight:700;
+  background:var(--accent);color:#fff;
+  padding:2px 6px;border-radius:3px;display:block;margin-top:2px;
+}
+.lb-footer{
+  padding:12px 16px;border-top:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.lb-updated{font-family:'Inconsolata',monospace;font-size:10px;color:var(--slate-light);}
+.lb-view-link{font-size:12px;color:var(--accent);text-decoration:none;cursor:pointer;background:none;border:none;}
+.lb-spinner{text-align:center;padding:24px;color:var(--slate-light);font-size:13px;}
+.lb-empty{text-align:center;padding:24px;color:var(--slate-light);font-size:13px;font-style:italic;}
+
+/* ===== SCREEN 2: QUIZ ===== */
+#quiz-screen{padding-top:60px;}
+.quiz-subbar{
+  position:fixed;top:60px;left:0;right:0;
+  background:rgba(250,249,246,0.95);backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--border);
+  padding:10px 24px;z-index:900;
+  display:flex;align-items:center;gap:16px;
+  flex-wrap:wrap;
+}
+.student-label{
+  font-size:13px;font-weight:500;color:var(--ink);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  max-width:180px;
+}
+.progress-wrap{flex:1;display:flex;align-items:center;gap:8px;min-width:0;}
+.prog-label{font-family:'Inconsolata',monospace;font-size:11px;color:var(--slate);white-space:nowrap;}
+.prog-track{
+  flex:1;height:6px;background:var(--border);border-radius:3px;
+  overflow:hidden;min-width:40px;
+}
+.prog-fill{
+  height:6px;background:linear-gradient(90deg,var(--accent),var(--accent-light));
+  border-radius:3px;transition:width 0.4s ease;width:0%;
+}
+.timer-badge{
+  font-family:'Inconsolata',monospace;font-size:14px;font-weight:700;
+  background:var(--accent);color:#fff;
+  padding:5px 12px;border-radius:20px;
+  flex-shrink:0;transition:background 0.3s;
+}
+.timer-badge.warn{background:var(--rose);animation:pulse-warn 1s ease-in-out infinite;}
+@keyframes pulse-warn{0%,100%{opacity:1;}50%{opacity:0.7;}}
+#review-label{font-family:'Inconsolata',monospace;font-size:11px;font-weight:700;color:var(--accent);letter-spacing:1px;display:none;}
+#back-to-score{display:none;}
+
+.quiz-content{max-width:900px;margin:0 auto;padding:110px 24px 60px;}
+
+/* Section Header */
+.section-header{
+  display:flex;align-items:center;gap:12px;margin:36px 0 20px;
+}
+.section-line{flex:1;height:1px;background:var(--border);}
+.section-pill{
+  display:flex;align-items:center;gap:8px;
+  padding:7px 18px;border-radius:20px;
+  color:#fff;font-family:'DM Serif Display',serif;font-size:14px;
+  white-space:nowrap;flex-shrink:0;
+}
+.section-sub{
+  font-family:'Inconsolata',monospace;font-size:10px;
+  opacity:0.8;font-weight:400;font-style:normal;
+}
+
+/* Question Card */
+.q-card{
+  background:#fff;border-radius:var(--radius-md);
+  border:1.5px solid var(--border);
+  box-shadow:var(--shadow-sm);
+  padding:20px 22px;margin-bottom:14px;
+  transition:box-shadow 0.2s,border-color 0.2s;
+  position:relative;
+}
+.q-card:hover{box-shadow:var(--shadow-md);}
+.q-card.answered{border-color:rgba(26,107,74,0.3);}
+.q-top{display:flex;align-items:flex-start;gap:12px;margin-bottom:14px;}
+.q-num{
+  width:28px;height:28px;border-radius:50%;
+  background:var(--cream);border:1.5px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Inconsolata',monospace;font-size:12px;font-weight:700;
+  color:var(--slate);flex-shrink:0;margin-top:2px;
+  transition:all 0.3s;
+}
+.q-card.answered .q-num{background:var(--accent);border-color:var(--accent);color:#fff;}
+.q-stem{font-size:14.5px;line-height:1.75;color:var(--ink);flex:1;}
+.q-tag{
+  position:absolute;top:16px;right:16px;
+  font-family:'Inconsolata',monospace;font-size:9px;font-weight:700;
+  padding:2px 7px;border-radius:3px;
+  color:#fff;letter-spacing:0.5px;text-transform:uppercase;
+}
+.q-opts{display:flex;flex-direction:column;gap:7px;}
+.opt-btn{
+  display:flex;align-items:center;gap:10px;
+  width:100%;padding:10px 12px;
+  background:#fff;border:1.5px solid var(--border);
+  border-radius:var(--radius-sm);cursor:pointer;
+  font-family:'DM Sans',sans-serif;font-size:13.5px;
+  color:var(--ink);text-align:left;
+  transition:all 0.18s ease;
+}
+.opt-btn:hover{border-color:var(--border-strong);transform:translateX(3px);}
+.opt-btn.selected{border-color:var(--accent);background:var(--accent-pale);}
+.opt-btn.selected .opt-letter{background:var(--accent);color:#fff;border-color:var(--accent);}
+.opt-letter{
+  width:24px;height:24px;border-radius:50%;
+  border:1.5px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Inconsolata',monospace;font-size:11px;font-weight:700;
+  color:var(--slate);flex-shrink:0;transition:all 0.18s;
+}
+/* Review colours */
+.opt-btn.correct-ans{border-color:var(--accent);background:var(--accent-pale);}
+.opt-btn.correct-ans .opt-letter{background:var(--accent);color:#fff;border-color:var(--accent);}
+.opt-btn.wrong-ans{border-color:var(--rose);background:var(--rose-pale);}
+.opt-btn.wrong-ans .opt-letter{background:var(--rose);color:#fff;border-color:var(--rose);}
+
+/* Submit area */
+#submit-wrap{text-align:center;padding:24px 0 20px;}
+.warn-box{
+  display:none;
+  background:var(--rose-pale);border:1px solid var(--rose);
+  border-radius:var(--radius-sm);padding:12px 16px;
+  color:var(--rose);font-size:13px;margin-bottom:16px;text-align:left;
+}
+.btn-submit{
+  display:inline-block;padding:14px 48px;
+  background:var(--accent);color:#fff;border:none;
+  border-radius:30px;cursor:pointer;
+  font-family:'DM Serif Display',serif;font-size:18px;
+  letter-spacing:0.3px;transition:background 0.2s,transform 0.1s;
+}
+.btn-submit:hover{background:var(--accent-dark);}
+.btn-submit:active{transform:scale(0.98);}
+
+/* ===== SCREEN 3: RESULT ===== */
+#result-screen{background:var(--cream);padding-top:80px;padding-bottom:60px;}
+#result-card{
+  max-width:620px;margin:0 auto;
+  background:#fff;border-radius:var(--radius-lg);
+  box-shadow:var(--shadow-lg);
+  border:1px solid var(--border);
+  overflow:hidden;
+}
+.result-top-bar{height:5px;background:linear-gradient(90deg,var(--accent),var(--accent-light));}
+.result-body{padding:36px;}
+.result-grade-emoji{font-size:48px;text-align:center;margin-bottom:12px;}
+.result-score{
+  text-align:center;
+  font-family:'DM Serif Display',serif;font-size:72px;
+  color:var(--accent);line-height:1;margin-bottom:8px;
+}
+.result-pct{
+  text-align:center;
+  font-family:'Inconsolata',monospace;font-size:14px;color:var(--slate);
+  margin-bottom:14px;
+}
+.verdict{
+  text-align:center;margin-bottom:20px;
+  font-family:'Inconsolata',monospace;font-size:13px;font-weight:700;
+  padding:8px 20px;border-radius:20px;display:inline-block;
+  width:100%;
+}
+.verdict.pass{background:rgba(26,122,94,0.1);color:var(--teal);}
+.verdict.fail{background:var(--rose-pale);color:var(--rose);}
+.status-badges{margin-bottom:20px;}
+.status-badge{
+  display:flex;align-items:center;gap:8px;
+  font-size:12px;font-family:'Inconsolata',monospace;
+  color:var(--slate);margin-bottom:4px;
+}
+.pulse-dot{
+  width:7px;height:7px;border-radius:50%;background:var(--accent);
+  animation:blink 1s infinite;flex-shrink:0;
+}
+.pulse-dot.done{background:#22c55e;animation:none;}
+.info-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:12px;margin-bottom:24px;
+}
+.info-cell{
+  background:var(--cream);border-radius:var(--radius-sm);
+  border:1px solid var(--border);padding:12px;text-align:center;
+}
+.info-cell-label{
+  font-family:'Inconsolata',monospace;font-size:9px;font-weight:700;
+  color:var(--slate-light);letter-spacing:0.8px;text-transform:uppercase;
+  margin-bottom:4px;
+}
+.info-cell-val{font-size:13px;font-weight:600;color:var(--ink);}
+.section-breakdown{margin-bottom:24px;}
+.breakdown-title{
+  font-family:'DM Serif Display',serif;font-size:15px;color:var(--ink);
+  margin-bottom:12px;
+}
+.bd-row{
+  display:flex;align-items:center;gap:10px;margin-bottom:8px;
+}
+.bd-label{font-size:12px;color:var(--slate);width:120px;flex-shrink:0;}
+.bd-bar-track{flex:1;height:5px;background:var(--border);border-radius:3px;}
+.bd-bar-fill{height:5px;border-radius:3px;transition:width 0.6s ease;}
+.bd-frac{font-family:'Inconsolata',monospace;font-size:11px;color:var(--slate);width:40px;text-align:right;flex-shrink:0;}
+.action-btns{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px;}
+.btn-action{
+  flex:1;padding:11px 12px;border-radius:var(--radius-sm);
+  border:1.5px solid;cursor:pointer;
+  font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;
+  transition:all 0.18s;
+}
+.btn-action.primary{background:var(--accent);color:#fff;border-color:var(--accent);}
+.btn-action.primary:hover{background:var(--accent-dark);}
+.btn-action.secondary{background:var(--accent-pale);color:var(--accent);border-color:rgba(26,107,74,0.25);}
+.btn-action.secondary:hover{background:var(--accent-mid);}
+.sid-box{
+  border:1.5px dashed rgba(26,107,74,0.4);border-radius:var(--radius-sm);
+  padding:14px;background:var(--accent-mid);
+}
+.sid-label{
+  font-family:'Inconsolata',monospace;font-size:10px;font-weight:700;
+  color:var(--accent);letter-spacing:0.8px;text-transform:uppercase;
+  margin-bottom:6px;
+}
+.sid-val{
+  font-family:'Inconsolata',monospace;font-size:16px;font-weight:700;
+  color:var(--ink);word-break:break-all;
+}
+.sid-hint{font-size:11px;color:var(--slate-light);font-style:italic;margin-top:4px;}
+
+/* ===== SCREEN 4: LEADERBOARD ===== */
+#lb-screen{background:var(--cream);padding:80px 24px 60px;}
+.lb-full-wrap{max-width:760px;margin:0 auto;}
+.lb-full-head{margin-bottom:28px;}
+.btn-back{
+  display:inline-flex;align-items:center;gap:6px;
+  background:var(--accent);color:#fff;border:none;
+  padding:8px 18px;border-radius:20px;cursor:pointer;
+  font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;
+  margin-bottom:20px;transition:background 0.2s;
+}
+.btn-back:hover{background:var(--accent-dark);}
+.lb-full-title{font-family:'DM Serif Display',serif;font-size:32px;color:var(--ink);margin-bottom:6px;}
+.lb-full-sub{font-family:'Inconsolata',monospace;font-size:11px;color:var(--slate);letter-spacing:0.5px;text-transform:uppercase;}
+.lb-table-wrap{
+  background:#fff;border-radius:var(--radius-lg);
+  border:1px solid var(--border);box-shadow:var(--shadow-md);overflow:hidden;
+}
+.lb-table{width:100%;border-collapse:collapse;}
+.lb-table th{
+  background:var(--accent);color:#fff;
+  font-family:'Inconsolata',monospace;font-size:10px;
+  font-weight:700;letter-spacing:0.8px;text-transform:uppercase;
+  padding:12px 16px;text-align:left;
+}
+.lb-table td{
+  padding:11px 16px;border-bottom:1px solid var(--border);
+  font-size:13px;color:var(--ink);
+}
+.lb-table tr:last-child td{border-bottom:none;}
+.lb-table tr:hover td{background:var(--cream);}
+.lb-table .rank-cell{font-family:'DM Serif Display',serif;font-size:16px;}
+.lb-table .grade-badge{
+  font-family:'Inconsolata',monospace;font-size:11px;font-weight:700;
+  background:var(--accent);color:#fff;padding:2px 8px;border-radius:4px;
+}
+
+/* Tab warning overlay */
+#tab-overlay{
+  display:none;position:fixed;inset:0;z-index:99999;
+  background:rgba(0,0,0,0.85);align-items:center;justify-content:center;
+}
+#tab-overlay.show{display:flex;}
+.tab-warn-box{
+  background:#fff;border-radius:var(--radius-lg);
+  border:3px solid var(--rose);
+  padding:36px;max-width:420px;text-align:center;
+  box-shadow:0 20px 60px rgba(0,0,0,0.4);
+}
+.tab-warn-icon{font-size:60px;margin-bottom:16px;}
+.tab-warn-title{font-family:'DM Serif Display',serif;font-size:24px;color:var(--rose);margin-bottom:12px;}
+.tab-warn-body{font-size:14px;color:var(--slate);line-height:1.65;margin-bottom:8px;}
+.tab-warn-count{font-family:'Inconsolata',monospace;font-size:12px;color:var(--rose);margin-bottom:20px;}
+.btn-understand{
+  padding:12px 28px;background:var(--accent);color:#fff;border:none;
+  border-radius:var(--radius-md);cursor:pointer;
+  font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;
+  transition:background 0.2s;
+}
+.btn-understand:hover{background:var(--accent-dark);}
+
+/* Responsive */
+@media(max-width:740px){
+  .reg-layout{grid-template-columns:1fr;}
+  .lb-widget{display:none;}
+  .topics-list{grid-template-columns:1fr;}
+}
+@media(max-width:520px){
+  .hide-m{display:none!important;}
+  .student-label{max-width:100px;}
+  .timer-badge{font-size:12px;}
+  .info-grid{grid-template-columns:repeat(2,1fr);}
+  .form-row{grid-template-columns:1fr;}
+  .reg-card-body{padding:20px;}
+  .quiz-content{padding:120px 14px 60px;}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-brand">
+    <div class="nav-logo">KP</div>
+    <div>
+      <div class="nav-name">K.P. Singh</div>
+      <div class="nav-sub">SRHU · BCA · Data Science</div>
+    </div>
+  </div>
+  <div class="nav-right">
+    <button class="nav-link hide-m" onclick="showLB()">🏆 Leaderboard</button>
+    <a class="nav-cta" href="https://kpsingh.in" target="_blank">kpsingh.in ↗</a>
+  </div>
+</nav>
+
+<!-- TAB OVERLAY -->
+<div id="tab-overlay">
+  <div class="tab-warn-box">
+    <div class="tab-warn-icon">⚠️</div>
+    <div class="tab-warn-title">Tab Switch Detected!</div>
+    <div class="tab-warn-body">Switching tabs or windows during the quiz is not permitted. This was your WARNING. If you switch again, your quiz will be submitted automatically with your current answers.</div>
+    <div class="tab-warn-count">Tab switch count: 1 of 2</div>
+    <button class="btn-understand" onclick="dismissTabWarn()">I Understand — Return to Quiz</button>
+  </div>
+</div>
+
+<!-- ===== SCREEN 1 ===== -->
+<div id="reg-screen" class="screen active">
+  <div class="reg-layout">
+    <div class="reg-card">
+      <div class="reg-card-top"></div>
+      <div class="reg-card-body">
+        <div class="reg-eyebrow">Units I–V · BCA 2nd Sem</div>
+        <div class="reg-title">Data <em>Science</em> Quiz</div>
+        <div class="reg-subtitle">60 MCQ · 10 Sections · 20 minutes · PDF on submission</div>
+        <div class="topics-box">
+          <div class="topics-title">Topics Covered</div>
+          <ul class="topics-list">
+            <li>Data Science Overview & Roles</li>
+            <li>Data Types, Sources & Collection</li>
+            <li>Data Cleaning & Transformation</li>
+            <li>Normalization & Encoding</li>
+            <li>Exploratory Data Analysis (EDA)</li>
+            <li>Descriptive Statistics</li>
+            <li>Data Visualization & Excel</li>
+            <li>Probability & Hypothesis Testing</li>
+            <li>Correlation & Regression</li>
+            <li>Ethics, Five Cs & Applications</li>
+          </ul>
+        </div>
+        <div id="reg-error" class="error-msg">⚠ Please fill in all required fields correctly.</div>
+        <div class="form-group">
+          <label class="form-label">Full Name</label>
+          <input id="f-name" class="form-input" type="text" placeholder="Enter your full name" required/>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Roll Number</label>
+            <input id="f-roll" class="form-input" type="text" placeholder="e.g. DD221BCA001" required oninput="this.value=this.value.toUpperCase()"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Section</label>
+            <select id="f-section" class="form-select">
+              <option value="">— Select —</option>
+              <option value="B1">B1</option>
+              <option value="B2">B2</option>
+              <option value="C1">C1</option>
+              <option value="C2">C2</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Branch</label>
+            <div class="form-locked">🔒 BCA</div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Semester</label>
+            <div class="form-locked">🔒 2nd Semester</div>
+          </div>
+        </div>
+        <button class="btn-begin" onclick="startQuiz()">Begin Quiz →</button>
+      </div>
+    </div>
+    <!-- LEADERBOARD WIDGET -->
+    <div class="lb-widget">
+      <div class="lb-widget-head">
+        <div class="lb-widget-title">🏆 Top 5 Students <span class="live-dot"></span></div>
+        <div class="lb-widget-sub">LIVE · Best attempt per student · Auto-refreshes</div>
+      </div>
+      <div class="lb-widget-body" id="widget-lb-body">
+        <div class="lb-spinner">Loading leaderboard…</div>
+      </div>
+      <div class="lb-footer">
+        <span class="lb-updated" id="widget-updated">—</span>
+        <button class="lb-view-link" onclick="showLB()">View Top 5 →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SCREEN 2: QUIZ ===== -->
+<div id="quiz-screen" class="screen">
+  <div class="quiz-subbar">
+    <div class="student-label" id="student-label">—</div>
+    <div class="progress-wrap">
+      <span class="prog-label" id="prog-answered">0 answered</span>
+      <div class="prog-track"><div class="prog-fill" id="prog-fill"></div></div>
+      <span class="prog-label" id="prog-total">60 questions</span>
+    </div>
+    <div class="timer-badge" id="timer">20:00</div>
+    <span id="review-label">📋 REVIEW</span>
+    <button id="back-to-score" class="btn-action secondary" style="padding:6px 14px;font-size:12px;" onclick="goBackToResult()">← Back to Score</button>
+  </div>
+  <div class="quiz-content" id="quiz-content"></div>
+  <div id="submit-wrap">
+    <div class="warn-box" id="warn-box">⚠ You have unanswered questions. Please answer all questions before submitting.</div>
+    <button class="btn-submit" onclick="attemptSubmit()">Submit Quiz ✓</button>
+  </div>
+</div>
+
+<!-- ===== SCREEN 3: RESULT ===== -->
+<div id="result-screen" class="screen">
+  <div id="result-card">
+    <div class="result-top-bar"></div>
+    <div class="result-body">
+      <div class="result-grade-emoji" id="res-emoji">🏆</div>
+      <div class="result-score" id="res-score">0/60</div>
+      <div class="result-pct" id="res-pct">0% · Grade F</div>
+      <div class="verdict" id="res-verdict"></div>
+      <div class="status-badges">
+        <div class="status-badge" id="badge-saving"><span class="pulse-dot" id="dot-saving"></span><span id="txt-saving">Saving to records…</span></div>
+        <div class="status-badge" id="badge-pdf"><span class="pulse-dot" id="dot-pdf"></span><span id="txt-pdf">Preparing PDF…</span></div>
+      </div>
+      <div class="info-grid" id="res-info"></div>
+      <div class="section-breakdown">
+        <div class="breakdown-title">Section Breakdown</div>
+        <div id="bd-rows"></div>
+      </div>
+      <div class="action-btns">
+        <button class="btn-action primary" onclick="savePDF()">⬇ Save PDF</button>
+        <button class="btn-action secondary" onclick="reviewAnswers()">Review Answers</button>
+        <button class="btn-action secondary" onclick="showLB()">🏆 Leaderboard</button>
+      </div>
+      <div class="sid-box">
+        <div class="sid-label">Submission ID — Show to Faculty</div>
+        <div class="sid-val" id="sid-val">—</div>
+        <div class="sid-hint">Keep this ID as proof of quiz completion</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SCREEN 4: LEADERBOARD FULL ===== -->
+<div id="lb-screen" class="screen">
+  <div class="lb-full-wrap">
+    <button class="btn-back" onclick="backFromLB()">← Back</button>
+    <div class="lb-full-head">
+      <div class="lb-full-title">🏆 Leaderboard</div>
+      <div class="lb-full-sub">Data Science Quiz · Top 5 · Best Attempt Per Student</div>
+    </div>
+    <div class="lb-table-wrap">
+      <div id="lb-full-body"><div class="lb-spinner" style="padding:32px;text-align:center;">Loading…</div></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─────────── CONFIGURATION ───────────
+const SHEET_URL = 'https://script.google.com/macros/s/AKfycbyl9pw_jPnu4Q2foxV-CZdpYhAKQjbehELiXDM2v3poHh553i3jB7Gs1C35jt5F1GYbbA/exec';
+const QUIZ_CODE = 'DS2BCA';
+const TOTAL = 60;
+const LB_SIZE = 5;
+const TIME_SECS = 20 * 60;
+
+// ─────────── QUIZ DATA ───────────
+// 10 sections × 6 questions = 60 total
+const SECTIONS = [
+  {
+    id:1, title:'Analogies', sub:'Daily-life analogies for technical concepts',
+    color:'var(--s1)', pale:'var(--s1p)', tag:'S1',
+    qs:[
+      {
+        stem:'A library catalogue is to finding books what a ______ is to locating specific records in a dataset — because both map a label to an exact physical location.',
+        opts:['Index','Filter','Schema','Join'],a:0
+      },
+      {
+        stem:'A water purification plant removes impurities before the water reaches homes. In data science, the equivalent process that removes errors and fills gaps before analysis is called:',
+        opts:['Data cleaning','Data mining','Data modelling','Data warehousing'],a:0
+      },
+      {
+        stem:'A recipe standardises measurements so any chef gets the same result. The data science technique that transforms all numeric features to a common scale to prevent one feature from dominating a model is:',
+        opts:['Normalisation','Clustering','Regression','Sampling'],a:0
+      },
+      {
+        stem:'A forensic scientist examines crime-scene evidence to reconstruct what happened. In data science, the phase where a Data Analyst examines patterns in historical data to understand past behaviour is called:',
+        opts:['Exploratory Data Analysis','Predictive modelling','Data ingestion','Feature engineering'],a:0
+      },
+      {
+        stem:'A fire alarm detects smoke — the cause — and triggers bells — the effect. In statistics, the technique that quantifies the strength and direction of such cause-and-effect relationships between two continuous variables is:',
+        opts:['Correlation analysis','Descriptive statistics','Data discretisation','Frequency encoding'],a:0
+      },
+      {
+        stem:'A nurse\'s handover report summarises a patient\'s vitals, giving the next shift instant context without reading full charts. In data science, the role that prepares summarised, clean datasets and visualisations for business decisions — without building the full ML pipeline — is the:',
+        opts:['Data Analyst','Data Engineer','ML Engineer','Database Administrator'],a:0
+      }
+    ]
+  },
+  {
+    id:2, title:'Witty Concepts', sub:'Light exaggeration — still academically accurate',
+    color:'var(--s2)', pale:'var(--s2p)', tag:'S2',
+    qs:[
+      {
+        stem:'A student loudly declares: "I don\'t need to clean my data — the algorithm is smart enough to ignore bad values!" The actual consequence of skipping data cleaning is:',
+        opts:['Garbage in, garbage out — errors propagate into model predictions','The algorithm flags bad rows automatically and removes them','Missing values default to zero, so results remain valid','The statistical mean self-corrects for any extreme values'],a:0
+      },
+      {
+        stem:'Someone proudly submits a histogram where all bars are the same height. They call it "perfectly uniform." Their professor calmly replies that a histogram is most useful for identifying:',
+        opts:['The frequency distribution and skewness of a variable','Whether two variables are linearly correlated','The exact median value of a sorted dataset','The number of unique categories in a column'],a:0
+      },
+      {
+        stem:'A developer insists that replacing every missing value with zero is "the safest approach." The actual risk of blindly imputing zeros is:',
+        opts:['It introduces artificial bias by treating absence of data as zero quantity','Zero is mathematically valid and introduces no bias whatsoever','Missing values are always zero in structured datasets','The model ignores zeroes during training by default'],a:0
+      },
+      {
+        stem:'A self-proclaimed data expert brags: "My model has 99% accuracy — I tested it on my training data!" The correct response is that this outcome is almost certainly due to:',
+        opts:['Overfitting — the model memorised training examples rather than learning general patterns','Exceptional data quality that makes the problem trivially easy','A perfectly chosen hypothesis that matches the null hypothesis','High variance in the test set causing inflated accuracy'],a:0
+      },
+      {
+        stem:'"Ethics in data science is just a marketing gimmick," claims a student. Their professor counters by citing a concrete risk of ignoring data ethics, which is:',
+        opts:['Algorithmic bias can systematically disadvantage protected groups in hiring or lending decisions','Ethical guidelines reduce model accuracy below acceptable thresholds','Unethical models run faster but produce identical results','Data ethics only applies to medical datasets, not general business data'],a:0
+      },
+      {
+        stem:'A very confident intern claims that a scatter plot showing points scattered in a random cloud "clearly proves a strong positive correlation." The correct interpretation is:',
+        opts:['A random cloud indicates little to no linear relationship between the variables','A cloud pattern confirms a polynomial, not linear, relationship','All scatter plots require a regression line to interpret correlation','Correlation is not visible in scatter plots — only in correlation matrices'],a:0
+      }
+    ]
+  },
+  {
+    id:3, title:'Riddles', sub:'Clues, metaphors & tiny stories — guess the concept',
+    color:'var(--s3)', pale:'var(--s3p)', tag:'S3',
+    qs:[
+      {
+        stem:'I am the silent detective of your dataset. I compute the average distance each value sits from the centre, then square those distances, average them, and hand the result to my more famous sibling. Remove me from the analysis and you cannot measure how spread out your data truly is. What am I?',
+        opts:['Variance','Standard deviation','Interquartile range','Skewness'],a:0
+      },
+      {
+        stem:'I transform your messy text labels — "Red", "Blue", "Green" — into columns of zeroes and ones, so algorithms that demand numbers can finally read them. I multiply your column count but eliminate any false numeric ordering. What am I?',
+        opts:['One-hot encoding','Label encoding','Min-max normalisation','Feature scaling'],a:0
+      },
+      {
+        stem:'I live at the intersection of two fields — computing and statistics. I am the formal discipline that extracts knowledge from structured and unstructured data, combining programming, mathematics, and domain expertise to solve real-world problems. What am I?',
+        opts:['Data Science','Information Technology','Business Analytics','Artificial Intelligence'],a:0
+      },
+      {
+        stem:'I am the step in the data science workflow where raw data arrives from databases, APIs, sensors, and spreadsheets and is brought together into a single environment for processing. I happen before cleaning but after you identify what data you need. What am I?',
+        opts:['Data collection and integration','Hypothesis testing','Feature engineering','Model deployment'],a:0
+      },
+      {
+        stem:'I am a statistical test that begins with an assumption of no effect and then attempts to reject it using sample evidence. My rejection threshold is called alpha, and I produce a probability value that tells you how surprising your data would be if I were true. What am I?',
+        opts:['Null hypothesis in hypothesis testing','Confidence interval','Regression coefficient','Bayes theorem'],a:0
+      },
+      {
+        stem:'I am a set of five principles designed to guide how organisations handle data responsibly. My five letters stand for values such as collection limitation, consumer protection, and control. In data ethics courses I am introduced as a framework, not an algorithm. What am I?',
+        opts:['The Five Cs of data ethics','The FAIR data principles','The CIA triad of information security','The CRISP-DM process model'],a:0
+      }
+    ]
+  },
+  {
+    id:4, title:'Scenarios', sub:'Student-life situations requiring the right tool or action',
+    color:'var(--s4)', pale:'var(--s4p)', tag:'S4',
+    qs:[
+      {
+        stem:'Priya has a column "City" with 12 unique values across 8,000 rows. She needs to feed this column into a linear regression model. She should:',
+        opts:['Apply one-hot encoding to convert it into binary indicator columns','Sort the column alphabetically and assign rank numbers','Delete the column since categorical data breaks regression','Replace each city name with its population figure'],a:0
+      },
+      {
+        stem:'Arjun is presenting sales data to a non-technical manager. He needs to show monthly revenue trend over 24 months as clearly as possible. The most appropriate chart type is:',
+        opts:['Line chart — it shows change over continuous time intervals intuitively','Pie chart — it shows proportion of each month\'s contribution','Box plot — it summarises the distribution of monthly values','Bar chart — it shows frequency of each revenue category'],a:0
+      },
+      {
+        stem:'Neha discovers that 15% of values in the "Income" column are missing. The income data is right-skewed. The most appropriate imputation strategy is:',
+        opts:['Replace missing values with the median income, since it is robust to skew','Replace missing values with the mean, which is the default imputation method','Delete all rows containing missing income values','Replace missing values with the mode, which is always correct for numeric data'],a:0
+      },
+      {
+        stem:'Kabir needs to combine two CSV files — one with student names and IDs, another with student grades — into a single analysis table, matching rows by student ID. He should use:',
+        opts:['Data integration via a join operation on the student ID key','Data transformation via normalisation of the ID column','Data cleaning by removing duplicate IDs from both files','Exploratory analysis to identify grade distributions first'],a:0
+      },
+      {
+        stem:'Ritu is tasked with detecting unusual transactions in a financial dataset — values far outside the typical range. She should first visualise these using:',
+        opts:['A box plot, which explicitly marks values beyond 1.5×IQR as potential outliers','A pie chart, which separates typical from atypical proportions','A histogram with 100 bins to maximise granularity','A scatter plot of transaction amount versus date'],a:0
+      },
+      {
+        stem:'Vikram has exam scores for 200 students: mean 62, median 58, mode 55. The scores are positively skewed. The best single measure to describe the "typical" student\'s score for a policy report is:',
+        opts:['Median — it is resistant to the pull of high outlier scores in a skewed distribution','Mean — it uses all data points and is always the most accurate measure','Mode — it is the most common score and therefore the most representative','Standard deviation — it describes the centre and spread simultaneously'],a:0
+      }
+    ]
+  },
+  {
+    id:5, title:'Misconception Busters', sub:'Correct commonly held wrong beliefs',
+    color:'var(--s5)', pale:'var(--s5p)', tag:'S5',
+    qs:[
+      {
+        stem:'MYTH: "Correlation between two variables proves that one causes the other." The correct understanding of correlation is:',
+        opts:['Correlation measures the strength of a linear relationship but does not establish causation — a third variable may explain both','Correlation is a subset of causation — high correlation always implies some causal pathway','Two variables can only correlate if they are measured on the same scale','Negative correlation disproves any causal relationship while positive correlation supports it'],a:0
+      },
+      {
+        stem:'A student believes that "Standardisation and Normalisation are the same operation with different names." The actual distinction is:',
+        opts:['Normalisation scales values to a fixed range (e.g. 0–1); standardisation transforms to zero mean and unit variance — they produce different outputs','They are identical operations — both always produce values between 0 and 1','Normalisation is only for categorical data; standardisation is for numerical data','Standardisation is applied before normalisation in every preprocessing pipeline'],a:0
+      },
+      {
+        stem:'MYTH: "The mean is always the best measure of central tendency." The correct position is:',
+        opts:['The median is preferred when data is skewed or contains outliers, as the mean is pulled toward extreme values','The mean is always best because it uses every data point in its calculation','The mode is always preferred in data science because it is the easiest to compute','Central tendency measures are interchangeable — all three give the same value for any distribution'],a:0
+      },
+      {
+        stem:'A student claims that "A p-value of 0.04 means there is a 96% probability that the alternative hypothesis is true." The correct interpretation of p-value is:',
+        opts:['The p-value is the probability of observing results as extreme as the sample, assuming the null hypothesis is true — it does not directly give probability of any hypothesis','A p-value of 0.04 means the null hypothesis has a 4% chance of being the true model','P-values above 0.05 confirm the null hypothesis is definitely true','A smaller p-value means a larger effect size in the population'],a:0
+      },
+      {
+        stem:'MYTH: "More data always leads to a better model, regardless of data quality." The reality is:',
+        opts:['Large volumes of dirty, biased, or irrelevant data can degrade model performance — quality and relevance matter as much as quantity','Modern algorithms are robust enough to learn correct patterns from any quantity of data, regardless of quality','Data quantity is the single most important factor in machine learning model performance','Only the last 20% of a dataset affects model accuracy; earlier rows are less important'],a:0
+      },
+      {
+        stem:'A student believes that "Data Science and Business Analytics are the same discipline." The key distinction is:',
+        opts:['Data Science includes building predictive models and working with unstructured data using programming; Business Analytics focuses primarily on structured historical data for decision support','They are identical — both roles require the same tools and produce the same outputs','Business Analytics requires more programming skill than Data Science','Data Science only applies to technology companies; Business Analytics is used in all industries'],a:0
+      }
+    ]
+  },
+  {
+    id:6, title:'Debug the Mistake', sub:'Find the flaw in logic, settings, or steps',
+    color:'var(--s6)', pale:'var(--s6p)', tag:'S6',
+    qs:[
+      {
+        stem:'A student applies min-max normalisation to a training set, then months later tests the model on new data — but normalises the new data independently using its own min and max values. The MOST LIKELY cause of poor model performance is:',
+        opts:['The normalisation parameters differ between train and test sets, causing incompatible feature scales','Min-max normalisation cannot be applied to test data under any circumstance','The model requires standardisation rather than normalisation for test data','New data should never be normalised — only raw values should be fed to trained models'],a:0
+      },
+      {
+        stem:'Deepa runs a hypothesis test and reports: "p = 0.06, so the effect is definitively zero." The error in her reasoning is:',
+        opts:['Failing to reject the null hypothesis does not prove it is true — it only means evidence was insufficient to reject it at the chosen alpha level','A p-value of 0.06 is below 0.10, so she should have rejected the null hypothesis','She should report the t-statistic instead of the p-value to avoid this ambiguity','p = 0.06 means the alternative hypothesis probability is exactly 94%'],a:0
+      },
+      {
+        stem:'A data analyst creates a pie chart with 18 slices to show product category breakdown. Stakeholders cannot read the chart. The root cause of this visualisation failure is:',
+        opts:['Pie charts become unreadable with many slices — a bar chart or grouped bar chart would communicate category comparisons more clearly','The chart software rendered the slices incorrectly due to floating-point rounding','Pie charts only work with percentage values, not raw counts','The analyst should have used 3D rendering to distinguish the slices more clearly'],a:0
+      },
+      {
+        stem:'Raj writes a regression model and finds R² = 0.95 on training data but R² = 0.31 on test data. The MOST LIKELY technical root cause is:',
+        opts:['Overfitting — the model learned noise and specific patterns in training data that do not generalise to unseen data','Underfitting — the model is too simple to capture the relationship in either dataset','The test set is too small to produce a reliable R² estimate','Regression models inherently produce lower R² on test data due to random sampling error'],a:0
+      },
+      {
+        stem:'A student collects survey data and notices the "Age" column has values like "twenty-five", "30", "N/A", and "999". When computing the mean age, the result is 187.4 years. The MOST LIKELY root cause is:',
+        opts:['Non-numeric entries and sentinel values (like 999 for missing) were not cleaned before the mean calculation, distorting the result','The mean function requires sorted data and the column was not sorted','Ages above 100 are automatically excluded by the mean function in most tools','The survey collected age in months and the analyst forgot to convert to years'],a:0
+      },
+      {
+        stem:'A student builds a time series model to predict next month\'s sales, but accidentally includes next month\'s actual sales as a training feature. The model shows suspiciously perfect accuracy. The technical name for this problem is:',
+        opts:['Data leakage — future information was used during training, making accuracy artificially inflated','Feature redundancy — including the same variable twice inflates precision scores','Multicollinearity — correlated features cause regression instability','Confirmation bias — the analyst selected only data that supported their hypothesis'],a:0
+      }
+    ]
+  },
+  {
+    id:7, title:'Application & Who Am I?', sub:'Mini-caselets and first-person concept descriptions',
+    color:'var(--s7)', pale:'var(--s7p)', tag:'S7',
+    qs:[
+      {
+        stem:'A hospital wants to understand which patient demographics (age, weight, blood pressure) most strongly predict readmission risk, and wants to quantify that relationship as a formula. The best analytical approach is:',
+        opts:['Multiple linear regression — it models the relationship between several independent variables and a continuous outcome','K-means clustering — it groups patients into risk tiers without a target variable','Decision tree classification — it predicts a categorical outcome using thresholds','Descriptive statistics — it summarises patient demographics without making predictions'],a:0
+      },
+      {
+        stem:'WHO AM I? I am a professional who designs and maintains the pipelines that move data from operational systems into storage environments like data lakes and warehouses. I write ETL jobs, manage APIs, and ensure data arrives reliably at the place where analysts and scientists can use it. I do not typically build predictive models.',
+        opts:['Data Engineer','Data Scientist','Machine Learning Engineer','Business Intelligence Analyst'],a:0
+      },
+      {
+        stem:'A retail company has 50,000 customer purchase records and wants to group customers into natural segments based on buying behaviour — without any pre-defined categories. The appropriate technique is:',
+        opts:['Unsupervised clustering — it discovers natural groupings in data without labelled categories','Supervised classification — it assigns customers to pre-defined segments using training labels','Time series decomposition — it separates trend and seasonality in sequential data','Hypothesis testing — it determines whether buying behaviour differs across known groups'],a:0
+      },
+      {
+        stem:'WHO AM I? I am the graphical summary that shows the five-number summary of a dataset — minimum, Q1, median, Q3, and maximum — and visually marks extreme values that fall far from the central box. Analysts use me to compare distributions side by side and to flag values that may need investigation.',
+        opts:['Box plot (box-and-whisker plot)','Histogram','Scatter plot','Bar chart'],a:0
+      },
+      {
+        stem:'A student has temperature data measured in Kelvin (range: 273–373) and income data in rupees (range: 5,000–500,000). She wants to run a distance-based algorithm. Before modelling, she must:',
+        opts:['Scale both features to a comparable range so that income magnitude does not dominate the distance calculation','Remove the temperature feature since it is measured in a scientific unit','Convert Kelvin to Celsius before any data science analysis can begin','Apply one-hot encoding to both features since distance algorithms require binary input'],a:0
+      },
+      {
+        stem:'WHO AM I? I am the stage in the data science process where cleaned, transformed data is examined using visualisations and summary statistics — not to build a model, but to understand distributions, spot patterns, identify outliers, and generate hypotheses before formal analysis begins.',
+        opts:['Exploratory Data Analysis (EDA)','Data preprocessing','Model evaluation','Feature selection'],a:0
+      }
+    ]
+  },
+  {
+    id:8, title:'Spot the Best Definition', sub:'Four close definitions — pick the most accurate',
+    color:'var(--s8)', pale:'var(--s8p)', tag:'S8',
+    qs:[
+      {
+        stem:'Which is the MOST ACCURATE definition of "Data Science"?',
+        opts:[
+          'An interdisciplinary field that uses statistical methods, programming, and domain knowledge to extract insights and build predictive models from structured and unstructured data',
+          'The branch of mathematics that studies how to store data efficiently in relational databases',
+          'A software engineering discipline focused on building scalable data pipelines and storage systems',
+          'The practice of creating business dashboards and visual reports from pre-cleaned structured data'
+        ],a:0
+      },
+      {
+        stem:'Which is the MOST ACCURATE definition of "Outlier"?',
+        opts:[
+          'A data point that lies significantly far from the bulk of observations in a dataset, potentially indicating measurement error, data entry issues, or a genuinely rare event',
+          'Any value in a dataset that is greater than the arithmetic mean of the column',
+          'A value that appears fewer than five times in a frequency distribution and is therefore removed before analysis',
+          'A variable that has low correlation with the target variable and is therefore irrelevant to the model'
+        ],a:0
+      },
+      {
+        stem:'Which is the MOST ACCURATE definition of "Hypothesis Testing"?',
+        opts:[
+          'A statistical procedure that uses sample data to evaluate a claim about a population parameter by computing the probability of observing the sample result if the null hypothesis were true',
+          'The process of proposing a business question and validating it using expert opinion rather than data',
+          'A machine learning technique that selects the best model hypothesis from a set of candidate algorithms',
+          'A data visualisation method that plots the distribution of sample means to test for normality'
+        ],a:0
+      },
+      {
+        stem:'Which is the MOST ACCURATE definition of "Data Integration"?',
+        opts:[
+          'The process of combining data from multiple heterogeneous sources into a unified, coherent dataset that provides a consistent view for analysis',
+          'The act of formatting all numeric columns to the same number of decimal places before model training',
+          'The process of removing duplicate rows and resolving inconsistencies within a single data file',
+          'A technique for compressing large datasets into smaller file sizes for efficient storage in the cloud'
+        ],a:0
+      },
+      {
+        stem:'Which is the MOST ACCURATE definition of "Regression Analysis"?',
+        opts:[
+          'A statistical technique that models the relationship between one or more independent variables and a continuous dependent variable, allowing prediction and quantification of effects',
+          'A method for grouping unlabelled data points into clusters based on distance measures',
+          'A visualisation approach for understanding the frequency distribution of a continuous variable',
+          'The process of reducing the number of features in a dataset by removing low-variance columns'
+        ],a:0
+      },
+      {
+        stem:'Which is the MOST ACCURATE definition of "Data Cleaning"?',
+        opts:[
+          'The process of detecting and correcting or removing errors, inconsistencies, missing values, and inaccuracies from a dataset to improve its quality for analysis',
+          'The act of deleting all rows from a dataset that contain any null value, ensuring only complete records remain',
+          'A step in which a Data Engineer rebuilds corrupted database tables from backup files',
+          'The process of selecting which features to include in a predictive model based on correlation scores'
+        ],a:0
+      }
+    ]
+  },
+  {
+    id:9, title:'Sequence & Order', sub:'Choose the correct order of steps',
+    color:'var(--s9)', pale:'var(--s9p)', tag:'S9',
+    qs:[
+      {
+        stem:'What is the correct high-level sequence of the Data Science Process?',
+        opts:[
+          'Step 1: Define problem → Step 2: Collect & integrate data → Step 3: Clean & preprocess → Step 4: EDA → Step 5: Model → Step 6: Communicate results',
+          'Step 1: Build model → Step 2: Collect data → Step 3: Clean data → Step 4: Define problem → Step 5: Visualise → Step 6: Deploy',
+          'Step 1: Collect data → Step 2: Build model → Step 3: Define problem → Step 4: Clean data → Step 5: EDA → Step 6: Communicate',
+          'Step 1: EDA → Step 2: Define problem → Step 3: Collect data → Step 4: Clean data → Step 5: Model → Step 6: Deploy'
+        ],a:0
+      },
+      {
+        stem:'Which sequence correctly describes how to perform Min-Max Normalisation on a column?',
+        opts:[
+          'Step 1: Find column minimum and maximum → Step 2: Subtract minimum from each value → Step 3: Divide by (max − min) → Step 4: Result is in [0, 1]',
+          'Step 1: Compute mean and standard deviation → Step 2: Subtract mean from each value → Step 3: Divide by standard deviation → Step 4: Result has mean 0',
+          'Step 1: Rank all values → Step 2: Divide rank by count → Step 3: Multiply by 100 → Step 4: Result is a percentile score',
+          'Step 1: Remove outliers → Step 2: Find new min and max → Step 3: Sort ascending → Step 4: Replace values with their indices'
+        ],a:0
+      },
+      {
+        stem:'A student wants to conduct a hypothesis test. Which order of steps is correct?',
+        opts:[
+          'Step 1: State null and alternative hypotheses → Step 2: Choose significance level (α) → Step 3: Collect sample data → Step 4: Compute test statistic and p-value → Step 5: Compare p to α and decide',
+          'Step 1: Collect data → Step 2: Compute test statistic → Step 3: State hypotheses → Step 4: Choose α → Step 5: Draw conclusion',
+          'Step 1: Choose α → Step 2: Compute p-value → Step 3: State null hypothesis → Step 4: Collect data → Step 5: Accept or reject',
+          'Step 1: State alternative hypothesis only → Step 2: Collect data → Step 3: Compute mean → Step 4: Compare to α → Step 5: Publish results'
+        ],a:0
+      },
+      {
+        stem:'What is the correct sequence for handling missing data in a numeric column?',
+        opts:[
+          'Step 1: Identify missing values and their percentage → Step 2: Assess distribution and context → Step 3: Choose strategy (drop/impute) → Step 4: Apply strategy → Step 5: Verify no missing values remain',
+          'Step 1: Delete all rows with missing values → Step 2: Recompute column statistics → Step 3: Document percentage removed → Step 4: Proceed to modelling',
+          'Step 1: Replace all missing values with zero → Step 2: Run descriptive statistics → Step 3: Assess distribution → Step 4: Decide if further cleaning is needed',
+          'Step 1: Build the model → Step 2: Observe where predictions are poor → Step 3: Identify those rows as missing-value rows → Step 4: Clean retroactively'
+        ],a:0
+      },
+      {
+        stem:'Which order correctly describes creating a line chart in Excel to show sales over time?',
+        opts:[
+          'Step 1: Select date and sales columns → Step 2: Insert tab → Step 3: Choose Line Chart → Step 4: Add axis labels and title → Step 5: Format as needed',
+          'Step 1: Format cells as currency → Step 2: Sort by date → Step 3: Insert chart → Step 4: Select data range → Step 5: Choose chart type',
+          'Step 1: Insert chart → Step 2: Select data → Step 3: Choose chart type → Step 4: Sort data by date → Step 5: Add title',
+          'Step 1: Create a PivotTable → Step 2: Add sales to values → Step 3: Insert chart → Step 4: Select Line → Step 5: Select date column'
+        ],a:0
+      },
+      {
+        stem:'What is the correct sequence for computing the standard deviation of a dataset manually?',
+        opts:[
+          'Step 1: Compute the mean → Step 2: Subtract mean from each value → Step 3: Square each difference → Step 4: Average the squared differences (variance) → Step 5: Take the square root',
+          'Step 1: Sort the dataset → Step 2: Find median → Step 3: Subtract median from each value → Step 4: Average absolute differences → Step 5: Square the result',
+          'Step 1: Find min and max → Step 2: Compute range → Step 3: Divide by count → Step 4: Multiply by 1.96 → Step 5: This is the standard deviation',
+          'Step 1: Compute mode → Step 2: Subtract mode from each value → Step 3: Sum all values → Step 4: Divide by n−1 → Step 5: Take the square root'
+        ],a:0
+      }
+    ]
+  },
+  {
+    id:10, title:'Cause → Effect', sub:'Identify the correct cause or the correct effect',
+    color:'var(--s10)', pale:'var(--s10p)', tag:'S10',
+    qs:[
+      {
+        stem:'CAUSE: A dataset contains 40% missing values in the target column. EFFECT: The supervised model produces unreliable and erratic predictions. Why?',
+        opts:[
+          'The model trained on only 60% of labelled examples, learning from an incomplete and potentially biased sample of the true population distribution',
+          'Missing target values are automatically treated as zero by all supervised learning algorithms, skewing the output',
+          'The model was unable to load the dataset because most tools reject files with more than 10% missing targets',
+          'Missing values in the target column increase training speed, which causes the model to underfit'
+        ],a:0
+      },
+      {
+        stem:'CAUSE: An analyst applies z-score standardisation to the "Salary" column, which contained values ranging from 20,000 to 2,000,000. EFFECT: The transformed column now has a mean near 0 and a standard deviation of 1. What is the MOST ACCURATE explanation for this effect?',
+        opts:[
+          'Standardisation subtracts the column mean from each value and divides by the standard deviation, centring the distribution at zero with unit spread',
+          'Standardisation clips all values above a threshold to zero, removing the influence of high salaries',
+          'The transformation converts salary into a ratio scale, which always produces a mean of zero',
+          'Dividing by the maximum value shifts the distribution centre to 0 regardless of the original range'
+        ],a:0
+      },
+      {
+        stem:'CAUSE: A data scientist adds 10 more irrelevant features (random noise columns) to a dataset before training a linear regression model. EFFECT: Model performance on the test set deteriorates. Why?',
+        opts:[
+          'Irrelevant features add noise to the model, increasing variance and reducing the model\'s ability to generalise — a manifestation of the curse of dimensionality',
+          'Linear regression cannot handle more than a fixed number of input features without recompiling',
+          'Adding features always improves training accuracy, so test accuracy must have been measured incorrectly',
+          'The model automatically assigns zero weight to irrelevant features, so performance remains unchanged'
+        ],a:0
+      },
+      {
+        stem:'CAUSE: A student uses a bar chart to display the change in average global temperature over 140 years. EFFECT: The audience finds the trend difficult to perceive. Why?',
+        opts:[
+          'Bar charts emphasise discrete category comparisons rather than continuous trends; a line chart would show temporal change far more clearly',
+          'The audience is unfamiliar with bar charts, which is a training problem, not a visualisation problem',
+          'Bar charts can only display frequency counts, not averages, so the values were plotted incorrectly',
+          'The number of bars (140) exceeded the maximum that bar chart software can render accurately'
+        ],a:0
+      },
+      {
+        stem:'CAUSE: A company collects customer data without informing users about how it will be used, shared, or stored. EFFECT: The company faces regulatory penalties and customer trust erosion. Why?',
+        opts:[
+          'Failure to disclose data collection and usage violates data ownership and transparency principles — cornerstones of data ethics frameworks such as the Five Cs',
+          'Customers automatically consent to data use when they visit a website, so the penalty was applied incorrectly',
+          'Regulatory penalties only apply to companies processing medical records, not general customer data',
+          'The company should have encrypted the data, which would have made collection disclosure unnecessary'
+        ],a:0
+      },
+      {
+        stem:'CAUSE: A researcher computes a Pearson correlation coefficient of r = 0.92 between ice cream sales and drowning incidents. EFFECT: A junior analyst concludes that ice cream causes drowning and proposes banning ice cream sales. Why is this conclusion incorrect?',
+        opts:[
+          'Correlation does not imply causation — both variables are driven by a confounding variable (hot weather/summer season) that was not included in the analysis',
+          'Pearson correlation only applies to data measured in the same units, so the r value is meaningless here',
+          'A coefficient of 0.92 is below the 0.95 threshold required to draw any conclusion from correlation',
+          'The correct approach would be to compute a rank correlation instead, which would show r = 0 between the variables'
+        ],a:0
+      }
+    ]
+  }
+];
+
+// ─────────── STATE ───────────
+let studentName='', studentRoll='', studentSection='';
+const branch='BCA', semester='2nd';
+let shuffledQs=[], answers={};
+let timerInterval=null, secsLeft=TIME_SECS;
+let submitted=false, tabSwitchCount=0;
+let startTime=null, submitTime=null;
+let secScores=new Array(10).fill(0);
+let correct=0, pct=0, grade='', sid='';
+let lbOrigin='reg';
+
+// ─────────── UTILITY ───────────
+function $(id){return document.getElementById(id);}
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  $(id).classList.add('active');
+}
+function shuffle(arr){
+  const a=[...arr];
+  for(let i=a.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+function gradeEmoji(g){
+  return {A:'🌟','A+':'🏆',B:'🎯',C:'📚',D:'💪',E:'🤞',F:'📖'}[g]||'📖';
+}
+function medal(r){return r===1?'🥇':r===2?'🥈':r===3?'🥉':'  ';}
+function gradeColor(g){
+  return {'A+':'#15803d',A:'#16a34a',B:'#2563eb',C:'#7c3aed',D:'#d97706',E:'#ea580c',F:'#dc2626'}[g]||'#64748b';
+}
+
+// ─────────── REGISTRATION ───────────
+function startQuiz(){
+  const name=$('f-name').value.trim();
+  const roll=$('f-roll').value.trim();
+  const sec=$('f-section').value;
+  if(!name||!roll||!sec){
+    $('reg-error').style.display='block';
+    return;
+  }
+  $('reg-error').style.display='none';
+  studentName=name; studentRoll=roll; studentSection=sec;
+  buildQuiz();
+  showScreen('quiz-screen');
+  startTimer();
+  setupLeaveProtection();
+  loadWidgetLB();
+}
+
+// ─────────── BUILD QUIZ ───────────
+function buildQuiz(){
+  // Flatten all questions with section info
+  let all=[];
+  SECTIONS.forEach((sec,si)=>{
+    sec.qs.forEach((q,qi)=>{
+      // Shuffle options
+      const origOpts=[...q.opts];
+      const shuffledOpts=shuffle(origOpts);
+      const newCorrect=shuffledOpts.indexOf(origOpts[q.a]);
+      all.push({...q, opts:shuffledOpts, a:newCorrect,
+        secIdx:si, secId:sec.id, secTitle:sec.title,
+        secColor:sec.color, secPale:sec.pale, secTag:sec.tag,
+        origQIdx:qi});
+    });
+  });
+  // Shuffle all questions
+  shuffledQs=shuffle(all);
+  renderQuiz();
+}
+
+function renderQuiz(){
+  $('student-label').textContent=`${studentName} · ${studentSection}`;
+  $('prog-total').textContent=`${TOTAL} questions`;
+  const content=$('quiz-content');
+  content.innerHTML='';
+  // Group by section for headers (we still show section headers per section)
+  // We'll show section headers every time the section changes in the shuffled order
+  let lastSec=-1;
+  shuffledQs.forEach((q,i)=>{
+    if(q.secIdx!==lastSec){
+      const s=SECTIONS[q.secIdx];
+      const hdr=document.createElement('div');
+      hdr.className='section-header';
+      hdr.innerHTML=`<div class="section-line"></div>
+        <div class="section-pill" style="background:${s.color}">
+          Section ${s.id}: ${s.title}
+          <span class="section-sub">— ${s.sub}</span>
+        </div>
+        <div class="section-line"></div>`;
+      content.appendChild(hdr);
+      lastSec=q.secIdx;
+    }
+    const card=document.createElement('div');
+    card.className='q-card';
+    card.id=`qcard-${i}`;
+    card.innerHTML=`
+      <div class="q-tag" style="background:${q.secColor}">${q.secTag}</div>
+      <div class="q-top">
+        <div class="q-num" id="qnum-${i}">${i+1}</div>
+        <div class="q-stem">${q.stem}</div>
+      </div>
+      <div class="q-opts">
+        ${q.opts.map((o,oi)=>`
+          <button class="opt-btn" id="opt-${i}-${oi}" onclick="selectOpt(${i},${oi})">
+            <span class="opt-letter">${['A','B','C','D'][oi]}</span>
+            <span>${o}</span>
+          </button>`).join('')}
+      </div>`;
+    content.appendChild(card);
+  });
+}
+
+function selectOpt(qi,oi){
+  if(submitted)return;
+  // Deselect previous
+  if(answers[qi]!==undefined){
+    document.querySelectorAll(`[id^="opt-${qi}-"]`).forEach(b=>b.classList.remove('selected'));
+  }
+  answers[qi]=oi;
+  document.getElementById(`opt-${qi}-${oi}`).classList.add('selected');
+  document.getElementById(`qcard-${qi}`).classList.add('answered');
+  updateProgress();
+}
+function updateProgress(){
+  const n=Object.keys(answers).length;
+  $('prog-answered').textContent=`${n} answered`;
+  $('prog-fill').style.width=`${(n/TOTAL)*100}%`;
+}
+
+// ─────────── TIMER ───────────
+function startTimer(){
+  startTime=Date.now();
+  timerInterval=setInterval(()=>{
+    secsLeft--;
+    const m=Math.floor(secsLeft/60), s=secsLeft%60;
+    $('timer').textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+    if(secsLeft<=300) $('timer').classList.add('warn');
+    if(secsLeft<=0){clearInterval(timerInterval);finalize();}
+  },1000);
+}
+
+// ─────────── LEAVE PROTECTION ───────────
+function setupLeaveProtection(){
+  window.addEventListener('beforeunload',function(e){
+    if(!submitted){e.preventDefault();e.returnValue='';}
+  });
+  document.addEventListener('visibilitychange',function(){
+    if(!submitted&&document.hidden){
+      tabSwitchCount++;
+      if(tabSwitchCount===1) showTabWarning();
+      else finalize();
+    }
+  });
+}
+function showTabWarning(){
+  $('tab-overlay').classList.add('show');
+}
+function dismissTabWarn(){
+  $('tab-overlay').classList.remove('show');
+}
+
+// ─────────── SUBMIT ───────────
+function attemptSubmit(){
+  const unanswered=TOTAL-Object.keys(answers).length;
+  if(unanswered>0){
+    $('warn-box').style.display='block';
+    $('warn-box').textContent=`⚠ You have ${unanswered} unanswered question${unanswered>1?'s':''}. Please answer all questions before submitting.`;
+    $('warn-box').scrollIntoView({behavior:'smooth',block:'center'});
+    return;
+  }
+  finalize();
+}
+function finalize(){
+  if(submitted)return;
+  submitted=true;
+  clearInterval(timerInterval);
+  submitTime=Date.now();
+  // Score
+  correct=0;
+  const scArr=new Array(10).fill(0);
+  shuffledQs.forEach((q,i)=>{
+    if(answers[i]===q.a){
+      correct++;
+      scArr[q.secIdx]++;
+    }
+  });
+  secScores=scArr;
+  pct=Math.round(correct/TOTAL*100);
+  if(pct>=90)grade='A+';
+  else if(pct>=80)grade='A';
+  else if(pct>=70)grade='B';
+  else if(pct>=60)grade='C';
+  else if(pct>=50)grade='D';
+  else if(pct>=40)grade='E';
+  else grade='F';
+  const passed=pct>=40;
+  const elapsed=Math.floor((submitTime-startTime)/1000);
+  const em=Math.floor(elapsed/60), es=elapsed%60;
+  const timeTaken=`${em}m ${String(es).padStart(2,'0')}s`;
+  const submittedAt=new Date().toLocaleString('en-IN',{timeZone:'Asia/Kolkata'});
+  sid=`${studentRoll}-${QUIZ_CODE}-${grade}-${Date.now().toString(36).toUpperCase()}`;
+  // Render result
+  $('res-emoji').textContent=gradeEmoji(grade);
+  $('res-score').textContent=`${correct}/${TOTAL}`;
+  $('res-pct').textContent=`${pct}% · Grade ${grade}`;
+  const verd=$('res-verdict');
+  if(passed){verd.textContent='✓ PASSED';verd.className='verdict pass';}
+  else{verd.textContent='✗ Needs Improvement';verd.className='verdict fail';}
+  $('sid-val').textContent=sid;
+  $('res-info').innerHTML=`
+    <div class="info-cell"><div class="info-cell-label">Name</div><div class="info-cell-val">${studentName}</div></div>
+    <div class="info-cell"><div class="info-cell-label">Roll No.</div><div class="info-cell-val">${studentRoll}</div></div>
+    <div class="info-cell"><div class="info-cell-label">Section</div><div class="info-cell-val">${studentSection}</div></div>
+    <div class="info-cell"><div class="info-cell-label">Branch/Sem</div><div class="info-cell-val">${branch} · ${semester}</div></div>
+    <div class="info-cell"><div class="info-cell-label">Time Taken</div><div class="info-cell-val">${timeTaken}</div></div>
+    <div class="info-cell"><div class="info-cell-label">Submitted At</div><div class="info-cell-val" style="font-size:11px;">${submittedAt}</div></div>
+  `;
+  // Section breakdown
+  const bdWrap=$('bd-rows');
+  bdWrap.innerHTML='';
+  SECTIONS.forEach((s,i)=>{
+    const sc=secScores[i], tot=s.qs.length, p=Math.round(sc/tot*100);
+    bdWrap.innerHTML+=`<div class="bd-row">
+      <div class="bd-label">${s.title}</div>
+      <div class="bd-bar-track"><div class="bd-bar-fill" style="width:${p}%;background:${s.color};"></div></div>
+      <div class="bd-frac">${sc}/${tot}</div>
+    </div>`;
+  });
+  showScreen('result-screen');
+  // Post to sheet
+  const payload={name:studentName,roll:studentRoll,section:studentSection,branch,semester,
+    score:correct,total:TOTAL,percentage:pct,grade,timeTaken,passed,submissionId:sid,
+    submittedAt,quizType:QUIZ_CODE,
+    s1:secScores[0],s2:secScores[1],s3:secScores[2],s4:secScores[3],s5:secScores[4],
+    s6:secScores[5],s7:secScores[6],s8:secScores[7],s9:secScores[8],s10:secScores[9]};
+  fetch(SHEET_URL,{method:'POST',mode:'no-cors',body:JSON.stringify(payload)}).catch(()=>{});
+  // Status badges
+  setTimeout(()=>{
+    $('dot-saving').classList.add('done');
+    $('txt-saving').textContent='✓ Saved to records';
+  },2000);
+  // Auto PDF
+  setTimeout(()=>savePDF(),1200);
+}
+
+// ─────────── PDF ───────────
+function savePDF(){
+  const fname=`${studentRoll}-${QUIZ_CODE}-${sid}.pdf`;
+  const el=$('result-card');
+  $('dot-pdf').classList.remove('done');
+  $('txt-pdf').textContent='Downloading PDF…';
+  html2pdf().set({
+    margin:[12,10,12,10],filename:fname,
+    image:{type:'jpeg',quality:0.97},
+    html2canvas:{scale:2,useCORS:true,backgroundColor:'#ffffff',logging:false},
+    jsPDF:{unit:'mm',format:'a4',orientation:'portrait'}
+  }).from(el).save().then(()=>{
+    $('dot-pdf').classList.add('done');
+    $('txt-pdf').textContent='✓ PDF saved';
+  });
+}
+
+// ─────────── REVIEW ───────────
+function reviewAnswers(){
+  lbOrigin='result';
+  $('submit-wrap').style.display='none';
+  $('review-label').style.display='inline';
+  $('back-to-score').style.display='inline-flex';
+  showScreen('quiz-screen');
+  // Colour options
+  shuffledQs.forEach((q,i)=>{
+    const correctOpt=q.a;
+    const studentOpt=answers[i];
+    // Highlight correct
+    const cBtn=document.getElementById(`opt-${i}-${correctOpt}`);
+    if(cBtn) cBtn.classList.add('correct-ans');
+    // Highlight wrong
+    if(studentOpt!==undefined&&studentOpt!==correctOpt){
+      const wBtn=document.getElementById(`opt-${i}-${studentOpt}`);
+      if(wBtn) wBtn.classList.add('wrong-ans');
+    }
+  });
+}
+function goBackToResult(){
+  showScreen('result-screen');
+}
+
+// ─────────── LEADERBOARD ───────────
+function showLB(){
+  lbOrigin=submitted?'result':'reg';
+  showScreen('lb-screen');
+  loadFullLB();
+}
+function backFromLB(){
+  showScreen(submitted?'result-screen':'reg-screen');
+}
+async function loadWidgetLB(){
+  try{
+    const r=await fetch(`${SHEET_URL}?action=leaderboard&top=${LB_SIZE}&quiz=${QUIZ_CODE}`);
+    const j=await r.json();
+    renderWidgetLB(j.data||[]);
+    $('widget-updated').textContent=`Updated ${new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'})}`;
+  }catch(e){
+    $('widget-lb-body').innerHTML='<div class="lb-empty">Unable to load leaderboard</div>';
+  }
+}
+function renderWidgetLB(data){
+  const body=$('widget-lb-body');
+  if(!data||!data.length){
+    body.innerHTML='<div class="lb-empty">No submissions yet. Be the first! 🚀</div>';
+    return;
+  }
+  body.innerHTML=data.map((r,i)=>`
+    <div class="lb-row">
+      <div class="lb-medal">${medal(i+1)}</div>
+      <div class="lb-rank">${i+1}</div>
+      <div class="lb-info">
+        <div class="lb-name">${r.name}</div>
+        <div class="lb-roll">${r.roll} · ${r.section}</div>
+        <div class="lb-prog"><div class="lb-prog-fill" style="width:${r.pct}%"></div></div>
+      </div>
+      <div class="lb-score">
+        <div class="lb-score-num">${r.score}/${r.total}</div>
+        <div class="lb-score-pct">${r.pct}%</div>
+        <span class="lb-grade">${r.grade}</span>
+      </div>
+    </div>`).join('');
+}
+async function loadFullLB(){
+  try{
+    const r=await fetch(`${SHEET_URL}?action=leaderboard&top=${LB_SIZE}&quiz=${QUIZ_CODE}`);
+    const j=await r.json();
+    renderFullLB(j.data||[]);
+  }catch(e){
+    $('lb-full-body').innerHTML='<div style="padding:32px;text-align:center;color:#888;">Unable to load leaderboard.</div>';
+  }
+}
+function renderFullLB(data){
+  if(!data||!data.length){
+    $('lb-full-body').innerHTML='<div style="padding:32px;text-align:center;color:#888;">No submissions yet.</div>';
+    return;
+  }
+  $('lb-full-body').innerHTML=`<table class="lb-table"><thead><tr>
+    <th>Rank</th><th>Name</th><th>Roll No.</th><th>Section</th><th>Score</th><th>%</th><th>Grade</th>
+  </tr></thead><tbody>${data.map((r,i)=>`<tr>
+    <td class="rank-cell">${medal(i+1)} ${i+1}</td>
+    <td>${r.name}</td>
+    <td style="font-family:Inconsolata,monospace;font-size:12px;">${r.roll}</td>
+    <td>${r.section}</td>
+    <td style="font-family:DM Serif Display,serif;font-size:16px;color:var(--accent)">${r.score}/${r.total}</td>
+    <td style="font-family:Inconsolata,monospace;">${r.pct}%</td>
+    <td><span class="lb-grade" style="background:${gradeColor(r.grade)}">${r.grade}</span></td>
+  </tr>`).join('')}</tbody></table>`;
+}
+// Auto-refresh widget
+setInterval(loadWidgetLB,90000);
+// Initial widget load
+loadWidgetLB();
+</script>
+</body>
+</html>
