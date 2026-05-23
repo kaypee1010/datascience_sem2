@@ -1287,11 +1287,13 @@ function dismissTabWarn(){
 }
 
 // ─────────── SUBMIT ───────────
+let submitWarned=false;
 function attemptSubmit(){
   const unanswered=TOTAL-Object.keys(answers).length;
-  if(unanswered>0){
+  if(unanswered>0&&!submitWarned){
+    submitWarned=true;
     $('warn-box').style.display='block';
-    $('warn-box').textContent=`⚠ You have ${unanswered} unanswered question${unanswered>1?'s':''}. Please answer all questions before submitting.`;
+    $('warn-box').textContent=`⚠ You have ${unanswered} unanswered question${unanswered>1?'s':''}. Click Submit again to confirm and submit with unanswered questions.`;
     $('warn-box').scrollIntoView({behavior:'smooth',block:'center'});
     return;
   }
