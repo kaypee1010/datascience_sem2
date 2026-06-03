@@ -1,0 +1,1082 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Data Science Quiz — Unit 1 | BCA 2nd Sem | K.P. Singh · SRHU</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&family=Inconsolata:wght@400;600;700&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<style>
+:root{
+  --accent:#0e7490;
+  --accent-pale:#e0f2fe;
+  --accent-mid:#38bdf8;
+  --accent-dark:#0c4a6e;
+  --ink:#0f172a;
+  --paper:#f0f9ff;
+  --cream:#fafafa;
+  --slate:#475569;
+  --slate-light:#94a3b8;
+  --border:#cbd5e1;
+  --border-strong:#64748b;
+  --rose:#e11d48;
+  --rose-pale:#fff1f2;
+  --warn:#f59e0b;
+  --shadow-sm:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.06);
+  --shadow-md:0 4px 12px rgba(0,0,0,.10),0 2px 6px rgba(0,0,0,.07);
+  --shadow-lg:0 16px 40px rgba(0,0,0,.12),0 4px 12px rgba(0,0,0,.08);
+  --r:10px;--r-lg:16px;
+  --s1:#7c3aed;--s2:#0891b2;--s3:#059669;--s4:#ea580c;--s5:#be185d;
+  --s6:#d97706;--s7:#2563eb;--s8:#7c3aed;--s9:#0f766e;--s10:#dc2626;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'DM Sans',sans-serif;
+  background:var(--paper);
+  color:var(--ink);
+  min-height:100vh;
+  position:relative;
+  overflow-x:hidden;
+}
+body::before{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  opacity:.025;
+}
+body::after{
+  content:'';position:fixed;top:-80px;right:-80px;width:340px;height:340px;
+  background:repeating-linear-gradient(45deg,var(--accent) 0,var(--accent) 1px,transparent 0,transparent 50%);
+  background-size:18px 18px;opacity:.035;pointer-events:none;z-index:0;
+}
+.screen{display:none;position:relative;z-index:1}
+.screen.active{display:block}
+
+/* NAV */
+.nav{
+  position:fixed;top:0;left:0;right:0;z-index:1000;
+  background:rgba(240,249,255,.88);backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 28px;height:60px;
+}
+.nav-left{display:flex;align-items:center;gap:14px}
+.nav-logo{
+  width:36px;height:36px;border-radius:50%;
+  background:linear-gradient(135deg,var(--accent),var(--accent-mid));
+  display:flex;align-items:center;justify-content:center;
+  color:#fff;font-family:'DM Serif Display',serif;font-size:14px;font-weight:bold;
+  flex-shrink:0;box-shadow:0 2px 8px rgba(14,116,144,.35);
+}
+.nav-title{font-family:'DM Serif Display',serif;font-size:17px;color:var(--ink)}
+.nav-sub{font-family:'Inconsolata',monospace;font-size:11px;color:var(--slate);margin-top:1px}
+.nav-right{display:flex;align-items:center;gap:16px}
+.nav-link{
+  font-size:13px;font-weight:500;color:var(--slate);text-decoration:none;cursor:pointer;
+  transition:color .2s;
+}
+.nav-link:hover{color:var(--accent)}
+.nav-cta{
+  font-family:'Inconsolata',monospace;font-size:12px;font-weight:700;
+  color:#fff;background:var(--accent);padding:6px 14px;border-radius:20px;
+  text-decoration:none;transition:background .2s;
+}
+.nav-cta:hover{background:var(--accent-dark)}
+.hide-m{display:flex}
+
+/* REG SCREEN */
+#reg-screen{padding:80px 24px 40px;min-height:100vh}
+.reg-layout{
+  max-width:1100px;margin:0 auto;
+  display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:start;
+}
+.card{
+  background:#fff;border-radius:var(--r-lg);box-shadow:var(--shadow-md);
+  overflow:hidden;
+}
+.card-top-bar{height:5px;background:linear-gradient(90deg,var(--accent),var(--accent-mid))}
+.card-body{padding:32px}
+.eyebrow{
+  font-family:'Inconsolata',monospace;font-size:11px;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--accent);margin-bottom:8px;
+}
+.card-title{font-family:'DM Serif Display',serif;font-size:28px;line-height:1.2;color:var(--ink);margin-bottom:6px}
+.card-title em{font-style:italic;color:var(--accent)}
+.card-subtitle{font-size:14px;color:var(--slate);margin-bottom:22px;line-height:1.5}
+.syllabus-box{
+  background:var(--accent-pale);border:1px solid #bae6fd;border-radius:var(--r);
+  padding:14px 16px;margin-bottom:22px;
+}
+.syllabus-box h4{font-size:11px;font-family:'Inconsolata',monospace;text-transform:uppercase;letter-spacing:.1em;color:var(--accent-dark);margin-bottom:6px}
+.syllabus-box ul{list-style:none;display:flex;flex-direction:column;gap:3px}
+.syllabus-box li{font-size:12.5px;color:var(--slate);padding-left:14px;position:relative}
+.syllabus-box li::before{content:'▸';position:absolute;left:0;color:var(--accent-mid)}
+.form-group{margin-bottom:16px}
+.form-label{display:block;font-size:12.5px;font-weight:600;color:var(--slate);margin-bottom:5px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+input,select{
+  width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:var(--r);
+  font-family:'DM Sans',sans-serif;font-size:14px;color:var(--ink);
+  background:#fff;transition:border-color .2s,box-shadow .2s;outline:none;
+}
+input:focus,select:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(14,116,144,.12)}
+input[readonly]{background:var(--paper);color:var(--slate);cursor:not-allowed}
+.lock-icon{font-size:10px;margin-left:4px;opacity:.6}
+.error-msg{
+  display:none;background:var(--rose-pale);border:1px solid #fecdd3;
+  color:var(--rose);font-size:13px;padding:10px 14px;border-radius:var(--r);margin-bottom:14px;
+}
+.error-msg.show{display:block}
+.btn{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:12px 28px;border-radius:30px;border:none;cursor:pointer;
+  font-family:'DM Sans',sans-serif;font-size:15px;font-weight:600;
+  transition:all .2s;
+}
+.btn-primary{
+  background:linear-gradient(135deg,var(--accent),var(--accent-mid));
+  color:#fff;box-shadow:0 4px 14px rgba(14,116,144,.35);width:100%;
+  justify-content:center;
+}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(14,116,144,.45)}
+.btn-secondary{
+  background:#fff;color:var(--accent);border:1.5px solid var(--accent);
+}
+.btn-secondary:hover{background:var(--accent-pale)}
+.btn-sm{padding:8px 18px;font-size:13px}
+
+/* LEADERBOARD WIDGET */
+.lb-widget{background:#0f172a;border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--shadow-lg)}
+.lb-widget-header{
+  padding:20px 24px 16px;
+  background:linear-gradient(135deg,#0f172a,#1e293b);
+  border-bottom:1px solid rgba(255,255,255,.08);
+}
+.lb-widget-title{
+  font-family:'DM Serif Display',serif;font-size:20px;color:#fff;margin-bottom:2px;
+}
+.lb-widget-sub{font-size:12px;color:#94a3b8;font-family:'Inconsolata',monospace}
+.lb-widget-body{padding:16px}
+.lb-row{
+  display:flex;align-items:center;gap:12px;
+  padding:10px 12px;border-radius:8px;margin-bottom:6px;
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);
+}
+.lb-medal{font-size:18px;flex-shrink:0;width:24px;text-align:center}
+.lb-rank{font-family:'Inconsolata',monospace;font-size:13px;color:#94a3b8;flex-shrink:0;width:18px}
+.lb-info{flex:1;min-width:0}
+.lb-name{font-size:13px;font-weight:600;color:#f1f5f9;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lb-roll{font-family:'Inconsolata',monospace;font-size:11px;color:#64748b}
+.lb-bar-wrap{width:60px;background:rgba(255,255,255,.08);border-radius:4px;height:4px}
+.lb-bar{height:4px;border-radius:4px;background:linear-gradient(90deg,var(--accent),var(--accent-mid));transition:width .5s}
+.lb-score{text-align:right;flex-shrink:0}
+.lb-pct{font-family:'DM Serif Display',serif;font-size:15px;color:var(--accent-mid)}
+.lb-grade{
+  font-family:'Inconsolata',monospace;font-size:10px;font-weight:700;
+  background:rgba(14,116,144,.35);color:var(--accent-mid);
+  padding:1px 6px;border-radius:4px;margin-top:1px;display:inline-block;
+}
+.lb-empty{text-align:center;padding:24px;color:#475569;font-size:13px}
+.lb-refresh{font-family:'Inconsolata',monospace;font-size:10px;color:#475569;text-align:right;padding:8px 16px}
+
+/* QUIZ SCREEN */
+#quiz-screen{padding-top:60px;min-height:100vh}
+.quiz-subbar{
+  position:sticky;top:60px;z-index:100;
+  background:rgba(240,249,255,.92);backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--border);padding:10px 24px;
+  display:flex;align-items:center;gap:16px;
+}
+.student-info{font-size:13px;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:200px}
+.progress-wrap{flex:1;display:flex;align-items:center;gap:10px}
+.progress-bar-outer{flex:1;background:var(--border);border-radius:10px;height:6px;overflow:hidden}
+.progress-bar-inner{height:6px;border-radius:10px;background:linear-gradient(90deg,var(--accent),var(--accent-mid));width:0;transition:width .4s}
+.progress-text{font-family:'Inconsolata',monospace;font-size:11px;color:var(--slate);white-space:nowrap}
+.timer{
+  font-family:'DM Serif Display',serif;font-size:22px;color:var(--accent);
+  min-width:68px;text-align:right;transition:color .3s;
+}
+.timer.warn{color:var(--rose);animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.6}}
+.review-badge{
+  background:var(--warn);color:#fff;font-size:11px;font-weight:700;
+  padding:3px 10px;border-radius:20px;display:none;font-family:'Inconsolata',monospace;
+}
+.back-score-btn{display:none}
+
+.quiz-content{max-width:860px;margin:0 auto;padding:28px 24px 60px}
+.section-header{
+  display:flex;align-items:center;gap:0;margin:36px 0 18px;
+}
+.section-line{flex:1;height:1px;background:var(--border)}
+.section-pill{
+  font-family:'Inconsolata',monospace;font-size:11px;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;
+  padding:5px 16px;border-radius:20px;margin:0 16px;
+  color:#fff;white-space:nowrap;
+}
+
+.q-card{
+  background:#fff;border-radius:var(--r-lg);box-shadow:var(--shadow-sm);
+  border:1px solid var(--border);margin-bottom:14px;overflow:hidden;
+  transition:box-shadow .2s;
+}
+.q-card:hover{box-shadow:var(--shadow-md)}
+.q-card-inner{padding:20px 22px}
+.q-header{display:flex;align-items:flex-start;gap:14px;margin-bottom:14px}
+.q-num{
+  width:30px;height:30px;border-radius:50%;border:2px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Inconsolata',monospace;font-size:12px;font-weight:700;
+  color:var(--slate);flex-shrink:0;margin-top:1px;transition:all .3s;
+}
+.q-num.answered{background:var(--accent);border-color:var(--accent);color:#fff}
+.q-stem{font-size:14.5px;line-height:1.65;color:var(--ink);flex:1}
+.q-tag{
+  font-family:'Inconsolata',monospace;font-size:10px;font-weight:700;
+  letter-spacing:.08em;text-transform:uppercase;padding:2px 8px;border-radius:12px;
+  color:#fff;flex-shrink:0;margin-top:3px;align-self:flex-start;
+}
+.options{display:grid;gap:8px}
+.opt-btn{
+  display:flex;align-items:center;gap:12px;
+  width:100%;text-align:left;padding:10px 14px;
+  border:1.5px solid var(--border);border-radius:var(--r);background:#fff;
+  cursor:pointer;font-family:'DM Sans',sans-serif;font-size:13.5px;color:var(--ink);
+  transition:all .18s;
+}
+.opt-btn:hover:not(:disabled){
+  border-color:var(--accent);background:var(--accent-pale);
+  transform:translateX(3px);
+}
+.opt-btn.selected{border-color:var(--accent);background:var(--accent-pale);color:var(--accent-dark)}
+.opt-btn:disabled{cursor:default}
+.opt-btn.correct-ans{border-color:#059669;background:#ecfdf5;color:#065f46}
+.opt-btn.wrong-ans{border-color:var(--rose);background:var(--rose-pale);color:var(--rose)}
+.opt-letter{
+  width:24px;height:24px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Inconsolata',monospace;font-size:11px;font-weight:700;
+  background:var(--paper);border:1.5px solid var(--border);
+  color:var(--slate);flex-shrink:0;transition:all .18s;
+}
+.opt-btn.selected .opt-letter{background:var(--accent);border-color:var(--accent);color:#fff}
+.opt-btn.correct-ans .opt-letter{background:#059669;border-color:#059669;color:#fff}
+.opt-btn.wrong-ans .opt-letter{background:var(--rose);border-color:var(--rose);color:#fff}
+
+.submit-section{max-width:860px;margin:0 auto;padding:0 24px 48px;text-align:center}
+.unanswered-warning{
+  display:none;background:#fffbeb;border:1.5px solid #fcd34d;border-radius:var(--r);
+  padding:14px 18px;margin-bottom:18px;text-align:left;
+}
+.unanswered-warning.show{display:block}
+.unanswered-warning strong{color:var(--warn);font-size:13.5px}
+.unanswered-warning p{font-size:13px;color:#78350f;margin-top:3px}
+.btn-submit{
+  background:linear-gradient(135deg,#059669,#10b981);
+  color:#fff;padding:14px 40px;border-radius:30px;border:none;cursor:pointer;
+  font-family:'DM Sans',sans-serif;font-size:16px;font-weight:700;
+  box-shadow:0 4px 16px rgba(5,150,105,.35);transition:all .2s;
+}
+.btn-submit:hover{transform:translateY(-2px);box-shadow:0 6px 22px rgba(5,150,105,.45)}
+
+/* RESULT SCREEN */
+#result-screen{padding:80px 24px 60px;min-height:100vh}
+#result-card{max-width:700px;margin:0 auto}
+.result-card{
+  background:#fff;border-radius:var(--r-lg);box-shadow:var(--shadow-lg);overflow:hidden;
+}
+.result-card-top{height:6px;background:linear-gradient(90deg,var(--accent),var(--accent-mid),#7c3aed)}
+.result-card-body{padding:36px}
+.result-emoji{font-size:48px;text-align:center;margin-bottom:12px}
+.result-score{
+  font-family:'DM Serif Display',serif;font-size:72px;color:var(--accent);
+  text-align:center;line-height:1;
+}
+.result-pct-grade{text-align:center;margin:6px 0 4px;font-size:17px;color:var(--slate)}
+.result-verdict{
+  text-align:center;font-family:'Inconsolata',monospace;font-size:13px;font-weight:700;
+  letter-spacing:.12em;padding:6px 20px;border-radius:20px;display:inline-block;
+  margin:0 auto 20px;
+}
+.verdict-wrap{text-align:center;margin-bottom:20px}
+.passed{background:#dcfce7;color:#15803d}
+.failed{background:var(--rose-pale);color:var(--rose)}
+.status-badges{display:flex;gap:8px;justify-content:center;margin-bottom:24px;flex-wrap:wrap}
+.status-badge{
+  font-family:'Inconsolata',monospace;font-size:11px;padding:4px 12px;
+  border-radius:20px;border:1px solid var(--border);background:var(--paper);color:var(--slate);
+}
+.status-badge.active{background:var(--accent-pale);border-color:var(--accent-mid);color:var(--accent-dark)}
+.status-badge.done{background:#dcfce7;border-color:#6ee7b7;color:#065f46}
+.info-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:24px;
+}
+.info-cell{
+  background:var(--paper);border-radius:var(--r);padding:12px;
+  border:1px solid var(--border);
+}
+.info-cell-label{font-family:'Inconsolata',monospace;font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--slate-light);margin-bottom:3px}
+.info-cell-val{font-size:13.5px;font-weight:600;color:var(--ink);word-break:break-all}
+.section-breakdown{margin-bottom:24px}
+.section-breakdown h4{font-size:13px;font-weight:700;color:var(--slate);margin-bottom:12px;text-transform:uppercase;letter-spacing:.05em;font-family:'Inconsolata',monospace}
+.sb-row{display:flex;align-items:center;gap:10px;margin-bottom:7px}
+.sb-label{font-size:11.5px;color:var(--slate);width:130px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sb-bar-outer{flex:1;background:var(--border);border-radius:4px;height:6px;overflow:hidden}
+.sb-bar-inner{height:6px;border-radius:4px;background:linear-gradient(90deg,var(--accent),var(--accent-mid));transition:width .8s}
+.sb-frac{font-family:'Inconsolata',monospace;font-size:12px;color:var(--slate);width:36px;text-align:right;flex-shrink:0}
+.result-actions{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:24px;justify-content:center}
+.submission-id-box{
+  border:2px dashed var(--accent-mid);border-radius:var(--r);padding:14px 18px;
+  background:var(--accent-pale);text-align:center;
+}
+.submission-id-box p{font-size:12px;color:var(--slate);margin-bottom:6px}
+.submission-id-val{font-family:'Inconsolata',monospace;font-size:15px;font-weight:700;color:var(--accent-dark);word-break:break-all}
+
+/* LEADERBOARD SCREEN */
+#lb-screen{padding:80px 24px 60px;min-height:100vh}
+.lb-page{max-width:800px;margin:0 auto}
+.lb-page-title{font-family:'DM Serif Display',serif;font-size:36px;color:var(--ink);margin-bottom:4px}
+.lb-page-sub{font-size:14px;color:var(--slate);margin-bottom:24px}
+table{width:100%;border-collapse:collapse;background:#fff;border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--shadow-md)}
+thead th{
+  background:var(--accent);color:#fff;font-family:'Inconsolata',monospace;
+  font-size:11px;text-transform:uppercase;letter-spacing:.1em;
+  padding:12px 16px;text-align:left;
+}
+tbody tr{border-bottom:1px solid var(--border);transition:background .15s}
+tbody tr:last-child{border:none}
+tbody tr:hover{background:var(--accent-pale)}
+tbody td{padding:12px 16px;font-size:13.5px;color:var(--ink)}
+.rank-cell{font-family:'Inconsolata',monospace;font-weight:700;font-size:15px}
+.grade-badge{
+  font-family:'Inconsolata',monospace;font-size:11px;font-weight:700;
+  padding:2px 8px;border-radius:10px;background:var(--accent-pale);color:var(--accent-dark);
+}
+
+/* TAB WARNING */
+#tab-overlay{
+  display:none;position:fixed;inset:0;z-index:99999;
+  background:rgba(0,0,0,.75);backdrop-filter:blur(6px);
+  align-items:center;justify-content:center;
+}
+#tab-overlay.show{display:flex}
+.tab-card{
+  background:#fff;border-radius:var(--r-lg);padding:36px;max-width:440px;width:90%;
+  border-top:5px solid var(--rose);box-shadow:var(--shadow-lg);text-align:center;
+}
+.tab-card h2{font-family:'DM Serif Display',serif;font-size:26px;color:var(--rose);margin-bottom:10px}
+.tab-card p{font-size:14px;color:var(--slate);line-height:1.6;margin-bottom:8px}
+.tab-count{font-family:'Inconsolata',monospace;font-size:12px;color:var(--rose);font-weight:700;margin-bottom:20px}
+.btn-dismiss{
+  background:var(--accent);color:#fff;padding:11px 28px;border-radius:30px;
+  border:none;cursor:pointer;font-size:14px;font-weight:600;font-family:'DM Sans',sans-serif;
+  transition:background .2s;
+}
+.btn-dismiss:hover{background:var(--accent-dark)}
+
+@media(max-width:740px){
+  .reg-layout{grid-template-columns:1fr}
+  .lb-widget{display:none}
+}
+@media(max-width:520px){
+  .hide-m{display:none}
+  .nav{padding:0 16px}
+  .student-info{max-width:120px;font-size:12px}
+  .timer{font-size:18px}
+  .result-card-body,.card-body{padding:20px}
+  .info-grid{grid-template-columns:1fr 1fr}
+  .form-row{grid-template-columns:1fr}
+  .quiz-content,.submit-section{padding-left:14px;padding-right:14px}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-left">
+    <div class="nav-logo">KP</div>
+    <div>
+      <div class="nav-title">K.P. Singh</div>
+      <div class="nav-sub">SRHU · BCA · Introduction to Data Science</div>
+    </div>
+  </div>
+  <div class="nav-right">
+    <span class="nav-link hide-m" onclick="goToLB()">🏆 Leaderboard</span>
+    <a class="nav-cta" href="https://kpsingh.in" target="_blank">kpsingh.in ↗</a>
+  </div>
+</nav>
+
+<!-- TAB OVERLAY -->
+<div id="tab-overlay">
+  <div class="tab-card">
+    <div style="font-size:44px;margin-bottom:10px">⚠️</div>
+    <h2>Tab Switch Detected!</h2>
+    <p>Switching tabs during the quiz is not allowed. Academic integrity is monitored.</p>
+    <p class="tab-count" id="tab-count-text">Tab switch count: 1 of 2</p>
+    <button class="btn-dismiss" onclick="dismissTabWarning()">I Understand — Return to Quiz</button>
+  </div>
+</div>
+
+<!-- SCREEN 1: REGISTRATION -->
+<div id="reg-screen" class="screen active">
+  <div class="reg-layout">
+    <div>
+      <div class="card">
+        <div class="card-top-bar"></div>
+        <div class="card-body">
+          <div class="eyebrow">Unit 1 Assessment · BCA 2nd Semester</div>
+          <h1 class="card-title">Introduction to <em>Data Science</em></h1>
+          <p class="card-subtitle">30 MCQs · 10 Minutes · 10 Section Styles · Randomised Every Attempt</p>
+          <div class="syllabus-box">
+            <h4>📖 Topics Covered</h4>
+            <ul>
+              <li>Overview of Data Science: Definitions, Importance, Applications</li>
+              <li>The Data Science Process: Steps and Workflow</li>
+              <li>Roles: Data Scientist, Data Analyst, Data Engineer</li>
+              <li>Introduction to Data: Types, Sources, Collection Methods</li>
+            </ul>
+          </div>
+          <div id="reg-error" class="error-msg"></div>
+          <div class="form-group">
+            <label class="form-label">Full Name</label>
+            <input type="text" id="reg-name" placeholder="e.g. Priya Sharma" autocomplete="name"/>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Roll Number</label>
+              <input type="text" id="reg-roll" placeholder="e.g. DD222BCA001" style="text-transform:uppercase"/>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Section</label>
+              <select id="reg-section">
+                <option value="">— Select —</option>
+                <option>B1</option>
+                <option>B2</option>
+                <option>C1</option>
+                <option>C2</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Branch <span class="lock-icon">🔒</span></label>
+              <input type="text" value="BCA" readonly/>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Semester <span class="lock-icon">🔒</span></label>
+              <input type="text" value="2nd" readonly/>
+            </div>
+          </div>
+          <button class="btn btn-primary" onclick="startQuiz()">Begin Quiz →</button>
+        </div>
+      </div>
+    </div>
+    <!-- LEADERBOARD WIDGET -->
+    <div class="lb-widget">
+      <div class="lb-widget-header">
+        <div class="lb-widget-title">🏆 Live Leaderboard</div>
+        <div class="lb-widget-sub">Top 3 · Auto-refreshes every 90s</div>
+      </div>
+      <div class="lb-widget-body" id="widget-lb-body">
+        <div class="lb-empty">No submissions yet — be the first! 🚀</div>
+      </div>
+      <div class="lb-refresh" id="lb-refresh-time"></div>
+    </div>
+  </div>
+</div>
+
+<!-- SCREEN 2: QUIZ -->
+<div id="quiz-screen" class="screen">
+  <div class="quiz-subbar">
+    <div class="student-info" id="quiz-student-label">Student</div>
+    <div class="progress-wrap">
+      <div class="progress-bar-outer"><div class="progress-bar-inner" id="progress-bar"></div></div>
+      <div class="progress-text" id="progress-text">0 / 30</div>
+    </div>
+    <div class="timer" id="timer">10:00</div>
+    <span class="review-badge" id="review-badge">📋 REVIEW</span>
+    <button class="btn btn-secondary btn-sm back-score-btn" id="back-score-btn" onclick="backToScore()">← Score</button>
+  </div>
+  <div class="quiz-content" id="quiz-content"></div>
+  <div class="submit-section">
+    <div class="unanswered-warning" id="unanswered-warning">
+      <strong>⚠️ You have unanswered questions!</strong>
+      <p id="unanswered-count-text">Please attempt all questions before submitting.</p>
+    </div>
+    <button class="btn-submit" id="submit-btn" onclick="trySubmit()">Submit Quiz ✓</button>
+  </div>
+</div>
+
+<!-- SCREEN 3: RESULT -->
+<div id="result-screen" class="screen">
+  <div id="result-card">
+    <div class="result-card">
+      <div class="result-card-top"></div>
+      <div class="result-card-body">
+        <div class="result-emoji" id="res-emoji"></div>
+        <div class="result-score" id="res-score"></div>
+        <div class="result-pct-grade" id="res-pct-grade"></div>
+        <div class="verdict-wrap"><span class="result-verdict" id="res-verdict"></span></div>
+        <div class="status-badges">
+          <span class="status-badge" id="badge-saving">💾 Saving…</span>
+          <span class="status-badge" id="badge-pdf">📄 Generating PDF…</span>
+        </div>
+        <div class="info-grid" id="res-info-grid"></div>
+        <div class="section-breakdown">
+          <h4>Section Breakdown</h4>
+          <div id="res-breakdown"></div>
+        </div>
+        <div class="result-actions">
+          <button class="btn btn-primary btn-sm" onclick="savePDF()">⬇ Save PDF</button>
+          <button class="btn btn-secondary btn-sm" onclick="reviewAnswers()">Review Answers</button>
+          <button class="btn btn-secondary btn-sm" onclick="goToLB()">🏆 Leaderboard</button>
+        </div>
+        <div class="submission-id-box">
+          <p>Your Submission ID — keep this safe</p>
+          <div class="submission-id-val" id="res-sub-id"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SCREEN 4: LEADERBOARD -->
+<div id="lb-screen" class="screen">
+  <div class="lb-page">
+    <button class="btn btn-secondary btn-sm" onclick="backFromLB()" style="margin-bottom:20px">← Back</button>
+    <h2 class="lb-page-title">🏆 Leaderboard</h2>
+    <p class="lb-page-sub">Top 3 · Introduction to Data Science · BCA 2nd Semester</p>
+    <div id="lb-page-content"><div class="lb-empty" style="padding:40px;text-align:center;color:var(--slate)">Loading…</div></div>
+  </div>
+</div>
+
+<script>
+// ===== CONFIG =====
+const SHEET_URL = 'YOUR_DEPLOYMENT_ID_HERE';
+const QUIZ_CODE = 'DS-U1-BCA2';
+const TOTAL_Q = 30;
+const TOTAL_MIN = 10;
+const LB_SIZE = 3;
+const SECTIONS = ['Analogy','Witty Concept','Riddle','Scenario','Misconception Buster','Debug the Mistake','Concept Application','Best Definition','Correct Sequence','Cause → Effect'];
+const SEC_COLORS = ['#7c3aed','#0891b2','#059669','#ea580c','#be185d','#d97706','#2563eb','#7c3aed','#0f766e','#dc2626'];
+
+// ===== QUESTION BANK (30 questions, 3 per section) =====
+const QUESTION_BANK = [
+// SECTION 1 — Analogy
+{s:0, stem:"A city's traffic management system collects vehicle speed, signal status, and congestion data from every junction — exactly like ______ in data science — because both gather continuous raw observations from multiple sources to inform decisions.", opts:["Data Collection","Model Deployment","Feature Engineering","Hypothesis Testing"], a:0},
+{s:0, stem:"A doctor's stethoscope is to diagnosing a patient's condition what ______ is to data science — because both are specialised instruments used to extract meaningful signals from complex raw input.", opts:["Exploratory Data Analysis","Data Warehousing","Report Generation","Network Configuration"], a:0},
+{s:0, stem:"A hostel warden who tracks attendance, mess usage, and complaint logs to improve student services is performing the role of a ______ — because both collect and interpret operational data to optimise outcomes for their community.", opts:["Data Analyst","Network Engineer","Software Tester","UI Designer"], a:0},
+
+// SECTION 2 — Witty Concept
+{s:1, stem:"A student proudly claims: 'Data Science is just Excel with fancier charts.' A professor who heard this immediately scheduled a remedial class. The actual discipline that the student is trivialising covers:", opts:["An interdisciplinary field combining statistics, programming, and domain expertise to extract knowledge from data","A spreadsheet software suite with extended graphing capabilities and macro support","A branch of database management focused on pivot tables and visual dashboards","An IT operations role responsible for generating weekly business reports"], a:0},
+{s:1, stem:"'I deleted the outliers because they looked suspicious and the graph looked cleaner without them.' Identifying what went wrong here reveals the actual villain in bad data science practice, which is:", opts:["Removing data points without statistical justification, thereby introducing bias into the analysis","Using a bar chart instead of a scatter plot for continuous variables","Forgetting to normalise the dataset before plotting","Choosing an inappropriate colour scheme for the visualisation"], a:0},
+{s:1, stem:"A fresher confidently states: 'A Data Engineer and a Data Scientist do the same thing — both work with data.' The precise distinction their interviewer would immediately correct them with is:", opts:["A Data Engineer builds and maintains data pipelines and infrastructure; a Data Scientist analyses data to generate insights and build predictive models","A Data Engineer writes SQL queries for reports; a Data Scientist installs database servers","A Data Engineer cleans spreadsheets; a Data Scientist visualises them in dashboards","A Data Engineer manages hardware; a Data Scientist manages software licenses"], a:0},
+
+// SECTION 3 — Riddle
+{s:2, stem:"I am the very first breath a data project takes. I define the question, set the boundaries, and decide what success looks like before a single row of data is touched. Without me, even perfect data leads to wrong answers. What am I?", opts:["Problem Definition","Data Cleaning","Model Training","Result Visualisation"], a:0},
+{s:2, stem:"I come in two broad families: one is neat, labelled, and lives comfortably in rows and columns; the other is wild, shapeless, and arrives as images, videos, text, and audio. Together, we represent everything data science can learn from. What are we?", opts:["Structured and Unstructured Data","Primary and Secondary Data","Training and Testing Data","Quantitative and Qualitative Analysis"], a:0},
+{s:2, stem:"I am the organised, repeatable journey every data project follows — from asking a question, through collecting and cleaning data, to building a model, evaluating it, and communicating the finding. Skip any of my stages and the whole project wobbles. What am I?", opts:["The Data Science Process","The Software Development Lifecycle","The Business Intelligence Pipeline","The Statistical Inference Framework"], a:0},
+
+// SECTION 4 — Scenario
+{s:3, stem:"Arjun is tasked with finding patterns in five years of a hospital's patient admission records to predict future demand for ICU beds. His output will guide the hospital's infrastructure budget. Which role best describes what Arjun is performing?", opts:["Data Scientist","Database Administrator","Network Engineer","Systems Analyst"], a:0},
+{s:3, stem:"Neha's company receives thousands of customer service chat logs daily — free-form text, images, and voice recordings. Before any analysis begins, she needs to categorise this by its fundamental data characteristic. She correctly identifies it as:", opts:["Unstructured data, because it lacks a predefined schema or row-column format","Primary data, because it is collected directly from the source","Discrete data, because each chat session is a separate event","Metadata, because it contains information about the service interactions"], a:0},
+{s:3, stem:"Kabir is building the automated pipeline that ingests raw sales data from 12 regional databases every night, validates it, and stores it in a central data warehouse for analysts to query. The role Kabir is filling in his organisation is:", opts:["Data Engineer","Data Analyst","Machine Learning Researcher","Business Intelligence Consultant"], a:0},
+
+// SECTION 5 — Misconception Buster
+{s:4, stem:"MYTH: 'Data Science is only useful for technology companies like Google and Amazon — traditional sectors like agriculture and healthcare have no real use for it.' The complete and accurate correction to this belief is:", opts:["Data Science is applicable across virtually all sectors; agriculture uses it for crop yield prediction and disease detection, healthcare for diagnosis and drug discovery, and finance for fraud detection","Data Science is primarily for e-commerce and social media platforms, with limited applicability in regulated industries","Data Science is useful in healthcare only for billing and records management, not for clinical decision-making","Data Science in agriculture is limited to weather forecasting and has no role in precision farming or supply chain optimisation"], a:0},
+{s:4, stem:"A student believes that: 'More data always leads to better model performance, so data collection should be maximised with no upper limit.' The correct and complete explanation that challenges this belief is:", opts:["More data can improve performance only when it is relevant, clean, and properly labelled; redundant, noisy, or biased data can degrade model quality and increase computational cost","More data always improves accuracy because machine learning algorithms are designed to filter out irrelevant information automatically","Data quantity is the only factor that matters; data quality can be improved later during the model evaluation stage","Collecting unlimited data is the standard industry practice and has no known drawbacks in modern deep learning"], a:0},
+{s:4, stem:"MYTH: 'A Data Analyst and a Data Scientist are interchangeable job titles used by different companies for the same role.' The accurate distinction that corrects this misconception fully is:", opts:["A Data Analyst typically focuses on interpreting existing data and producing descriptive reports, while a Data Scientist builds predictive models, applies machine learning, and works with unstructured data at greater technical depth","Both roles are identical in responsibilities; the difference is only in salary band and company size","A Data Analyst uses Python; a Data Scientist uses R — that is the only meaningful difference between the two roles","Data Scientists work only on big data platforms, while Data Analysts work only with small datasets in spreadsheets"], a:0},
+
+// SECTION 6 — Debug the Mistake
+{s:5, stem:"A student builds a sentiment analysis model on product reviews, achieves 95% training accuracy, but gets only 58% accuracy on new customer reviews. She reports the model as 'working correctly.' The most likely root cause of the actual problem is:", opts:["Overfitting — the model memorised the training data rather than learning generalisable patterns","Underfitting — the model is too simple to capture the complexity of the training data","Data leakage — test data was accidentally included in the training pipeline","Class imbalance — positive reviews significantly outnumber negative ones in the dataset"], a:0},
+{s:5, stem:"A data team collects survey responses and sales figures from the same regional offices for a study on marketing effectiveness. Halfway through analysis they discover their conclusion is contradicted by national data. The most probable root cause is:", opts:["Sampling bias — the data was collected only from regional offices, making it unrepresentative of the broader population","Data encoding error — numerical values were stored as text strings during import","Missing value imputation — mean substitution inflated the sales figures artificially","Multicollinearity — survey response variables are correlated with each other"], a:0},
+{s:5, stem:"During the data science workflow, a team skips the data cleaning step and directly feeds raw hospital records into a prediction model. The model produces wildly inconsistent outputs. The most likely root cause is:", opts:["Dirty data — missing values, inconsistent formatting, and duplicate entries corrupt the model's learning process","Incorrect algorithm selection — the chosen model type does not suit classification problems","Insufficient computing resources — the server cannot process the volume of records provided","Improper hyperparameter tuning — default settings were used instead of optimised values"], a:0},
+
+// SECTION 7 — Concept Application / Who Am I?
+{s:6, stem:"I am first-person and proud: 'I was created specifically for this study. A researcher designed a survey, distributed it to 500 university students, and recorded their responses. Every data point you see came directly from that interaction.' What type of data am I?", opts:["Primary Data","Secondary Data","Synthetic Data","Derived Data"], a:0},
+{s:6, stem:"A retail chain wants to understand *why* sales dropped 30% in the north region last quarter. They need someone to examine historical sales records, identify patterns, produce visualisations, and present a clear narrative to management. Which profile best matches this requirement?", opts:["Data Analyst","Data Engineer","Machine Learning Engineer","Cloud Architect"], a:0},
+{s:6, stem:"A government health ministry collects patient records from hospitals, combines them with census data and satellite images of pollution levels, then uses ML models to predict disease outbreak hotspots. Which stage of the data science process does the 'combining and preparing datasets for the model' step represent?", opts:["Data Preparation and Feature Engineering","Problem Definition","Model Deployment","Result Communication"], a:0},
+
+// SECTION 8 — Best Definition
+{s:7, stem:"Which is the MOST ACCURATE definition of 'Data Science'?", opts:["An interdisciplinary field that uses scientific methods, statistics, algorithms, and domain knowledge to extract insights and knowledge from structured and unstructured data","A software engineering discipline focused on building and maintaining large-scale database systems and query optimisation tools","A branch of computer science that studies the design of programming languages and compilers for numerical computation","A business analytics practice that uses Excel and BI dashboards to generate quarterly performance summary reports"], a:0},
+{s:7, stem:"Which is the MOST ACCURATE definition of 'Structured Data'?", opts:["Data that is organised in a predefined format — typically rows and columns with defined data types — such as relational databases and spreadsheets, enabling straightforward querying and analysis","Any data that has been cleaned, validated, and stored in a file system, regardless of its original format or organisation","Data derived from surveys and questionnaires where responses follow a fixed set of answer choices","Data that has been compressed and encoded for efficient storage, making it accessible only through specialised decoding software"], a:0},
+{s:7, stem:"Which is the MOST ACCURATE definition of the 'role of a Data Engineer'?", opts:["A professional who designs, builds, and maintains the infrastructure, pipelines, and systems that enable efficient data ingestion, storage, transformation, and delivery to analysts and scientists","A professional who creates data visualisations and interactive dashboards to communicate findings to non-technical business stakeholders","A professional who selects machine learning algorithms, tunes hyperparameters, and evaluates model performance on labelled datasets","A professional who defines business KPIs and manages the reporting lifecycle within an organisation's finance department"], a:0},
+
+// SECTION 9 — Sequence
+{s:8, stem:"Which option correctly represents the standard sequence of stages in the Data Science Process?", opts:["Problem Definition → Data Collection → Data Cleaning → Exploratory Analysis → Modelling → Evaluation → Deployment → Communication","Data Collection → Problem Definition → Modelling → Data Cleaning → Evaluation → Deployment → Communication → Exploration","Modelling → Data Collection → Problem Definition → Exploratory Analysis → Data Cleaning → Communication → Evaluation → Deployment","Data Cleaning → Data Collection → Problem Definition → Exploratory Analysis → Evaluation → Modelling → Communication → Deployment"], a:0},
+{s:8, stem:"Ritu is building a customer churn prediction model. Which sequence correctly describes the steps she should follow from raw data to a usable result?", opts:["Collect raw customer data → Clean and handle missing values → Perform exploratory data analysis → Engineer features → Train model → Evaluate on test set → Deploy model","Train model → Collect raw customer data → Clean and handle missing values → Evaluate on test set → Perform exploratory data analysis → Engineer features → Deploy model","Clean and handle missing values → Collect raw customer data → Train model → Deploy model → Perform exploratory data analysis → Evaluate on test set → Engineer features","Engineer features → Clean and handle missing values → Perform exploratory data analysis → Collect raw customer data → Evaluate on test set → Train model → Deploy model"], a:0},
+{s:8, stem:"For collecting data via a structured survey for academic research, what is the correct sequence of steps from planning to usable dataset?", opts:["Define research objective → Design survey instrument → Pilot test the survey → Distribute to sample → Collect responses → Validate and clean responses → Store for analysis","Distribute to sample → Define research objective → Design survey instrument → Collect responses → Pilot test the survey → Validate and clean responses → Store for analysis","Design survey instrument → Collect responses → Define research objective → Pilot test the survey → Store for analysis → Validate and clean responses → Distribute to sample","Pilot test the survey → Design survey instrument → Distribute to sample → Define research objective → Validate and clean responses → Collect responses → Store for analysis"], a:0},
+
+// SECTION 10 — Cause → Effect
+{s:9, stem:"CAUSE: A data science team uses data scraped only from urban hospitals for a national disease prediction model. EFFECT: The model consistently underestimates disease prevalence in rural areas. Why?", opts:["The training data does not represent rural demographics, so the model has not learned patterns from that population, leading to biased and inaccurate predictions for underrepresented groups","The model architecture is too complex and overfits the urban data, causing it to generalise poorly to any new data regardless of region","The scraping process corrupted the rural data entries, so they were excluded during data cleaning","The rural hospitals use different database formats, making their data incompatible with the model's input schema"], a:0},
+{s:9, stem:"CAUSE: A data analyst presents findings using only raw summary statistics — mean and total — without any visualisation or contextual explanation. EFFECT: The management team misinterprets the findings and makes a poor strategic decision. What is the MOST LIKELY explanation for this effect?", opts:["Raw statistics alone can hide distribution shapes, outliers, and trends that visualisations reveal; without context and visual aids, non-technical audiences frequently draw incorrect conclusions","The mean is an inaccurate measure of central tendency and should be replaced with the median in all business reporting contexts","Management teams inherently lack the cognitive ability to process numerical data, making any data-driven reporting ineffective without simplification","Summary statistics are only valid for datasets with more than 10,000 records; smaller datasets require a different presentation format"], a:0},
+{s:9, stem:"CAUSE: An organisation collects data from its customers without clearly explaining the purpose or obtaining explicit consent. EFFECT: Regulatory authorities impose heavy fines and the company faces a public trust crisis. Why does this effect follow from the cause?", opts:["Collecting personal data without informed consent violates data privacy regulations such as GDPR; such violations attract financial penalties and erode customer trust in the organisation","Data collection itself is illegal under all global jurisdictions unless the organisation holds a government-issued data licence","The fine is triggered solely by the volume of data collected, not by the absence of consent or transparency","Customer trust is only affected by data breaches, not by collection practices or consent procedures"], a:0},
+];
+
+// ===== STATE =====
+let student = {};
+let allQs = [];
+let answers = {};
+let secScores = Array(10).fill(0);
+let secCounts = Array(10).fill(0);
+let submitted = false;
+let timerInterval = null;
+let secsLeft = TOTAL_MIN * 60;
+let startTime, endTime;
+let tabSwitchCount = 0;
+let prevScreen = 'reg';
+
+// ===== FISHER-YATES =====
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+// ===== SCREEN MANAGEMENT =====
+function show(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+// ===== REGISTRATION =====
+function startQuiz() {
+  const name = document.getElementById('reg-name').value.trim();
+  const roll = document.getElementById('reg-roll').value.trim().toUpperCase();
+  const section = document.getElementById('reg-section').value;
+  const err = document.getElementById('reg-error');
+  if (!name) { showErr(err, 'Please enter your full name.'); return; }
+  if (!roll) { showErr(err, 'Please enter your roll number.'); return; }
+  if (!section) { showErr(err, 'Please select your section.'); return; }
+  err.classList.remove('show');
+  student = { name, roll, section, branch: 'BCA', semester: '2nd' };
+  buildQuiz();
+  show('quiz-screen');
+  document.getElementById('quiz-student-label').textContent = `${name} · ${section}`;
+  startTimer();
+  startTime = new Date();
+}
+
+function showErr(el, msg) {
+  el.textContent = msg;
+  el.classList.add('show');
+}
+
+// ===== BUILD QUIZ =====
+function buildQuiz() {
+  const shuffled = shuffle(QUESTION_BANK);
+  allQs = shuffled.map((q, idx) => {
+    const correctText = q.opts[q.a];
+    const shuffledOpts = shuffle(q.opts);
+    return {
+      ...q,
+      idx,
+      displayOpts: shuffledOpts,
+      correctIdx: shuffledOpts.indexOf(correctText)
+    };
+  });
+
+  // Group by section
+  const bySection = Array.from({length:10}, () => []);
+  allQs.forEach(q => bySection[q.s].push(q));
+
+  const container = document.getElementById('quiz-content');
+  container.innerHTML = '';
+  let qNum = 0;
+
+  bySection.forEach((qs, si) => {
+    if (!qs.length) return;
+    // Section header
+    const hdr = document.createElement('div');
+    hdr.className = 'section-header';
+    hdr.innerHTML = `<div class="section-line"></div><div class="section-pill" style="background:${SEC_COLORS[si]}">Section ${si+1} — ${SECTIONS[si]}</div><div class="section-line"></div>`;
+    container.appendChild(hdr);
+
+    qs.forEach(q => {
+      qNum++;
+      const card = document.createElement('div');
+      card.className = 'q-card';
+      card.id = `qcard-${q.idx}`;
+
+      const optsHTML = q.displayOpts.map((opt, oi) => {
+        const letter = ['A','B','C','D'][oi];
+        return `<button class="opt-btn" data-qi="${q.idx}" data-oi="${oi}" onclick="selectOpt(${q.idx},${oi})">
+          <span class="opt-letter">${letter}</span>
+          <span>${opt}</span>
+        </button>`;
+      }).join('');
+
+      card.innerHTML = `
+        <div class="q-card-inner">
+          <div class="q-header">
+            <div class="q-num" id="qnum-${q.idx}">${qNum}</div>
+            <div class="q-stem">${q.stem}</div>
+            <div class="q-tag" style="background:${SEC_COLORS[q.s]}">S${q.s+1}</div>
+          </div>
+          <div class="options">${optsHTML}</div>
+        </div>`;
+      container.appendChild(card);
+    });
+  });
+
+  updateProgress();
+}
+
+// ===== SELECT OPTION =====
+function selectOpt(qi, oi) {
+  if (submitted) return;
+  answers[qi] = oi;
+  const card = document.getElementById(`qcard-${qi}`);
+  card.querySelectorAll('.opt-btn').forEach((btn, i) => {
+    btn.classList.toggle('selected', i === oi);
+  });
+  document.getElementById(`qnum-${qi}`).classList.add('answered');
+  updateProgress();
+}
+
+function updateProgress() {
+  const answered = Object.keys(answers).length;
+  const pct = answered / TOTAL_Q * 100;
+  document.getElementById('progress-bar').style.width = pct + '%';
+  document.getElementById('progress-text').textContent = `${answered} / ${TOTAL_Q}`;
+}
+
+// ===== TIMER =====
+function startTimer() {
+  secsLeft = TOTAL_MIN * 60;
+  renderTimer();
+  timerInterval = setInterval(() => {
+    secsLeft--;
+    renderTimer();
+    if (secsLeft <= 0) { clearInterval(timerInterval); finalize(); }
+  }, 1000);
+}
+
+function renderTimer() {
+  const m = Math.floor(secsLeft / 60).toString().padStart(2,'0');
+  const s = (secsLeft % 60).toString().padStart(2,'0');
+  const el = document.getElementById('timer');
+  el.textContent = `${m}:${s}`;
+  el.classList.toggle('warn', secsLeft <= 300);
+}
+
+// ===== SUBMIT =====
+let firstSubmitAttempt = false;
+function trySubmit() {
+  const answered = Object.keys(answers).length;
+  const unanswered = TOTAL_Q - answered;
+  if (unanswered > 0) {
+    const box = document.getElementById('unanswered-warning');
+    document.getElementById('unanswered-count-text').textContent = `${unanswered} question(s) unanswered. You may still submit, but unanswered questions count as incorrect.`;
+    box.classList.add('show');
+    if (!firstSubmitAttempt) { firstSubmitAttempt = true; return; }
+  }
+  finalize();
+}
+
+function finalize() {
+  if (submitted) return;
+  submitted = true;
+  clearInterval(timerInterval);
+  endTime = new Date();
+
+  // Score
+  let correct = 0;
+  const sc = Array(10).fill(0), cnt = Array(10).fill(0);
+  allQs.forEach(q => {
+    cnt[q.s]++;
+    if (answers[q.idx] === q.correctIdx) { correct++; sc[q.s]++; }
+  });
+  secScores = sc; secCounts = cnt;
+
+  const pct = Math.round(correct / TOTAL_Q * 100);
+  let grade;
+  if (pct >= 90) grade = 'A+';
+  else if (pct >= 80) grade = 'A';
+  else if (pct >= 70) grade = 'B';
+  else if (pct >= 60) grade = 'C';
+  else if (pct >= 50) grade = 'D';
+  else if (pct >= 40) grade = 'E';
+  else grade = 'F';
+  const passed = pct >= 40;
+
+  const elapsed = Math.round((endTime - startTime) / 1000);
+  const em = Math.floor(elapsed / 60), es = elapsed % 60;
+  const timeTaken = `${em}m ${es}s`;
+
+  const sid = `${student.roll}-${QUIZ_CODE}-${grade}-${Date.now().toString(36).toUpperCase()}`;
+  const submittedAt = endTime.toLocaleString('en-IN', {timeZone:'Asia/Kolkata'});
+
+  const payload = {
+    name: student.name, roll: student.roll, section: student.section,
+    branch: student.branch, semester: student.semester,
+    score: correct, total: TOTAL_Q, percentage: pct,
+    grade, passed, timeTaken, submissionId: sid, submittedAt,
+    quizType: QUIZ_CODE,
+    s1: `${sc[0]}/${cnt[0]}`, s2: `${sc[1]}/${cnt[1]}`, s3: `${sc[2]}/${cnt[2]}`,
+    s4: `${sc[3]}/${cnt[3]}`, s5: `${sc[4]}/${cnt[4]}`, s6: `${sc[5]}/${cnt[5]}`,
+    s7: `${sc[6]}/${cnt[6]}`, s8: `${sc[7]}/${cnt[7]}`, s9: `${sc[8]}/${cnt[8]}`,
+    s10: `${sc[9]}/${cnt[9]}`
+  };
+
+  showResult({ correct, pct, grade, passed, timeTaken, sid, submittedAt, payload });
+  postToSheet(payload);
+}
+
+// ===== SHOW RESULT =====
+function showResult(r) {
+  show('result-screen');
+  const emojis = {A:['🏆','🌟','🎯','🥇','🎉']};
+  const emojiMap = r.pct>=90?'🏆':r.pct>=80?'🌟':r.pct>=70?'🎯':r.pct>=60?'👍':r.pct>=50?'📚':r.pct>=40?'💪':'📖';
+  document.getElementById('res-emoji').textContent = emojiMap;
+  document.getElementById('res-score').textContent = `${r.correct}/${TOTAL_Q}`;
+  document.getElementById('res-pct-grade').textContent = `${r.pct}% · Grade ${r.grade}`;
+  const vEl = document.getElementById('res-verdict');
+  vEl.textContent = r.passed ? '✓ PASSED' : '✗ NEEDS IMPROVEMENT';
+  vEl.className = 'result-verdict ' + (r.passed ? 'passed' : 'failed');
+
+  // Info grid
+  const ig = document.getElementById('res-info-grid');
+  const cells = [
+    ['Name', student.name], ['Roll', student.roll], ['Section', student.section],
+    ['Branch / Sem', `${student.branch} · ${student.semester}`],
+    ['Time Taken', r.timeTaken], ['Submitted At', r.submittedAt]
+  ];
+  ig.innerHTML = cells.map(([l,v]) => `<div class="info-cell"><div class="info-cell-label">${l}</div><div class="info-cell-val">${v}</div></div>`).join('');
+
+  // Breakdown
+  const bd = document.getElementById('res-breakdown');
+  bd.innerHTML = secScores.map((sc, i) => {
+    const cnt = secCounts[i]; if (!cnt) return '';
+    const frac = `${sc}/${cnt}`;
+    const pctBar = Math.round(sc/cnt*100);
+    return `<div class="sb-row">
+      <div class="sb-label" style="color:${SEC_COLORS[i]}">S${i+1} ${SECTIONS[i]}</div>
+      <div class="sb-bar-outer"><div class="sb-bar-inner" style="width:${pctBar}%;background:${SEC_COLORS[i]}"></div></div>
+      <div class="sb-frac">${frac}</div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('res-sub-id').textContent = r.sid;
+
+  // Auto-PDF
+  setTimeout(() => {
+    document.getElementById('badge-pdf').classList.add('active');
+    savePDF(r.sid);
+  }, 1200);
+}
+
+// ===== POST TO SHEET =====
+function postToSheet(payload) {
+  document.getElementById('badge-saving').classList.add('active');
+  fetch(SHEET_URL, {
+    method:'POST', mode:'no-cors',
+    body: JSON.stringify(payload)
+  }).then(() => {
+    document.getElementById('badge-saving').classList.remove('active');
+    document.getElementById('badge-saving').classList.add('done');
+    document.getElementById('badge-saving').textContent = '✓ Saved';
+  }).catch(() => {
+    document.getElementById('badge-saving').textContent = '⚠ Save failed';
+  });
+}
+
+// ===== PDF =====
+function savePDF(sidArg) {
+  const sid = sidArg || document.getElementById('res-sub-id').textContent;
+  const fname = `${student.roll}-${QUIZ_CODE}-${sid}.pdf`;
+  const el = document.getElementById('result-card');
+  html2pdf().set({
+    margin: [12,10,12,10], filename: fname,
+    image: { type:'jpeg', quality:0.97 },
+    html2canvas: { scale:2, useCORS:true, backgroundColor:'#ffffff', logging:false },
+    jsPDF: { unit:'mm', format:'a4', orientation:'portrait' }
+  }).from(el).save().then(() => {
+    document.getElementById('badge-pdf').classList.remove('active');
+    document.getElementById('badge-pdf').classList.add('done');
+    document.getElementById('badge-pdf').textContent = '✓ PDF saved';
+  });
+}
+
+// ===== REVIEW =====
+function reviewAnswers() {
+  prevScreen = 'result';
+  show('quiz-screen');
+  document.getElementById('submit-btn').style.display = 'none';
+  document.getElementById('unanswered-warning').classList.remove('show');
+  document.getElementById('review-badge').style.display = 'inline-flex';
+  document.getElementById('back-score-btn').style.display = 'inline-flex';
+
+  allQs.forEach(q => {
+    const card = document.getElementById(`qcard-${q.idx}`);
+    card.querySelectorAll('.opt-btn').forEach((btn, oi) => {
+      btn.disabled = true;
+      const isCorrect = oi === q.correctIdx;
+      const isChosen = answers[q.idx] === oi;
+      btn.classList.remove('selected','correct-ans','wrong-ans');
+      if (isCorrect) btn.classList.add('correct-ans');
+      else if (isChosen) btn.classList.add('wrong-ans');
+    });
+  });
+}
+
+function backToScore() {
+  show('result-screen');
+}
+
+// ===== LEADERBOARD =====
+function goToLB() {
+  prevScreen = submitted ? 'result' : 'reg';
+  show('lb-screen');
+  loadPageLB();
+}
+
+function backFromLB() {
+  show(prevScreen === 'result' ? 'result-screen' : 'reg-screen');
+}
+
+async function loadPageLB() {
+  const el = document.getElementById('lb-page-content');
+  try {
+    const r = await fetch(`${SHEET_URL}?action=leaderboard&top=${LB_SIZE}&quiz=${QUIZ_CODE}`);
+    const j = await r.json();
+    renderLBTable(el, j.data || []);
+  } catch(e) {
+    el.innerHTML = `<div class="lb-empty" style="padding:40px;text-align:center;color:var(--slate)">Could not load leaderboard. Please configure the Google Sheets URL.</div>`;
+  }
+}
+
+function renderLBTable(el, data) {
+  if (!data.length) {
+    el.innerHTML = `<div class="lb-empty" style="padding:40px;text-align:center;color:var(--slate)">No entries yet. Be the first to finish! 🚀</div>`;
+    return;
+  }
+  const medals = ['🥇','🥈','🥉'];
+  el.innerHTML = `<table>
+    <thead><tr><th>Rank</th><th>Name</th><th>Roll</th><th>Section</th><th>Score</th><th>%</th><th>Grade</th></tr></thead>
+    <tbody>${data.map((d,i) => `<tr>
+      <td class="rank-cell">${medals[i]||'#'+(i+1)}</td>
+      <td>${d.name}</td>
+      <td style="font-family:'Inconsolata',monospace;font-size:12px">${d.roll}</td>
+      <td>${d.section}</td>
+      <td>${d.score}/${d.total}</td>
+      <td>${d.pct}%</td>
+      <td><span class="grade-badge">${d.grade}</span></td>
+    </tr>`).join('')}</tbody>
+  </table>`;
+}
+
+async function loadWidgetLB() {
+  const el = document.getElementById('widget-lb-body');
+  try {
+    const r = await fetch(`${SHEET_URL}?action=leaderboard&top=${LB_SIZE}&quiz=${QUIZ_CODE}`);
+    const j = await r.json();
+    const data = j.data || [];
+    if (!data.length) {
+      el.innerHTML = `<div class="lb-empty">No submissions yet — be the first! 🚀</div>`;
+    } else {
+      const medals = ['🥇','🥈','🥉'];
+      el.innerHTML = data.map((d, i) => `
+        <div class="lb-row">
+          <div class="lb-medal">${medals[i]||''}</div>
+          <div class="lb-rank">${i+1}</div>
+          <div class="lb-info">
+            <div class="lb-name">${d.name}</div>
+            <div class="lb-roll">${d.roll} · ${d.section}</div>
+          </div>
+          <div class="lb-bar-wrap"><div class="lb-bar" style="width:${d.pct}%"></div></div>
+          <div class="lb-score">
+            <div class="lb-pct">${d.pct}%</div>
+            <div class="lb-grade">${d.grade}</div>
+          </div>
+        </div>`).join('');
+    }
+    document.getElementById('lb-refresh-time').textContent = 'Updated: ' + new Date().toLocaleTimeString('en-IN');
+  } catch(e) {}
+}
+
+loadWidgetLB();
+setInterval(loadWidgetLB, 90000);
+
+// ===== TAB PROTECTION =====
+window.addEventListener('beforeunload', function(e) {
+  if (!submitted) { e.preventDefault(); e.returnValue = ''; }
+});
+
+document.addEventListener('visibilitychange', function() {
+  if (!submitted && document.hidden) {
+    tabSwitchCount++;
+    if (tabSwitchCount === 1) showTabWarning();
+    else finalize();
+  }
+});
+
+function showTabWarning() {
+  document.getElementById('tab-count-text').textContent = `Tab switch count: ${tabSwitchCount} of 2`;
+  document.getElementById('tab-overlay').classList.add('show');
+}
+
+function dismissTabWarning() {
+  document.getElementById('tab-overlay').classList.remove('show');
+}
+</script>
+
+<!-- ===================== APPS SCRIPT REFERENCE (comment) ======================
+Paste the following Code.gs into Google Apps Script → Deploy as Web App → Anyone.
+Then replace 'YOUR_DEPLOYMENT_ID_HERE' in the script above with the deployed URL.
+
+=== Code.gs ===
+
+const SHEET_NAME = 'Responses';
+
+function doPost(e) {
+  try {
+    const data = JSON.parse(e.postData.contents);
+    const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SHEET_NAME);
+    if (sheet.getLastRow() === 0) {
+      sheet.appendRow(['Timestamp','Submission ID','Name','Roll Number','Section','Branch','Semester','Quiz Type','Score','Total','Percentage','Grade','Passed','Time Taken','Submitted At','S1 Analogy','S2 Witty','S3 Riddle','S4 Scenario','S5 Misconception','S6 Debug','S7 Application','S8 Definition','S9 Sequence','S10 Cause→Effect']);
+      const hdr = sheet.getRange(1,1,1,25);
+      hdr.setBackground('#0e7490').setFontColor('#fff').setFontWeight('bold');
+      sheet.setFrozenRows(1);
+    }
+    sheet.appendRow([new Date(),data.submissionId,data.name,data.roll,data.section,data.branch,data.semester,data.quizType,data.score,data.total,data.percentage,data.grade,data.passed,data.timeTaken,data.submittedAt,data.s1,data.s2,data.s3,data.s4,data.s5,data.s6,data.s7,data.s8,data.s9,data.s10]);
+    return ContentService.createTextOutput(JSON.stringify({status:'ok'})).setMimeType(ContentService.MimeType.JSON);
+  } catch(err) {
+    return ContentService.createTextOutput(JSON.stringify({status:'error',message:err.toString()})).setMimeType(ContentService.MimeType.JSON);
+  }
+}
+
+function doGet(e) {
+  try {
+    if ((e.parameter.action||'').toLowerCase() !== 'leaderboard') return jsonOut({status:'ok',message:'Quiz API live.'});
+    const top = parseInt(e.parameter.top)||3;
+    const quiz = (e.parameter.quiz||'').toLowerCase();
+    const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SHEET_NAME);
+    const data = sheet.getDataRange().getValues();
+    if (data.length <= 1) return jsonOut({status:'ok',data:[]});
+    const rows = data.slice(1);
+    const filtered = quiz ? rows.filter(r=>String(r[7]).toLowerCase().includes(quiz)) : rows;
+    const best = {};
+    filtered.forEach(r => {
+      const roll = String(r[3]).trim().toUpperCase();
+      const pct = Number(r[10]);
+      if (!best[roll]||pct>best[roll].pct) best[roll]={name:r[2],roll,section:r[4],score:Number(r[8]),total:Number(r[9]),pct,grade:r[11],passed:r[12],timeTaken:r[13]};
+    });
+    const sorted = Object.values(best).sort((a,b)=>b.pct-a.pct||b.score-a.score).slice(0,top);
+    return jsonOut({status:'ok',data:sorted});
+  } catch(err) { return jsonOut({status:'error',message:err.toString()}); }
+}
+
+function jsonOut(obj) {
+  return ContentService.createTextOutput(JSON.stringify(obj)).setMimeType(ContentService.MimeType.JSON);
+}
+============================================================================ -->
+</body>
+</html>
