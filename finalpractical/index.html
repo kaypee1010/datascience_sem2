@@ -980,16 +980,17 @@ function getTimeTaken(){
 // ============================================================
 // SUBMIT
 // ============================================================
+let submitWarningShown=false;
 function handleSubmitClick(){
   const unanswered=answers.filter(a=>a===-1).length;
   const warnEl=document.getElementById('unanswered-warn');
-  if(unanswered>0){
-    warnEl.textContent=`⚠ You have ${unanswered} unanswered question${unanswered>1?'s':''}. You can still submit, but unanswered questions will be marked wrong.`;
+  if(unanswered>0 && !submitWarningShown){
+    warnEl.textContent=`⚠ You have ${unanswered} unanswered question${unanswered>1?'s':''}. Click "Submit Quiz" again to confirm — unanswered questions will be marked wrong.`;
     warnEl.style.display='block';
-    // On second click, finalize
-    warnEl.onclick=()=>{warnEl.style.display='none';finalize();};
+    submitWarningShown=true;
     return;
   }
+  warnEl.style.display='none';
   finalize();
 }
 
